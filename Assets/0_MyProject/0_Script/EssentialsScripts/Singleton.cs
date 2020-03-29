@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using System.Reflection;
 
-namespace WeplayVR.Base
+namespace GameUtility.Base
 {
     public class Singleton<T> where T : class
     {
