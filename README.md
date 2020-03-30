@@ -1,2 +1,2 @@
 # LudoParty
-A Ludo game as a challeneg
+A Ludo game as a challenge
