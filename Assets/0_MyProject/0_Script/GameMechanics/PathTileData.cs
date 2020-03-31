@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class PathTileData : MonoBehaviour
 {
-    // Start is called before the first frame update
+	[SerializeField]private GameUtility.Base.PathTileType m_enumPathTileType = GameUtility.Base.PathTileType.None;
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

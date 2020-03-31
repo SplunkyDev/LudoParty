@@ -30,6 +30,18 @@ namespace GameUtility.Base
         void DeRegisterForEvents();
     }
 
+	public enum PathTileType
+	{
+		None =0,
+		BlueStart =1,
+		BlueEnd = 2,
+		YellowStart =3,
+		YellowEnd = 4,
+		RedStart =5,
+		RedEnd =6,
+		GreenStart =7,
+		GreenEnd =8
 
+	}
 }
 
