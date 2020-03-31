@@ -1,15 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using GameUtility.Base;
 using UnityEngine;
 
 public class TokenData : MonoBehaviour
 {
-
+	//This type is to identify which token it is
 	[SerializeField] private GameUtility.Base.eTokenType m_enumTokenType = GameUtility.Base.eTokenType.None;
+	public eTokenType EnumTokenType { get => m_enumTokenType; }
 	[SerializeField] private int m_iTokenID = 0;
+	public int ITokenID { get => m_iTokenID;}
 
-    // Start is called before the first frame update
-    void Start()
+	private int m_iCurrentPathIndex = -1; //-1 means it is at home
+	public int ICurrentPathIndex { get => m_iCurrentPathIndex; set => m_iCurrentPathIndex = value; }
+
+	private bool m_bInSpecial;
+	public bool BInSpecial { get => m_bInSpecial; set => m_bInSpecial = value; }
+
+	// Start is called before the first frame update
+	void Start()
     {
         
     }

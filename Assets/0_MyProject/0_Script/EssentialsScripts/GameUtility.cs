@@ -30,6 +30,15 @@ namespace GameUtility.Base
         void DeRegisterForEvents();
     }
 
+	public enum ePlayerTurn
+	{
+		None =0,
+		Blue =1,
+		Yellow =2,
+		red =3,
+		Green =4
+	}
+
 	public enum ePathTileType
 	{
 		None =0,
@@ -48,7 +57,8 @@ namespace GameUtility.Base
 		RedSafePath =13,
 		RedSafeZone =14,
 		GreenSafePath =15,
-		GreenSafeZone =16
+		GreenSafeZone =16,
+		Special =17
 	}
 
 	public enum eTokenState

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class StairwayToHeavenManager : MonoBehaviour
 {
+	//This is to set which token this path belongs to, RED, BLUE etc
 	[SerializeField] private GameUtility.Base.eSafePathType m_enumSafePathType = GameUtility.Base.eSafePathType.None;
 	private Dictionary<int, PathTileData> m_dicStairwayToHeaven = new Dictionary<int, PathTileData>();
 
@@ -13,7 +14,14 @@ public class StairwayToHeavenManager : MonoBehaviour
 		int index = 0;
 		foreach (Transform child in transform)
 		{
-			m_dicStairwayToHeaven.Add(index, child.gameObject.GetComponent<PathTileData>());
+
+			PathTileData refPathTileData = child.gameObject.GetComponent<PathTileData>();
+			if (refPathTileData == null)
+			{
+				Debug.LogError("[StairwayToHeavenManager] PathTileData not FOUND");
+				return;
+			}
+			m_dicStairwayToHeaven.Add(index, refPathTileData);
 			index++;
 		}
 	}
