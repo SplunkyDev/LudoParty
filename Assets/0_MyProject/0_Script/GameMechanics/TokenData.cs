@@ -19,9 +19,9 @@ public class TokenData : MonoBehaviour
 
 	private GameUtility.Base.eTokenState m_enumTokenState = GameUtility.Base.eTokenState.House;
 	public eTokenState EnumTokenState { get => m_enumTokenState; set => m_enumTokenState = value; }
-	public bool BCanBeUsed { get => m_bCanBeUsed; set => m_bCanBeUsed = value; }
 
 	private bool m_bCanBeUsed = false;
+	public bool BCanBeUsed { get => m_bCanBeUsed; set => m_bCanBeUsed = value; }
 
 	// Start is called before the first frame update
 	void Start()
