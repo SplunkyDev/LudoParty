@@ -2643,11 +2643,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d88443cd19ecca41b276c90ee016141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_lstStairwayToHeaven: []
-  m_refBlueStart: {fileID: 0}
-  m_refYellowStart: {fileID: 0}
-  m_refRedStart: {fileID: 0}
-  m_refGreenStart: {fileID: 0}
+  m_lstStairwayToHeaven:
+  - {fileID: 524249501}
+  - {fileID: 1441955635}
+  - {fileID: 547660206}
+  - {fileID: 925879830}
 --- !u!4 &480939664
 Transform:
   m_ObjectHideFlags: 0
@@ -8587,11 +8587,7 @@ MonoBehaviour:
   - {fileID: 1952763774}
   - {fileID: 664489331}
   - {fileID: 646725740}
-  m_lstFreenToken:
-  - {fileID: 1420738636}
-  - {fileID: 441854738}
-  - {fileID: 1174733710}
-  - {fileID: 1132942515}
+  m_lstGreenToken: []
 --- !u!4 &1696627371
 Transform:
   m_ObjectHideFlags: 0
