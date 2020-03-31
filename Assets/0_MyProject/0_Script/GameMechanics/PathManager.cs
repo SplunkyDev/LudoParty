@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class PathManager : MonoBehaviour
 {
-	[SerializeField] private List<PathTileData> m_lstPathTileTypes = new List<PathTileData>();
+	private Dictionary<int,PathTileData> m_lstPathTileTypes = new Dictionary<int, PathTileData>();
 
     // Start is called before the first frame update
     void Start()
     {
+		int index = 0;
         foreach(Transform child in transform)
 		{
-			m_lstPathTileTypes.Add(child.gameObject.GetComponent<PathTileData>());
+			m_lstPathTileTypes.Add(index,child.gameObject.GetComponent<PathTileData>());
+			index++;
 		}
     }
 

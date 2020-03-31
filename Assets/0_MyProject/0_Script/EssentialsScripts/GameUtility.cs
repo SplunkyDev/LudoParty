@@ -43,5 +43,14 @@ namespace GameUtility.Base
 		GreenEnd =8
 
 	}
+
+	public enum TokenState
+	{
+		House =0,
+		InRoute =1,
+		InHideOut =2,
+		InStairwayToHeaven =3,
+		InHeaven =4
+	}
 }
 
