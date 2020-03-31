@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PathManager : MonoBehaviour
 {
-	private Dictionary<int,PathTileData> m_lstPathTileTypes = new Dictionary<int, PathTileData>();
+	private Dictionary<int,PathTileData> m_dicPathTileTypes = new Dictionary<int, PathTileData>();
+	[SerializeField] private List<StairwayToHeavenManager> m_lstStairwayToHeaven = new List<StairwayToHeavenManager>();
 
     // Start is called before the first frame update
     void Start()
@@ -12,7 +13,7 @@ public class PathManager : MonoBehaviour
 		int index = 0;
         foreach(Transform child in transform)
 		{
-			m_lstPathTileTypes.Add(index,child.gameObject.GetComponent<PathTileData>());
+			m_dicPathTileTypes.Add(index,child.gameObject.GetComponent<PathTileData>());
 			index++;
 		}
     }

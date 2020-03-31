@@ -30,7 +30,7 @@ namespace GameUtility.Base
         void DeRegisterForEvents();
     }
 
-	public enum PathTileType
+	public enum ePathTileType
 	{
 		None =0,
 		BlueStart =1,
@@ -40,11 +40,18 @@ namespace GameUtility.Base
 		RedStart =5,
 		RedEnd =6,
 		GreenStart =7,
-		GreenEnd =8
-
+		GreenEnd =8,
+		BlueSafePath =9,
+		BlueSafeZone =10,
+		YellowSafePath =11,
+		YellowSafeZone =12,
+		RedSafePath =13,
+		RedSafeZone =14,
+		GreenSafePath =15,
+		GreenSafeZone =16
 	}
 
-	public enum TokenState
+	public enum eTokenState
 	{
 		House =0,
 		InRoute =1,
@@ -52,5 +59,25 @@ namespace GameUtility.Base
 		InStairwayToHeaven =3,
 		InHeaven =4
 	}
+
+	public enum eSafePathType
+	{
+		None =0,
+		Blue =1,
+		Yellow =2,
+		Red =3,
+		Green =4
+	}
+
+	public enum eTokenType
+	{
+		None =0,
+		Blue =1,
+		Yellow =2,
+		Red =3,
+		Green =4
+	}
+
+
 }
 
