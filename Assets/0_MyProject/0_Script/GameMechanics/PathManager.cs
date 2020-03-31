@@ -24,6 +24,7 @@ public class PathManager : MonoBehaviour
 	private PathTileData m_refBlueStart, m_refYellowStart,m_refRedStart, m_refGreenStart;
 	//This list is used to send it to token manager for the tween effect
 	private List<Transform> m_lstTilePosition = new List<Transform>();
+	private const int STEPCOUNT = 6;
 
 	private void Awake()
 	{
@@ -105,15 +106,21 @@ public class PathManager : MonoBehaviour
 		}
 		else
 		{
-			
-			int iCurrentTile = (a_refTokenData.ICurrentPathIndex + 1);
-			for (int i = iCurrentTile; i <= (iCurrentTile + a_iDiceValue);i++)
+			if (a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.InStairwayToHeaven)
 			{
-				PathTileData refPathTileData;
-				m_dicPathTileTypes.TryGetValue(i, out refPathTileData);
-				a_refTokenData.ICurrentPathIndex = refPathTileData.ITileIndex;
-				a_refTokenData.BInSpecial = refPathTileData.EnumPathTileType == GameUtility.Base.ePathTileType.Special ? true : false;
-				m_lstTilePosition.Add(refPathTileData.gameObject.transform);
+				//TODO: get path to heaven
+			}
+			else
+			{
+				int iCurrentTile = (a_refTokenData.ICurrentPathIndex + 1);
+				for (int i = iCurrentTile; i <= (iCurrentTile + a_iDiceValue); i++)
+				{
+					PathTileData refPathTileData;
+					m_dicPathTileTypes.TryGetValue(i, out refPathTileData);
+					a_refTokenData.ICurrentPathIndex = refPathTileData.ITileIndex;
+					a_refTokenData.BInSpecial = refPathTileData.EnumPathTileType == GameUtility.Base.ePathTileType.Special ? true : false;
+					m_lstTilePosition.Add(refPathTileData.gameObject.transform);
+				}
 			}
 
 			
@@ -122,4 +129,17 @@ public class PathManager : MonoBehaviour
 
 		return m_lstTilePosition;
 	}
+
+	//Checking while in stairway the heaven the dice value is valid to move to heaven
+	public bool ValidateMovement(TokenData a_refTokenData, int a_iDiceValue)
+	{
+		bool bValid = false;
+
+		if ((STEPCOUNT - a_refTokenData.ICurrentPathIndex) <= a_iDiceValue)
+		{
+			bValid = true;
+		}
+		return bValid;
+	}
+		
 }

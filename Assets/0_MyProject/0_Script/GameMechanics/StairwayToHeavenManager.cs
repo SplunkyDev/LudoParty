@@ -11,7 +11,7 @@ public class StairwayToHeavenManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-		int index = 0;
+		int index = 1;
 		foreach (Transform child in transform)
 		{
 
@@ -21,6 +21,7 @@ public class StairwayToHeavenManager : MonoBehaviour
 				Debug.LogError("[StairwayToHeavenManager] PathTileData not FOUND");
 				return;
 			}
+			refPathTileData.ITileIndex = index;
 			m_dicStairwayToHeaven.Add(index, refPathTileData);
 			index++;
 		}
