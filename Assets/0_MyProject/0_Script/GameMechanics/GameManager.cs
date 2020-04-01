@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GameUtility.Base;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MBSingleton<GameManager>
 {
@@ -35,6 +36,30 @@ public class GameManager : MBSingleton<GameManager>
 	}
 
 
+	private void OnEnable()
+	{
+		SceneManager.sceneLoaded += OnSceneLoaded;
+	}
+
+	private void OnDisable()
+	{
+		SceneManager.sceneLoaded -= OnSceneLoaded;	
+	}
+
+
+	private void OnSceneLoaded(Scene a_scene, LoadSceneMode a_loadMode)
+	{
+		switch(a_scene.buildIndex)
+		{
+			case 0:
+				Debug.Log("[GameManager] Menu Scene Loaded");
+				break;
+			case 1:
+				Debug.Log("[GameManager] Game Scene Loaded");
+				InitializeGame();
+				break;
+		}
+	}
 	public void SetPlayerData(PlayerData a_PlayerData)
 	{
 		//Setting the value of how many turns until the player gets a forced six if not got until then
@@ -53,7 +78,16 @@ public class GameManager : MBSingleton<GameManager>
     {
         
     }
+	private void InitializeGame()
+	{
 
+	}
+
+
+	public void LoadToGame()
+	{
+		//TODO: Load Game and start the game session
+	}
 
 	public void RollTheDice()
 	{
