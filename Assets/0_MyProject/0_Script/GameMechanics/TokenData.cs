@@ -23,6 +23,33 @@ public class TokenData : MonoBehaviour
 	private bool m_bCanBeUsed = false;
 	public bool BCanBeUsed { get => m_bCanBeUsed; set => m_bCanBeUsed = value; }
 
+	private void OnEnable()
+	{
+		if(TokenManager.Instance == null)
+		{
+			Debug.LogError("[TokenData] Cannot find PathManager");
+			return;
+		}
+
+		TokenManager.Instance.m_OnResetToken += ResetTokenUsability;
+	}
+
+	private void OnDisable()
+	{
+		if (TokenManager.Instance == null)
+		{
+			Debug.LogError("[TokenData] Cannot find PathManager");
+			return;
+		}
+
+		TokenManager.Instance.m_OnResetToken -= ResetTokenUsability;
+	}
+
+	private void ResetTokenUsability()
+	{
+		m_bCanBeUsed = false;
+	}
+
 	// Start is called before the first frame update
 	void Start()
     {

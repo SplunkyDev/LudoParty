@@ -28,6 +28,10 @@ public class TokenManager : MonoBehaviour
 	private TokenData m_TokenToMove;
 	private Vector2 m_vec2Scalevalue = new Vector2(0.65f, 0.65f);
 
+	public delegate void m_delResetToken();
+	//This event will be called to reset all token BCanBeUsed to false;
+	public m_delResetToken m_OnResetToken;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +40,12 @@ public class TokenManager : MonoBehaviour
 
 	public void CheckvalidTokenMovement(int a_iDiceValue)
 	{
+		//Resets all the token before checking their movable state, basically checking if the player can move it at their turn after making the roll
+		if(m_OnResetToken != null)
+		{
+			m_OnResetToken.Invoke();
+		}
+
 		switch (GameManager.Instance.EnumPlayerTurn)
 		{
 
