@@ -4,10 +4,12 @@ using UnityEngine;
 #region GameMechanics
 public class EventDiceRollAnimationComplete : IEventBase
 {
-	public EventDiceRollAnimationComplete()
-	{
+	public EventDiceRollAnimationComplete() { }
+}
 
-	}
+public class EventPlayerTurnChanged : IEventBase
+{
+	public EventPlayerTurnChanged() { }
 }
 
 #endregion

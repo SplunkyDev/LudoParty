@@ -28,6 +28,7 @@ public class InGameUIManager : MonoBehaviour
 
 		EventManager.Instance.RegisterEvent<EventHighlightCurrentPlayer>(HighlightCurrentPlayer);
 		EventManager.Instance.RegisterEvent<EventDiceRollAnimationComplete>(DiceRollAnimationComplete);
+		EventManager.Instance.RegisterEvent<EventPlayerTurnChanged>(PlayerTurnChanged);
 	}
 
 	private void DeregisterToEvent()
@@ -39,6 +40,7 @@ public class InGameUIManager : MonoBehaviour
 
 		EventManager.Instance.DeRegisterEvent<EventHighlightCurrentPlayer>(HighlightCurrentPlayer);
 		EventManager.Instance.DeRegisterEvent<EventDiceRollAnimationComplete>(DiceRollAnimationComplete);
+		EventManager.Instance.DeRegisterEvent<EventPlayerTurnChanged>(PlayerTurnChanged);
 	}
 
 	private void OnEnable()
@@ -71,7 +73,7 @@ public class InGameUIManager : MonoBehaviour
     }
 
 
-	public void HighlightCurrentPlayer(IEventBase a_Event)
+	private void HighlightCurrentPlayer(IEventBase a_Event)
 	{
 		Debug.Log("[InGameUIManager] HighlightCurrentPlayer TRIGGERED");
 		EventHighlightCurrentPlayer data = a_Event as EventHighlightCurrentPlayer;
@@ -93,7 +95,7 @@ public class InGameUIManager : MonoBehaviour
 		m_imgCurrentAvatar.transform.DOScale(m_vec2ScaleValue, 0.75f).From(false).SetLoops(-1).SetEase(Ease.OutCirc);
 	}
 
-	public void DiceRollAnimationComplete(IEventBase a_Event)
+	private void DiceRollAnimationComplete(IEventBase a_Event)
 	{
 		EventDiceRollAnimationComplete data = a_Event as EventDiceRollAnimationComplete;
 		if (data == null)
@@ -102,14 +104,34 @@ public class InGameUIManager : MonoBehaviour
 			return;
 		}
 
-		m_arrAnimController[(int)GameManager.Instance.EnumPlayerToken - 1].SetBool("RollDice", false);
-		m_arrAnimController[(int)GameManager.Instance.EnumPlayerToken - 1].enabled = false;
+		StartCoroutine(AnimationSequence());
 
-		Debug.Log("[InGameUIManager] The Dice Roll value: "+ GameManager.Instance.ICurrentDiceValue);
-		//This will show the current roll sprite on the dice image
-		m_arrDiceImage[(int)GameManager.Instance.EnumPlayerToken - 1].sprite = m_arrDiceSprite[GameManager.Instance.ICurrentDiceValue - 1];
+		IEnumerator AnimationSequence()
+		{
+			m_arrAnimController[(int)GameManager.Instance.EnumPlayerToken - 1].SetBool("RollDice", false);
+			yield return new WaitForSeconds(0.25f);
+			m_arrAnimController[(int)GameManager.Instance.EnumPlayerToken - 1].enabled = false;
+			yield return new WaitForEndOfFrame();
 
-		GameManager.Instance.CheckResult();
+			Debug.Log("[InGameUIManager] The Dice Roll value: " + GameManager.Instance.ICurrentDiceValue);
+			//This will show the current roll sprite on the dice image
+			m_arrDiceImage[(int)GameManager.Instance.EnumPlayerToken - 1].sprite = m_arrDiceSprite[GameManager.Instance.ICurrentDiceValue - 1];
+
+			GameManager.Instance.CheckResult();
+		}
+	}
+
+	private void PlayerTurnChanged(IEventBase a_Event)
+	{
+		Debug.Log("[InGameUIManager] Player Turn Changed TRIGGERED");
+		EventPlayerTurnChanged data = a_Event as EventPlayerTurnChanged;
+		if (data == null)
+		{
+			Debug.LogError("[InGameUIManager] Player Turn Changed trigger is null");
+			return;
+		}
+
+		EventManager.Instance.TriggerEvent<EventHighlightCurrentPlayer>(new EventHighlightCurrentPlayer(GameManager.Instance.EnumPlayerToken));
 	}
 
 	public void InputButton(string a_strInput)
@@ -119,7 +141,7 @@ public class InGameUIManager : MonoBehaviour
 			case "RollDice":
 				Debug.Log("[InGameUIManager] Roll Dice");
 				GameManager.Instance.RollTheDice();
-				AnimateDiceRoll();
+				StartCoroutine(AnimateDiceRoll());
 				break;
 			case "BackToMenu":
 				break;
@@ -127,9 +149,11 @@ public class InGameUIManager : MonoBehaviour
 
 	}
 
-	private void AnimateDiceRoll()
+	private IEnumerator AnimateDiceRoll()
 	{
+		Debug.Log("[InGameUIManager][AnimateDiceRoll] EnumPlayerToken: "+ GameManager.Instance.EnumPlayerToken +" Value for Token: "+((int)GameManager.Instance.EnumPlayerToken - 1));
 		m_arrAnimController[(int)GameManager.Instance.EnumPlayerToken - 1].enabled = true;
+		yield return new WaitForSeconds(0.25f);
 		m_arrAnimController[(int)GameManager.Instance.EnumPlayerToken -1].SetBool("RollDice",true);
 	}
 

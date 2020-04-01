@@ -1668,6 +1668,7 @@ GameObject:
   - component: {fileID: 260776957}
   - component: {fileID: 260776956}
   - component: {fileID: 260776955}
+  - component: {fileID: 260776958}
   m_Layer: 5
   m_Name: BtnDiceRoll
   m_TagString: Untagged
@@ -1784,6 +1785,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260776953}
   m_CullTransparentMesh: 0
+--- !u!114 &260776958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260776953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81b578f21321e4a4eae590d91e3b1800, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EaseEffect: 30
 --- !u!1 &263519248
 GameObject:
   m_ObjectHideFlags: 0

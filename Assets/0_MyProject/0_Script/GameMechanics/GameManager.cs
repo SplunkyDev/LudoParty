@@ -8,6 +8,7 @@ public class GameManager : MBSingleton<GameManager>
 {
 
 	private const int MAXTRY = 3;
+	private int m_iNumberOfPlayers = 1;
 
 	private PlayerData m_RefCurrentPlayer;
 	private int m_iCurrentDiceValue = 0, m_iTotalRolls = MAXTRY;
@@ -71,6 +72,8 @@ public class GameManager : MBSingleton<GameManager>
 		Debug.Log("[GameManager] PlayerData PlayerTurn: "+a_PlayerData.m_enumPlayerTurn);
 		Debug.Log("[GameManager] PlayerData PlayerToken: "+a_PlayerData.m_enumPlayerToken);
 		m_lstPlayerData.Add(a_PlayerData);
+
+		m_iNumberOfPlayers = m_lstPlayerData.Count;
 	}
 
 	// Start is called before the first frame update
@@ -146,7 +149,16 @@ public class GameManager : MBSingleton<GameManager>
 
 	private void ChangePlayerTurn()
 	{
-		//TODO: change to next player turn
+		Debug.Log("[GameManager][ChangePlayerTurn]");
+		if ((int)m_enumCurrentPlayerTurn >= (m_iNumberOfPlayers-1))
+		{
+			m_enumPlayerTurn = 0;
+		}
+		else
+		{
+			m_enumPlayerTurn++;
+		}
+
 
 		if (m_enumCurrentPlayerTurn != m_enumPlayerTurn)
 		{
@@ -156,6 +168,7 @@ public class GameManager : MBSingleton<GameManager>
 
 		//Get Reference to PlayerData, dont need to loop through players when ever update in data is required
 		CurrentPlayerData();
+		EventManager.Instance.TriggerEvent<EventHighlightCurrentPlayer>(new EventHighlightCurrentPlayer(EnumPlayerToken));
 	}
 
 
