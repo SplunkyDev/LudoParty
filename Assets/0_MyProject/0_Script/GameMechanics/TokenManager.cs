@@ -38,39 +38,46 @@ public class TokenManager : MonoBehaviour
 		DOTween.Init(true, false, LogBehaviour.Verbose);
     }
 
-	public void CheckvalidTokenMovement(int a_iDiceValue)
+	public bool CheckvalidTokenMovement(int a_iDiceValue)
 	{
+		bool bValid = false;
 		//Resets all the token before checking their movable state, basically checking if the player can move it at their turn after making the roll
 		if(m_OnResetToken != null)
 		{
 			m_OnResetToken.Invoke();
 		}
 
-		switch (GameManager.Instance.EnumPlayerTurn)
+		switch (GameManager.Instance.EnumPlayerToken)
 		{
-
-			case GameUtility.Base.ePlayerTurn.Blue:
-				AnimateValidTokens(m_lstBlueToken, a_iDiceValue);
+			case GameUtility.Base.ePlayerToken.None:
+				Debug.LogError("[TokenManager] Could not retrieve Player Token State");
 				break;
-			case GameUtility.Base.ePlayerTurn.Yellow:
-				AnimateValidTokens(m_lstYellowToken, a_iDiceValue);
+			case GameUtility.Base.ePlayerToken.Blue:
+				bValid = AnimateValidTokens(m_lstBlueToken, a_iDiceValue);
 				break;
-			case GameUtility.Base.ePlayerTurn.red:
-				AnimateValidTokens(m_lstRedToken, a_iDiceValue);
+			case GameUtility.Base.ePlayerToken.Yellow:
+				bValid = AnimateValidTokens(m_lstYellowToken, a_iDiceValue);
 				break;
-			case GameUtility.Base.ePlayerTurn.Green:
-				AnimateValidTokens(m_lstGreenToken, a_iDiceValue);
+			case GameUtility.Base.ePlayerToken.red:
+				bValid = AnimateValidTokens(m_lstRedToken, a_iDiceValue);
+				break;
+			case GameUtility.Base.ePlayerToken.Green:
+				bValid = AnimateValidTokens(m_lstGreenToken, a_iDiceValue);
 				break;
 			default:
 				break;
 		}
 
+		return bValid;
+
 	}
 		
 
 	//This method is used to check which tokens can be moved
-	private void AnimateValidTokens(List<TokenData> a_lstToken, int a_iDiceValue)
+	private bool AnimateValidTokens(List<TokenData> a_lstToken, int a_iDiceValue)
 	{
+		bool bValid = false;
+
 		for (int i = 0; i < a_lstToken.Count; i++)
 		{
 			switch (a_lstToken[i].EnumTokenState)
@@ -78,24 +85,26 @@ public class TokenManager : MonoBehaviour
 				case GameUtility.Base.eTokenState.House:
 					if (a_iDiceValue == 6)
 					{
-						a_lstToken[i].BCanBeUsed = true;
+						bValid = a_lstToken[i].BCanBeUsed = true;
 						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(true).SetLoops(3, LoopType.Yoyo);
 					}
 					break;
 				case GameUtility.Base.eTokenState.InRoute:
 				case GameUtility.Base.eTokenState.InHideOut:
-					a_lstToken[i].BCanBeUsed = true;
+					bValid = a_lstToken[i].BCanBeUsed = true;
 					a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(true).SetLoops(3, LoopType.Yoyo);
 					break;
 				case GameUtility.Base.eTokenState.InStairwayToHeaven:
 					if (PathManager.Instance.ValidateMovement(m_lstBlueToken[i], a_iDiceValue))
 					{
-						a_lstToken[i].BCanBeUsed = true;
+						bValid = a_lstToken[i].BCanBeUsed = true;
 						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(true).SetLoops(3, LoopType.Yoyo);
 					}
 					break;
 			}
 		}
+
+		return bValid;
 	}
 
 	//When the dice has been rolled and the token has been selected this will be called

@@ -32,6 +32,14 @@ namespace GameUtility.Base
 
 	public enum ePlayerTurn
 	{
+		PlayerOne = 0,
+		PlayerTwo = 1,
+		PlayerThree = 2,
+		PlayerFour = 3
+	}
+
+	public enum ePlayerToken
+	{
 		None =0,
 		Blue =1,
 		Yellow =2,
@@ -86,6 +94,14 @@ namespace GameUtility.Base
 		Yellow =2,
 		Red =3,
 		Green =4
+	}
+
+	public class PlayerData
+	{
+		public ePlayerTurn m_enumPlayerTurn;
+		public ePlayerToken m_enumPlayerToken;
+		public bool m_bPlayAgain;
+		public int m_iRollSixIn;
 	}
 
 
