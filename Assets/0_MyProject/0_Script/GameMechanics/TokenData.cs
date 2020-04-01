@@ -27,7 +27,7 @@ public class TokenData : MonoBehaviour
 	{
 		if(TokenManager.Instance == null)
 		{
-			Debug.LogError("[TokenData] Cannot find PathManager");
+			Debug.LogError("[TokenData] Cannot find TokenManager");
 			return;
 		}
 
@@ -38,7 +38,7 @@ public class TokenData : MonoBehaviour
 	{
 		if (TokenManager.Instance == null)
 		{
-			Debug.LogError("[TokenData] Cannot find PathManager");
+			Debug.LogError("[TokenData] Cannot find TokenManager");
 			return;
 		}
 
