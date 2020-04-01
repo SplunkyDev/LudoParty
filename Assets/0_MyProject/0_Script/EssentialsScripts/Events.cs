@@ -49,6 +49,18 @@ public class EventShowInGameUI : IEventBase
 		m_eGameState = a_eGameState;
 	}
 }
+
+public class EventHighlightCurrentPlayer : IEventBase
+{
+	private ePlayerToken m_enumPlayerToken;
+	public ePlayerToken EnumPlayerToken { get => m_enumPlayerToken;  }
+
+	public EventHighlightCurrentPlayer(ePlayerToken a_enumPlayerToken)
+	{
+		m_enumPlayerToken = a_enumPlayerToken;
+	}
+}
+
 #endregion
 
 #region TouchEvents

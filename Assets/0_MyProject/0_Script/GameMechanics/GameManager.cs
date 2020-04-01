@@ -56,7 +56,8 @@ public class GameManager : MBSingleton<GameManager>
 				break;
 			case 1:
 				Debug.Log("[GameManager] Game Scene Loaded");
-				InitializeGame();
+				EventManager.Instance.TriggerEvent<EventShowInGameUI>(new EventShowInGameUI(true,eGameState.InGame));
+				StartCoroutine(InitializeGame(0.15f));
 				break;
 		}
 	}
@@ -79,9 +80,10 @@ public class GameManager : MBSingleton<GameManager>
         
     }
 
-	private void InitializeGame()
+	private IEnumerator InitializeGame(float a_fDelay)
 	{
-		
+		yield return new WaitForSeconds(a_fDelay);
+		EventManager.Instance.TriggerEvent<EventHighlightCurrentPlayer>(new EventHighlightCurrentPlayer(EnumPlayerToken));
 	}
 
 
