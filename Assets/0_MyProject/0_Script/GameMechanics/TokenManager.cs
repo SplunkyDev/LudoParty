@@ -21,7 +21,7 @@ public class TokenManager : MonoBehaviour
 	[Header("Start Postion Token")]
 	[SerializeField] private List<Transform> m_lstStartBlueTokenPosition = new List<Transform>();
 	[SerializeField] private List<Transform> m_lstStartYellowTokenPosition = new List<Transform>();
-	[SerializeField] private List<Transform> m_lstStarttRedTokenPosition = new List<Transform>();
+	[SerializeField] private List<Transform> m_lstStartRedTokenPosition = new List<Transform>();
 	[SerializeField] private List<Transform> m_lstStartGreenTokenPosition = new List<Transform>();
 
 	[Header("Token References")]
@@ -39,8 +39,20 @@ public class TokenManager : MonoBehaviour
 	//This event will be called to reset all token BCanBeUsed to false;
 	public m_delResetToken m_OnResetToken;
 
-    // Start is called before the first frame update
-    void Start()
+	private void OnEnable()
+	{
+		//Reseting to init postion on game start to resized  spritepositions
+		for (int i = 0; i < 4; i++)
+		{
+			m_lstBlueToken[i].transform.position = m_lstStartBlueTokenPosition[i].position;
+			m_lstYellowToken[i].transform.position = m_lstStartYellowTokenPosition[i].position;
+			m_lstRedToken[i].transform.position = m_lstStartRedTokenPosition[i].position;
+			m_lstGreenToken[i].transform.position = m_lstStartGreenTokenPosition[i].position;
+		}
+	}
+
+	// Start is called before the first frame update
+	void Start()
     {
 		DOTween.Init(true, false, LogBehaviour.Verbose);
     }

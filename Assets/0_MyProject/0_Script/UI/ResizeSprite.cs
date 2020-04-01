@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ResizeSprite : MonoBehaviour
 {
-	private void Start()
+	private void Awake()
 	{
 		float width = ResizeSpriteManager.GetScreenToWorldWidth;
 		transform.localScale = Vector3.one * width;
