@@ -105,5 +105,33 @@ namespace GameUtility.Base
 	}
 
 
+	public enum eGameState
+	{
+		None = 0,
+		Initialize = 1,
+		LevelSelection = 2,
+		InGame = 3,
+		GameComplete = 4,
+		Menu = 6,
+		WaitingForOpponent = 7
+	}
+
+	public enum eGameUIState
+	{
+		None = 0,
+		InitializeUI = 1,
+		MenuUI = 2,
+		InGameUI = 3,
+		GameComplete = 4,
+	}
+
+	public enum eUITweenMoveState
+	{
+		None = 0,
+		Horizontal_Left = 1,
+		Horizontal_Right = 2,
+		Vertical_Up = 3,
+		vertical_Down = 4
+	}
 }
 

@@ -23,6 +23,10 @@ public class GameManager : MonoBehaviour
 	private PlayerData m_RefCurrentPlayer;
 	private int m_iCurrentDiceValue = 0, m_iTotalRolls = MAXTRY;
 	private List<PlayerData> m_lstPlayerData = new List<PlayerData>();
+
+	private eGameState m_enumGameState;
+	public eGameState EnumGameState { get => m_enumGameState; set => m_enumGameState = value; }
+
 	private ePlayerTurn m_enumCurrentPlayerTurn = ePlayerTurn.PlayerOne;
 	private ePlayerTurn m_enumPlayerTurn = ePlayerTurn.PlayerOne;
 	public ePlayerTurn EnumPlayerTurn { get => m_enumPlayerTurn; }
@@ -41,6 +45,7 @@ public class GameManager : MonoBehaviour
 			return ePlayerToken.None;
 		}
 	}
+
 
 	public void SetPlayerData(PlayerData a_PlayerData)
 	{
@@ -82,7 +87,7 @@ public class GameManager : MonoBehaviour
 		}
 		else 
 		{
-			if (!TokenManager.Instance.CheckvalidTokenMovement(m_iCurrentDiceValue))
+			if (!TokenManager.Instance.CheckValidTokenMovement(m_iCurrentDiceValue))
 			{
 				ChangePlayerTurn();
 			}

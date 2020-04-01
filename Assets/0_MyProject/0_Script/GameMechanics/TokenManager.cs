@@ -38,7 +38,7 @@ public class TokenManager : MonoBehaviour
 		DOTween.Init(true, false, LogBehaviour.Verbose);
     }
 
-	public bool CheckvalidTokenMovement(int a_iDiceValue)
+	public bool CheckValidTokenMovement(int a_iDiceValue)
 	{
 		bool bValid = false;
 		//Resets all the token before checking their movable state, basically checking if the player can move it at their turn after making the roll
