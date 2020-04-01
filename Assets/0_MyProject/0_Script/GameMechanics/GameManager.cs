@@ -78,6 +78,7 @@ public class GameManager : MBSingleton<GameManager>
     {
         
     }
+
 	private void InitializeGame()
 	{
 

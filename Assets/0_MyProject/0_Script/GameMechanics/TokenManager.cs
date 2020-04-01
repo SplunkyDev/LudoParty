@@ -18,6 +18,13 @@ public class TokenManager : MonoBehaviour
 		}
 	}
 
+	[Header("Start Postion Token")]
+	[SerializeField] private List<Transform> m_lstStartBlueTokenPosition = new List<Transform>();
+	[SerializeField] private List<Transform> m_lstStartYellowTokenPosition = new List<Transform>();
+	[SerializeField] private List<Transform> m_lstStarttRedTokenPosition = new List<Transform>();
+	[SerializeField] private List<Transform> m_lstStartGreenTokenPosition = new List<Transform>();
+
+	[Header("Token References")]
 	[SerializeField] private List<TokenData> m_lstBlueToken = new List<TokenData>();
 	[SerializeField] private List<TokenData> m_lstYellowToken = new List<TokenData>();
 	[SerializeField] private List<TokenData> m_lstRedToken = new List<TokenData>();
