@@ -11,6 +11,8 @@ public class GameManager : MBSingleton<GameManager>
 
 	private PlayerData m_RefCurrentPlayer;
 	private int m_iCurrentDiceValue = 0, m_iTotalRolls = MAXTRY;
+	public int ICurrentDiceValue { get => m_iCurrentDiceValue;}
+
 	private List<PlayerData> m_lstPlayerData = new List<PlayerData>();
 
 	private eGameState m_enumGameState;
@@ -57,7 +59,7 @@ public class GameManager : MBSingleton<GameManager>
 			case 1:
 				Debug.Log("[GameManager] Game Scene Loaded");
 				EventManager.Instance.TriggerEvent<EventShowInGameUI>(new EventShowInGameUI(true,eGameState.InGame));
-				StartCoroutine(InitializeGame(0.15f));
+				StartCoroutine(InitializeGame(1f));
 				break;
 		}
 	}
@@ -65,6 +67,9 @@ public class GameManager : MBSingleton<GameManager>
 	{
 		//Setting the value of how many turns until the player gets a forced six if not got until then
 		a_PlayerData.m_iRollSixIn = Random.Range(5, 10);
+
+		Debug.Log("[GameManager] PlayerData PlayerTurn: "+a_PlayerData.m_enumPlayerTurn);
+		Debug.Log("[GameManager] PlayerData PlayerToken: "+a_PlayerData.m_enumPlayerToken);
 		m_lstPlayerData.Add(a_PlayerData);
 	}
 
@@ -109,17 +114,23 @@ public class GameManager : MBSingleton<GameManager>
 		m_iCurrentDiceValue = UnityEngine.Random.Range(1, 6);
 	}
 
+	public void CheckResult()
+	{
+		CheckPlayerPlayCondition();
+	}
+
 	private void CheckPlayerPlayCondition()
 	{
-	
+		Debug.Log("[GameManager][CheckPlayerPlayCondition]");
 		//Checking how many 6 dice value has been got by player
-		if(m_iCurrentDiceValue == 6)
+		if (m_iCurrentDiceValue == 6)
 		{
 			UpdatePlayerSixPossiblity();
 			if (m_iTotalRolls <= 0)
 			{
 				ChangePlayerTurn();
 			}
+			Debug.Log("[GameManager][CheckPlayerPlayCondition] 6 got now");
 		}
 		else 
 		{

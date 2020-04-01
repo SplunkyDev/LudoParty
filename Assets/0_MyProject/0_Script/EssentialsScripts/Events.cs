@@ -1,6 +1,17 @@
 ﻿using GameUtility.Base;
 using UnityEngine;
 
+#region GameMechanics
+public class EventDiceRollAnimationComplete : IEventBase
+{
+	public EventDiceRollAnimationComplete()
+	{
+
+	}
+}
+
+#endregion
+
 #region UI_EVENTS
 //Event to call Game Complete UI
 public class EventShowGameCompleteUI : IEventBase
