@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GameUtility.Base;
 
-public class TouchInputManager : MonoBehaviour
+public class TouchInputManager : MBSingleton<TouchInputManager>
 {
 	private int m_iTouchID = -1;
 	private Vector3 m_vec3BeganPosi;

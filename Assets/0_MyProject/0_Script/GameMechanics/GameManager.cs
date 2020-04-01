@@ -3,20 +3,8 @@ using System.Collections.Generic;
 using GameUtility.Base;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MBSingleton<GameManager>
 {
-	private static GameManager m_instance;
-	public static GameManager Instance
-	{
-		get
-		{
-			if (m_instance == null)
-			{
-				m_instance = FindObjectOfType<GameManager>();
-			}
-			return m_instance;
-		}
-	}
 
 	private const int MAXTRY = 3;
 
