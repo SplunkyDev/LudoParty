@@ -9,7 +9,8 @@ public class MenuUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-		EventManager.Instance.TriggerEvent<EventShowMenuUI>(new EventShowMenuUI(true, eGameState.Menu));
+		if(GameManager.Instance.EnumGameState == eGameState.None)
+			EventManager.Instance.TriggerEvent<EventShowMenuUI>(new EventShowMenuUI(true, eGameState.Menu));
     }
 
     // Update is called once per frame
@@ -33,10 +34,11 @@ public class MenuUIManager : MonoBehaviour
 					playerData = null;
 				}
 
-				GameManager.Instance.LoadToGame();
+				GameManager.Instance.LoadToGame(1);
 				break;
 
 			case "Exit":
+				Application.Quit();
 				break;
 		}
 

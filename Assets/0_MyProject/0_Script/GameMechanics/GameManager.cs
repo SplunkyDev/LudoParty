@@ -84,9 +84,20 @@ public class GameManager : MBSingleton<GameManager>
 	}
 
 
-	public void LoadToGame()
+	public void LoadToGame(int a_iBuildIndex)
 	{
 		//TODO: Load Game and start the game session
+		switch (a_iBuildIndex)
+		{
+			case 0:
+				SceneManager.LoadScene(a_iBuildIndex, LoadSceneMode.Single);
+				break;
+			case 1:
+				SceneManager.LoadScene(a_iBuildIndex, LoadSceneMode.Single);
+				break;
+		}
+
+		
 	}
 
 	public void RollTheDice()
