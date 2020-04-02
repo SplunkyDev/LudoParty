@@ -75,7 +75,8 @@ namespace GameUtility.Base
 		InRoute =1,
 		InHideOut =2,
 		InStairwayToHeaven =3,
-		InHeaven =4
+		InHeaven =4,
+		EntryToStairway =5
 	}
 
 	public enum eSafePathType

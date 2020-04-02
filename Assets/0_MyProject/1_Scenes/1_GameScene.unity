@@ -888,6 +888,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enumTokenType: 1
   m_iTokenID: 2
+  m_enumTokenState: 0
 --- !u!1 &177251875
 GameObject:
   m_ObjectHideFlags: 0
@@ -1200,6 +1201,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enumTokenType: 1
   m_iTokenID: 1
+  m_enumTokenState: 0
 --- !u!1 &209994753
 GameObject:
   m_ObjectHideFlags: 0
@@ -1901,7 +1903,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_enumPathTileType: 4
-  m_enumTokenState: 1
+  m_enumTokenState: 5
 --- !u!1 &273943017
 GameObject:
   m_ObjectHideFlags: 0
@@ -2951,6 +2953,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enumTokenType: 4
   m_iTokenID: 1
+  m_enumTokenState: 0
 --- !u!1 &450059259
 GameObject:
   m_ObjectHideFlags: 0
@@ -4271,6 +4274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enumTokenType: 3
   m_iTokenID: 3
+  m_enumTokenState: 0
 --- !u!1 &659110706
 GameObject:
   m_ObjectHideFlags: 0
@@ -4411,6 +4415,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enumTokenType: 3
   m_iTokenID: 2
+  m_enumTokenState: 0
 --- !u!1 &672977443
 GameObject:
   m_ObjectHideFlags: 0
@@ -4598,7 +4603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_enumPathTileType: 8
-  m_enumTokenState: 1
+  m_enumTokenState: 5
 --- !u!1 &676725545
 GameObject:
   m_ObjectHideFlags: 0
@@ -7187,6 +7192,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enumTokenType: 4
   m_iTokenID: 3
+  m_enumTokenState: 0
 --- !u!1 &1138750901
 GameObject:
   m_ObjectHideFlags: 0
@@ -7515,6 +7521,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enumTokenType: 4
   m_iTokenID: 2
+  m_enumTokenState: 0
 --- !u!1 &1212816430
 GameObject:
   m_ObjectHideFlags: 0
@@ -7943,6 +7950,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enumTokenType: 1
   m_iTokenID: 0
+  m_enumTokenState: 0
 --- !u!1 &1294723950
 GameObject:
   m_ObjectHideFlags: 0
@@ -8271,6 +8279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enumTokenType: 4
   m_iTokenID: 0
+  m_enumTokenState: 0
 --- !u!1 &1439420774
 GameObject:
   m_ObjectHideFlags: 0
@@ -9271,7 +9280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_enumPathTileType: 2
-  m_enumTokenState: 1
+  m_enumTokenState: 5
 --- !u!1 &1576900979
 GameObject:
   m_ObjectHideFlags: 0
@@ -9558,6 +9567,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enumTokenType: 2
   m_iTokenID: 1
+  m_enumTokenState: 0
 --- !u!1 &1618699125
 GameObject:
   m_ObjectHideFlags: 0
@@ -9745,7 +9755,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_enumPathTileType: 6
-  m_enumTokenState: 1
+  m_enumTokenState: 5
 --- !u!1 &1641203401
 GameObject:
   m_ObjectHideFlags: 0
@@ -9886,6 +9896,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enumTokenType: 2
   m_iTokenID: 2
+  m_enumTokenState: 0
 --- !u!1 &1696627369
 GameObject:
   m_ObjectHideFlags: 0
@@ -11566,6 +11577,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enumTokenType: 1
   m_iTokenID: 0
+  m_enumTokenState: 0
 --- !u!1 &1931573014
 GameObject:
   m_ObjectHideFlags: 0
@@ -11736,6 +11748,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enumTokenType: 3
   m_iTokenID: 1
+  m_enumTokenState: 0
 --- !u!1 &1960583753
 GameObject:
   m_ObjectHideFlags: 0
@@ -11949,6 +11962,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enumTokenType: 2
   m_iTokenID: 0
+  m_enumTokenState: 0
 --- !u!1 &1987287342
 GameObject:
   m_ObjectHideFlags: 0
@@ -12423,6 +12437,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enumTokenType: 2
   m_iTokenID: 3
+  m_enumTokenState: 0
 --- !u!1 &2074439833
 GameObject:
   m_ObjectHideFlags: 0
@@ -12826,6 +12841,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enumTokenType: 3
   m_iTokenID: 0
+  m_enumTokenState: 0
 --- !u!1 &2132674350
 GameObject:
   m_ObjectHideFlags: 0
@@ -13060,3 +13076,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_enumTokenType: 1
   m_iTokenID: 3
+  m_enumTokenState: 0

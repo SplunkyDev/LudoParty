@@ -99,7 +99,6 @@ public class TouchInputManager : MBSingleton<TouchInputManager>
 	{
 		if(Input.GetMouseButtonUp(0))
 		{
-			Debug.Log("[TouchInputManager] Mouse button click detected");
 			EventManager.Instance.TriggerEvent<EventTouchActive>(new EventTouchActive(true, Input.mousePosition));
 		}
 	}

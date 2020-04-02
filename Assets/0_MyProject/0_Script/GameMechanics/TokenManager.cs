@@ -84,7 +84,7 @@ public class TokenManager : MonoBehaviour
 	void Start()
 	{
 		DOTween.Init(true, false, LogBehaviour.Verbose);
-		m_tweenScaleEffect = new TweenParams().SetLoops(-1).SetEase(Ease.OutCirc).SetId("ScaleEffect");
+		m_tweenScaleEffect = new TweenParams().SetLoops(-1).SetEase(Ease.OutCirc);
 	}
 
 	public bool CheckValidTokenMovement(int a_iDiceValue)
@@ -136,19 +136,19 @@ public class TokenManager : MonoBehaviour
 					if (a_iDiceValue == 6)
 					{
 						bValid = a_lstToken[i].BCanBeUsed = true;
-						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetAs(m_tweenScaleEffect);
+						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetAs(m_tweenScaleEffect).SetId("ScaleEffect");
 					}
 					break;
 				case GameUtility.Base.eTokenState.InRoute:
 				case GameUtility.Base.eTokenState.InHideOut:
 					bValid = a_lstToken[i].BCanBeUsed = true;
-					a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetAs(m_tweenScaleEffect);
+					a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetAs(m_tweenScaleEffect).SetId("ScaleEffect");
 					break;
 				case GameUtility.Base.eTokenState.InStairwayToHeaven:
 					if (PathManager.Instance.ValidateMovement(m_lstBlueToken[i], a_iDiceValue))
 					{
 						bValid = a_lstToken[i].BCanBeUsed = true;
-						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetAs(m_tweenScaleEffect);
+						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetAs(m_tweenScaleEffect).SetId("ScaleEffect");
 					}
 					break;
 			}
@@ -178,12 +178,10 @@ public class TokenManager : MonoBehaviour
 
 	private void RaycastFromScreen(Vector3 a_vec3Position)
 	{
-		Debug.Log("[TokenManger] [RaycastFromScreen]");
 		Vector2 vec2ray = Camera.main.ScreenToWorldPoint(a_vec3Position);
 		RaycastHit2D hit = Physics2D.Raycast(vec2ray, Vector2.zero, m_layerMask);
 		if (hit.collider != null)
 		{
-			Debug.Log("[TokenManger] Selection Detected");
 			if (hit.transform.CompareTag("Token"))
 			{
 				Debug.Log("[TokenManger] Token selected");
@@ -202,24 +200,22 @@ public class TokenManager : MonoBehaviour
 			return;
 		}
 
+
+		Debug.Log("[TokenManager] Scale Effect Tween Paused: " + DOTween.Pause("ScaleEffect"));
 		switch (a_refTokenData.EnumTokenType)
 		{
 			case GameUtility.Base.eTokenType.None:
 				break;
 			case GameUtility.Base.eTokenType.Blue:
-				DOTween.Pause("ScaleEffect");
 				m_TokenToMove = m_lstBlueToken[a_refTokenData.ITokenID];
 				break;
 			case GameUtility.Base.eTokenType.Yellow:
-				DOTween.Pause("ScaleEffect");
 				m_TokenToMove = m_lstYellowToken[a_refTokenData.ITokenID];
 				break;
 			case GameUtility.Base.eTokenType.Red:
-				DOTween.Pause("ScaleEffect");
 				m_TokenToMove = m_lstRedToken[a_refTokenData.ITokenID];
 				break;
 			case GameUtility.Base.eTokenType.Green:
-				DOTween.Pause("ScaleEffect");
 				m_TokenToMove = m_lstGreenToken[a_refTokenData.ITokenID];
 				break;
 			default:

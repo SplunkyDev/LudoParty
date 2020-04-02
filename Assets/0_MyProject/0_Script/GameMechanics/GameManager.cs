@@ -67,7 +67,8 @@ public class GameManager : MBSingleton<GameManager>
 	public void SetPlayerData(PlayerData a_PlayerData)
 	{
 		//Setting the value of how many turns until the player gets a forced six if not got until then
-		a_PlayerData.m_iRollSixIn = Random.Range(5, 10);
+		//a_PlayerData.m_iRollSixIn = Random.Range(5, 10);
+		a_PlayerData.m_iRollSixIn = Random.Range(1, 1);
 
 		Debug.Log("[GameManager] PlayerData PlayerTurn: "+a_PlayerData.m_enumPlayerTurn);
 		Debug.Log("[GameManager] PlayerData PlayerToken: "+a_PlayerData.m_enumPlayerToken);

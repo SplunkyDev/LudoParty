@@ -76,7 +76,7 @@ public class PathManager : MonoBehaviour
 	{
 		m_lstTilePosition.Clear();
 
-		if (a_refTokenData.ICurrentPathIndex == -1)
+		if (a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.House)
 		{
 			Debug.Log("[PathManager] Move to start Point: "+a_refTokenData.EnumTokenType.ToString());
 			switch (a_refTokenData.EnumTokenType)
@@ -84,7 +84,7 @@ public class PathManager : MonoBehaviour
 				case GameUtility.Base.eTokenType.None:
 					break;
 				case GameUtility.Base.eTokenType.Blue:
-					a_refTokenData.ICurrentPathIndex = m_refBlueStart.ITileIndex;
+					a_refTokenData.ICurrentPathIndex = m_refBlueStart.ITileIndex;				
 					m_lstTilePosition.Add(m_refBlueStart.gameObject.transform);
 					break;
 				case GameUtility.Base.eTokenType.Yellow:
@@ -103,40 +103,92 @@ public class PathManager : MonoBehaviour
 					break;
 			}
 
+			a_refTokenData.EnumTokenState = GameUtility.Base.eTokenState.InRoute;
+
 		}
 		else
 		{
+			//NOTE: USE DICE VALUE NOT TILE ID FOR GETTING TILE 
 			if (a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.InStairwayToHeaven)
 			{
 				//TODO: get path to heaven
+
 			}
 			else
 			{
 				if (a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.InRoute || a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.InHideOut)
 				{
-					int iCurrentTile = (a_refTokenData.ICurrentPathIndex + 1);
-					for (int i = iCurrentTile; i <= (iCurrentTile + a_iDiceValue); i++)
+					//int iCurrentTile = (a_refTokenData.ICurrentPathIndex + 1);
+					//int iCurrentTile = (a_refTokenData.ICurrentPathIndex);
+					//int pathIndex = iCurrentTile + a_iDiceValue;
+					//if (pathIndex > 51)
+					//{
+					//	//Path index ends at 51
+					//	pathIndex -= 51;
+					//}
+
+					for (int i = 1; i < a_iDiceValue; i++)
 					{
-						int pathIndex = iCurrentTile + a_iDiceValue;
-						if (i > pathIndex)
+						int iCurrentTile = a_refTokenData.ICurrentPathIndex;
+						iCurrentTile++;
+						//TODO: If the token enters StairwayToHeavenState here
+						if (iCurrentTile > 51)
 						{
-							//Path index ends at 51
-							i -= 51;
+							iCurrentTile = 0; 
 						}
+
 						PathTileData refPathTileData;
-						m_dicPathTileTypes.TryGetValue(i, out refPathTileData);
+						m_dicPathTileTypes.TryGetValue(iCurrentTile, out refPathTileData);
 						if (refPathTileData == null)
 						{
-							Debug.LogError("[PathManager] PathTileData is null: index: " + i);
+							Debug.LogError("[PathManager] PathTileData is null: index: " + iCurrentTile);
 						}
 						a_refTokenData.ICurrentPathIndex = refPathTileData.ITileIndex;
-						a_refTokenData.EnumTokenState = refPathTileData.EnumTokenState;
+
+						//Updating token state based on which tile it moves to 
+						#region UpdateTokenState
+						if (refPathTileData.EnumTokenState == GameUtility.Base.eTokenState.EntryToStairway)
+						{
+							switch (refPathTileData.EnumPathTileType)
+							{
+								case GameUtility.Base.ePathTileType.BlueEnd:
+									if (a_refTokenData.EnumTokenType == GameUtility.Base.eTokenType.Blue)
+										a_refTokenData.EnumTokenState = refPathTileData.EnumTokenState;
+									else
+										a_refTokenData.EnumTokenState = GameUtility.Base.eTokenState.InRoute;
+									break;
+								case GameUtility.Base.ePathTileType.YellowEnd:
+									if (a_refTokenData.EnumTokenType == GameUtility.Base.eTokenType.Yellow)
+										a_refTokenData.EnumTokenState = refPathTileData.EnumTokenState;
+									else
+										a_refTokenData.EnumTokenState = GameUtility.Base.eTokenState.InRoute;
+									break;
+								case GameUtility.Base.ePathTileType.RedEnd:
+									if (a_refTokenData.EnumTokenType == GameUtility.Base.eTokenType.Red)
+										a_refTokenData.EnumTokenState = refPathTileData.EnumTokenState;
+									else
+										a_refTokenData.EnumTokenState = GameUtility.Base.eTokenState.InRoute;
+									break;
+								case GameUtility.Base.ePathTileType.GreenEnd:
+									if (a_refTokenData.EnumTokenType == GameUtility.Base.eTokenType.Green)
+										a_refTokenData.EnumTokenState = refPathTileData.EnumTokenState;
+									else
+										a_refTokenData.EnumTokenState = GameUtility.Base.eTokenState.InRoute;
+									break;
+							}
+
+						}
+						else
+						{
+							a_refTokenData.EnumTokenState = refPathTileData.EnumTokenState;
+						}
+						#endregion
 						m_lstTilePosition.Add(refPathTileData.gameObject.transform);
 					}
 				}
 			}
 
-			
+
 
 		}
 
@@ -155,5 +207,5 @@ public class PathManager : MonoBehaviour
 		}
 		return bValid;
 	}
-		
+
 }
