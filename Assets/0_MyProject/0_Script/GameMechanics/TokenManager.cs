@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using GameUtility.Base;
 
 public class TokenManager : MonoBehaviour
 {
@@ -30,16 +31,37 @@ public class TokenManager : MonoBehaviour
 	[SerializeField] private List<TokenData> m_lstRedToken = new List<TokenData>();
 	[SerializeField] private List<TokenData> m_lstGreenToken = new List<TokenData>();
 
+	[Header("Token Layer")]
+	[SerializeField] private LayerMask m_layerMask;
+
 	private List<Transform> m_lstTokenMovePoints = new List<Transform>();
 	private bool m_bMoveTweenComplete = false;
 	private TokenData m_TokenToMove;
 	private Vector2 m_vec2Scalevalue = new Vector2(0.95f, 0.95f);
 	public delegate void m_delResetToken();
+
 	//This event will be called to reset all token BCanBeUsed to false;
 	public m_delResetToken m_OnResetToken;
 
+
+	private void RegisterToEvents()
+	{
+		EventManager.Instance.RegisterEvent<EventTouchActive>(InputReceived);
+	}
+
+	private void DereegiterToEvents()
+	{
+
+		if (EventManager.Instance == null)
+			return;
+
+		EventManager.Instance.DeRegisterEvent<EventTouchActive>(InputReceived);
+	}
+
 	private void OnEnable()
 	{
+		RegisterToEvents();
+
 		//Reseting to init postion on game start to resized  spritepositions
 		for (int i = 0; i < 4; i++)
 		{
@@ -50,17 +72,23 @@ public class TokenManager : MonoBehaviour
 		}
 	}
 
+
+	private void OnDisable()
+	{
+		DereegiterToEvents();
+	}
+
 	// Start is called before the first frame update
 	void Start()
-    {
+	{
 		DOTween.Init(true, false, LogBehaviour.Verbose);
-    }
+	}
 
 	public bool CheckValidTokenMovement(int a_iDiceValue)
 	{
 		bool bValid = false;
 		//Resets all the token before checking their movable state, basically checking if the player can move it at their turn after making the roll
-		if(m_OnResetToken != null)
+		if (m_OnResetToken != null)
 		{
 			m_OnResetToken.Invoke();
 		}
@@ -89,7 +117,7 @@ public class TokenManager : MonoBehaviour
 		return bValid;
 
 	}
-		
+
 
 	//This method is used to check which tokens can be moved
 	private bool AnimateValidTokens(List<TokenData> a_lstToken, int a_iDiceValue)
@@ -104,19 +132,19 @@ public class TokenManager : MonoBehaviour
 					if (a_iDiceValue == 6)
 					{
 						bValid = a_lstToken[i].BCanBeUsed = true;
-						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetLoops(3, LoopType.Yoyo);
+						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetLoops(-1).SetEase(Ease.OutCirc);
 					}
 					break;
 				case GameUtility.Base.eTokenState.InRoute:
 				case GameUtility.Base.eTokenState.InHideOut:
 					bValid = a_lstToken[i].BCanBeUsed = true;
-					a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetLoops(3, LoopType.Yoyo);
+					a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetLoops(-1).SetEase(Ease.OutCirc);
 					break;
 				case GameUtility.Base.eTokenState.InStairwayToHeaven:
 					if (PathManager.Instance.ValidateMovement(m_lstBlueToken[i], a_iDiceValue))
 					{
 						bValid = a_lstToken[i].BCanBeUsed = true;
-						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetLoops(3, LoopType.Yoyo);
+						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetLoops(-1).SetEase(Ease.OutCirc);
 					}
 					break;
 			}
@@ -125,23 +153,69 @@ public class TokenManager : MonoBehaviour
 		return bValid;
 	}
 
+
+	private void InputReceived(IEventBase a_Event)
+	{
+		EventTouchActive data = a_Event as EventTouchActive;
+		if(data == null)
+		{
+			Debug.LogError("[TokenManager] Touch Active trigger null");
+			return;
+		}
+
+		Debug.Log("[TokenManager] Input detected");
+		if(data.BTouch)
+		{
+			RaycastFromScreen(data.Vec3TouchPosition);
+		}
+
+		
+	}
+
+	private void RaycastFromScreen(Vector3 a_vec3Position)
+	{
+		Debug.Log("[TokenManger] [RaycastFromScreen]");
+		Vector2 vec2ray = Camera.main.ScreenToWorldPoint(a_vec3Position);
+		RaycastHit2D hit = Physics2D.Raycast(vec2ray, Vector2.zero, m_layerMask);
+		if (hit.collider != null)
+		{
+			Debug.Log("[TokenManger] Selection Detected");
+			if (hit.transform.CompareTag("Token"))
+			{
+				Debug.Log("[TokenManger] Token selected");
+				TokenSelected(hit.transform.parent.gameObject.GetComponent<TokenData>(),GameManager.Instance.ICurrentDiceValue);
+			}
+		}
+	}
+
 	//When the dice has been rolled and the token has been selected this will be called
 	public void TokenSelected(TokenData a_refTokenData, int a_iDiceValue)
 	{
+
+		if(!a_refTokenData.BCanBeUsed)
+		{
+			Debug.LogError("[TokenManager] This Token cannot be moved");
+			return;
+		}
+
 		switch (a_refTokenData.EnumTokenType)
 		{
 			case GameUtility.Base.eTokenType.None:
 				break;
 			case GameUtility.Base.eTokenType.Blue:
+				StopTokenTween(m_lstBlueToken);
 				m_TokenToMove = m_lstBlueToken[a_refTokenData.ITokenID];
 				break;
 			case GameUtility.Base.eTokenType.Yellow:
+				StopTokenTween(m_lstYellowToken);
 				m_TokenToMove = m_lstYellowToken[a_refTokenData.ITokenID];
 				break;
 			case GameUtility.Base.eTokenType.Red:
+				StopTokenTween(m_lstRedToken);
 				m_TokenToMove = m_lstRedToken[a_refTokenData.ITokenID];
 				break;
 			case GameUtility.Base.eTokenType.Green:
+				StopTokenTween(m_lstGreenToken);
 				m_TokenToMove = m_lstGreenToken[a_refTokenData.ITokenID];
 				break;
 			default:
@@ -168,15 +242,23 @@ public class TokenManager : MonoBehaviour
 		}
 	}
 
-	
+
 
 	private void MoveTweenComplete()
 	{
 		m_bMoveTweenComplete = true;
 	}
 
-	// Update is called once per frame
-	void Update()
-    {
-    }
+
+	private void StopTokenTween(List<TokenData> a_lstToken)
+	{
+		for (int i = 0; i < a_lstToken.Count; i++)
+		{
+			if (a_lstToken[i].BCanBeUsed)
+			{
+				a_lstToken[i].DOPause();
+			}
+		}
+
+	}
 }

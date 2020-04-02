@@ -11,7 +11,6 @@ public class EventPlayerTurnChanged : IEventBase
 {
 	public EventPlayerTurnChanged() { }
 }
-
 #endregion
 
 #region UI_EVENTS

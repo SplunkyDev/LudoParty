@@ -147,7 +147,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 14672214}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -240,7 +240,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 64425759}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -333,7 +333,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 67921128}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -426,7 +426,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 68450999}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -582,7 +582,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 75452450}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -845,7 +845,7 @@ GameObject:
   m_Component:
   - component: {fileID: 91256571}
   - component: {fileID: 91256573}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Blue_Token_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -937,7 +937,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 182838973}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1015,7 +1015,7 @@ GameObject:
   - component: {fileID: 189943227}
   - component: {fileID: 189943229}
   - component: {fileID: 189943228}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Green_Token
   m_TagString: Token
   m_Icon: {fileID: 0}
@@ -1156,7 +1156,7 @@ GameObject:
   m_Component:
   - component: {fileID: 196901492}
   - component: {fileID: 196901494}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Blue_Token_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1589,7 +1589,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 245933905}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1824,7 +1824,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 263519248}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1902,7 +1902,7 @@ GameObject:
   - component: {fileID: 273943018}
   - component: {fileID: 273943020}
   - component: {fileID: 273943019}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Yellow_Token
   m_TagString: Token
   m_Icon: {fileID: 0}
@@ -2210,7 +2210,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 329927027}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2288,7 +2288,7 @@ GameObject:
   - component: {fileID: 333600660}
   - component: {fileID: 333600662}
   - component: {fileID: 333600661}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Yellow_Token
   m_TagString: Token
   m_Icon: {fileID: 0}
@@ -2635,7 +2635,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 391592658}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2728,7 +2728,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 401042969}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2821,7 +2821,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 434899435}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2898,7 +2898,7 @@ GameObject:
   m_Component:
   - component: {fileID: 441854736}
   - component: {fileID: 441854738}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Green_Token_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2945,7 +2945,7 @@ GameObject:
   - component: {fileID: 450059260}
   - component: {fileID: 450059262}
   - component: {fileID: 450059261}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Green_Token
   m_TagString: Token
   m_Icon: {fileID: 0}
@@ -3325,7 +3325,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 523961148}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -3453,7 +3453,7 @@ GameObject:
   - component: {fileID: 547196157}
   - component: {fileID: 547196159}
   - component: {fileID: 547196158}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Yellow_Token
   m_TagString: Token
   m_Icon: {fileID: 0}
@@ -3742,6 +3742,7 @@ GameObject:
   - component: {fileID: 583598759}
   - component: {fileID: 583598758}
   - component: {fileID: 583598760}
+  - component: {fileID: 583598761}
   m_Layer: 0
   m_Name: LudoBoard
   m_TagString: Untagged
@@ -3827,6 +3828,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ae5ee1df3caa284aafb7b91f1da6725, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &583598761
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583598757}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &608907123
 GameObject:
   m_ObjectHideFlags: 0
@@ -3838,7 +3852,7 @@ GameObject:
   - component: {fileID: 608907124}
   - component: {fileID: 608907126}
   - component: {fileID: 608907125}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Green_Token
   m_TagString: Token
   m_Icon: {fileID: 0}
@@ -4118,7 +4132,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 637551788}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -4195,7 +4209,7 @@ GameObject:
   m_Component:
   - component: {fileID: 646725738}
   - component: {fileID: 646725740}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Red_Token_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4257,7 +4271,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 659110706}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -4334,7 +4348,7 @@ GameObject:
   m_Component:
   - component: {fileID: 664489329}
   - component: {fileID: 664489331}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Red_Token_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4396,7 +4410,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 672977443}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -4489,7 +4503,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 676353159}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -4612,7 +4626,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 684606473}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -4690,7 +4704,7 @@ GameObject:
   - component: {fileID: 685337349}
   - component: {fileID: 685337351}
   - component: {fileID: 685337350}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Blue_Token
   m_TagString: Token
   m_Icon: {fileID: 0}
@@ -4845,7 +4859,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 709831366}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -5232,7 +5246,7 @@ GameObject:
   - component: {fileID: 792765365}
   - component: {fileID: 792765367}
   - component: {fileID: 792765366}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Red_Token
   m_TagString: Token
   m_Icon: {fileID: 0}
@@ -5371,7 +5385,7 @@ GameObject:
   - component: {fileID: 813473154}
   - component: {fileID: 813473156}
   - component: {fileID: 813473155}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Blue_Token
   m_TagString: Token
   m_Icon: {fileID: 0}
@@ -5712,7 +5726,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 884596328}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -5851,7 +5865,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 901090999}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -6072,7 +6086,7 @@ GameObject:
   - component: {fileID: 936009953}
   - component: {fileID: 936009955}
   - component: {fileID: 936009954}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Blue_Token
   m_TagString: Token
   m_Icon: {fileID: 0}
@@ -6227,7 +6241,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 991346888}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -6458,7 +6472,7 @@ GameObject:
   - component: {fileID: 1028894992}
   - component: {fileID: 1028894994}
   - component: {fileID: 1028894993}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Green_Token
   m_TagString: Token
   m_Icon: {fileID: 0}
@@ -6629,7 +6643,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1040795559}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -6708,7 +6722,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1049851718}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -6801,7 +6815,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1055535500}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -6894,7 +6908,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1056062914}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -6987,7 +7001,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1063775018}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -7094,7 +7108,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1132942513}
   - component: {fileID: 1132942515}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Green_Token_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7419,7 +7433,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1174733708}
   - component: {fileID: 1174733710}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Green_Token_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7739,7 +7753,7 @@ GameObject:
   - component: {fileID: 1261657147}
   - component: {fileID: 1261657148}
   - component: {fileID: 1261657146}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Blue_Token
   m_TagString: Token
   m_Icon: {fileID: 0}
@@ -8001,7 +8015,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1322085813}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -8094,7 +8108,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1375387775}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -8171,7 +8185,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1420738634}
   - component: {fileID: 1420738636}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Green_Token_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8392,7 +8406,7 @@ GameObject:
   - component: {fileID: 1475736887}
   - component: {fileID: 1475736889}
   - component: {fileID: 1475736888}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Red_Token
   m_TagString: Token
   m_Icon: {fileID: 0}
@@ -8546,7 +8560,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1494386556}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -8639,7 +8653,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1495963315}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -8825,7 +8839,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1518745161}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -9025,7 +9039,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1535267996}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -9134,7 +9148,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1552851175}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -9305,7 +9319,7 @@ GameObject:
   - component: {fileID: 1596519104}
   - component: {fileID: 1596519106}
   - component: {fileID: 1596519105}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Yellow_Token
   m_TagString: Token
   m_Icon: {fileID: 0}
@@ -9450,7 +9464,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1602424725}
   - component: {fileID: 1602424727}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Yellow_Token_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9605,7 +9619,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1629536555}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -9775,7 +9789,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1668841099}
   - component: {fileID: 1668841101}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Yellow_Token_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9880,6 +9894,9 @@ MonoBehaviour:
   - {fileID: 441854738}
   - {fileID: 1174733710}
   - {fileID: 1132942515}
+  m_layerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!4 &1696627371
 Transform:
   m_ObjectHideFlags: 0
@@ -9954,7 +9971,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1700253155}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -10214,7 +10231,7 @@ GameObject:
   - component: {fileID: 1743993450}
   - component: {fileID: 1743993452}
   - component: {fileID: 1743993451}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Red_Token
   m_TagString: Token
   m_Icon: {fileID: 0}
@@ -10368,7 +10385,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1746988611}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -10640,7 +10657,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1758738459}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -10733,7 +10750,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1779271922}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -10856,7 +10873,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1794898489}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -10949,7 +10966,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1812976185}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -11042,7 +11059,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1827488023}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -11228,7 +11245,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1893451231}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -11442,7 +11459,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1929955898}
   - component: {fileID: 1929955900}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Blue_Token_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11504,7 +11521,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1931573014}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -11611,7 +11628,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1952763772}
   - component: {fileID: 1952763774}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Red_Token_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11746,7 +11763,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1975527842}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -11823,7 +11840,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1976425354}
   - component: {fileID: 1976425356}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Yellow_Token_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11958,7 +11975,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1996739625}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -12051,7 +12068,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2001635555}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -12217,7 +12234,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2025400108}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -12294,7 +12311,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2057241122}
   - component: {fileID: 2057241124}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Yellow_Token_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12341,7 +12358,7 @@ GameObject:
   - component: {fileID: 2074439834}
   - component: {fileID: 2074439836}
   - component: {fileID: 2074439835}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Red_Token
   m_TagString: Token
   m_Icon: {fileID: 0}
@@ -12495,7 +12512,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2083703115}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -12588,7 +12605,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2098269176}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -12695,7 +12712,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2132590896}
   - component: {fileID: 2132590898}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Red_Token_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12757,7 +12774,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2132674350}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -12850,7 +12867,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2143882671}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -12927,7 +12944,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2145191009}
   - component: {fileID: 2145191011}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Blue_Token_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}

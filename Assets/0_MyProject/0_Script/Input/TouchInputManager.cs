@@ -21,7 +21,7 @@ public class TouchInputManager : MBSingleton<TouchInputManager>
     // Update is called once per frame
     void Update()
     {
-#if UNITY_STANDALONE
+#if UNITY_STANDALONE||UNITY_EDITOR
 		MouseInput();
 #elif UNITY_ANDROID
 		TouchInput();
@@ -97,6 +97,10 @@ public class TouchInputManager : MBSingleton<TouchInputManager>
 
 	private void MouseInput()
 	{
-
+		if(Input.GetMouseButtonUp(0))
+		{
+			Debug.Log("[TouchInputManager] Mouse button click detected");
+			EventManager.Instance.TriggerEvent<EventTouchActive>(new EventTouchActive(true, Input.mousePosition));
+		}
 	}
 }
