@@ -30,6 +30,12 @@ namespace GameUtility.Base
         void DeRegisterForEvents();
     }
 
+	public enum ePlayerState
+	{
+		PlayerRollDice =0,
+		PlayerMoveToken =1
+	}
+
 	public enum ePlayerTurn
 	{
 		PlayerOne = 0,
@@ -101,6 +107,7 @@ namespace GameUtility.Base
 	{
 		public ePlayerTurn m_enumPlayerTurn;
 		public ePlayerToken m_enumPlayerToken;
+		public ePlayerState m_ePlayerState;
 		public bool m_bPlayAgain;
 		public int m_iRollSixIn;
 	}

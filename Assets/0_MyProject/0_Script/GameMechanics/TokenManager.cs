@@ -39,7 +39,9 @@ public class TokenManager : MonoBehaviour
 	private TokenData m_TokenToMove;
 	private Vector2 m_vec2Scalevalue = new Vector2(0.95f, 0.95f);
 	private TweenParams m_tweenScaleEffect;
+	private TokenData m_refCurrentToken;
 
+	private const int TOKENSPERPLAYER = 4;
 
 	public delegate void m_delResetToken();
 	//This event will be called to reset all token BCanBeUsed to false;
@@ -193,13 +195,20 @@ public class TokenManager : MonoBehaviour
 	//When the dice has been rolled and the token has been selected this will be called
 	private void TokenSelected(TokenData a_refTokenData, int a_iDiceValue)
 	{
+		m_refCurrentToken = a_refTokenData;
 
-		if(!a_refTokenData.BCanBeUsed)
+		if (!a_refTokenData.BCanBeUsed)
 		{
 			Debug.LogError("[TokenManager] This Token cannot be moved");
 			return;
 		}
 
+
+		//Resets all the token after checking their movable state, making sure no user tried to mobe any other token
+		if (m_OnResetToken != null)
+		{
+			m_OnResetToken.Invoke();
+		}
 
 		Debug.Log("[TokenManager] Scale Effect Tween Paused: " + DOTween.Pause("ScaleEffect"));
 		switch (a_refTokenData.EnumTokenType)
@@ -241,11 +250,101 @@ public class TokenManager : MonoBehaviour
 				}
 			}
 		}
+
+
+		GameManager.Instance.CheckPlayerChangeCondtion();
+		CheckIfTileContainsOtherTokens();
 	}
 
 	private void MoveTweenComplete()
-	{
+	{	
 		m_bMoveTweenComplete = true;
+	}
+
+	//After the token has been moved, if other tokens are present move them back to thrier respective homes
+	private void CheckIfTileContainsOtherTokens()
+	{
+		
+		if(m_refCurrentToken != null)
+		{
+			switch (m_refCurrentToken.EnumTokenType)
+			{
+				case eTokenType.Blue:
+					for(int i = 0;i< TOKENSPERPLAYER; i++)
+					{
+						if (m_lstRedToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+						{
+							m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
+						}
+						if (m_lstGreenToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+						{
+							m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
+						}
+						if (m_lstYellowToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+						{
+							m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
+						}
+					}
+					break;
+				case eTokenType.Yellow:
+					for (int i = 0; i < TOKENSPERPLAYER; i++)
+					{
+						if (m_lstRedToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+						{
+							m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
+						}
+						if (m_lstGreenToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+						{
+							m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
+						}
+						if (m_lstBlueToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+						{
+							m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
+						}
+					}
+					break;
+				case eTokenType.Red:
+					for (int i = 0; i < TOKENSPERPLAYER; i++)
+					{
+						if (m_lstGreenToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+						{
+							m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
+						}
+						if (m_lstYellowToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+						{
+							m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
+						}
+						if (m_lstBlueToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+						{
+							m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
+						}
+					}
+					break;
+				case eTokenType.Green:
+					for (int i = 0; i < TOKENSPERPLAYER; i++)
+					{
+						if (m_lstRedToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+						{
+							m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
+						}
+						if (m_lstYellowToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+						{
+							m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
+						}
+						if (m_lstBlueToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+						{
+							m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
+						}
+					}
+					break;
+			}
+
+			for(int i =0; i< m_lstTokenDataGoHome.Count;i++)
+			{
+				m_lstTokenDataGoHome[i].transform.DOMove((Vector2)m_lstTokenMovePoints[i].transform.position, 5, false).SetSpeedBased(true).OnComplete(MoveTweenComplete);
+			}
+
+		}
 	}
 
 }

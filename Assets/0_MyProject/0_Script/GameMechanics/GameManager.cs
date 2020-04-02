@@ -7,10 +7,12 @@ using UnityEngine.SceneManagement;
 public class GameManager : MBSingleton<GameManager>
 {
 
-	private const int MAXTRY = 3;
+	private const int MAXTRY = 2;
 	private int m_iNumberOfPlayers = 1;
 
 	private PlayerData m_RefCurrentPlayer;
+	public PlayerData CurrentPlayer { get => m_RefCurrentPlayer;}
+
 	private int m_iCurrentDiceValue = 0, m_iTotalRolls = MAXTRY;
 	public int ICurrentDiceValue { get => m_iCurrentDiceValue;}
 
@@ -68,10 +70,11 @@ public class GameManager : MBSingleton<GameManager>
 	{
 		//Setting the value of how many turns until the player gets a forced six if not got until then
 		//a_PlayerData.m_iRollSixIn = Random.Range(5, 10);
-		a_PlayerData.m_iRollSixIn = Random.Range(1, 1);
+		a_PlayerData.m_iRollSixIn = Random.Range(3, 10); ;
 
 		Debug.Log("[GameManager] PlayerData PlayerTurn: "+a_PlayerData.m_enumPlayerTurn);
 		Debug.Log("[GameManager] PlayerData PlayerToken: "+a_PlayerData.m_enumPlayerToken);
+		Debug.Log("[GameManager] PlayerData PlayerToken: "+a_PlayerData.m_iRollSixIn);
 		m_lstPlayerData.Add(a_PlayerData);
 
 		m_iNumberOfPlayers = m_lstPlayerData.Count;
@@ -96,6 +99,7 @@ public class GameManager : MBSingleton<GameManager>
 
 		//Get Reference to PlayerData, dont need to loop through players when ever update in data is required
 		CurrentPlayerData();
+		CurrentPlayer.m_ePlayerState = ePlayerState.PlayerRollDice;
 	}
 
 
@@ -118,41 +122,75 @@ public class GameManager : MBSingleton<GameManager>
 	public void RollTheDice()
 	{
 		//Let's Roll a D20, ;-P
-		m_iCurrentDiceValue = UnityEngine.Random.Range(1, 6);
+		m_iCurrentDiceValue = UnityEngine.Random.Range(1, 7);
+		m_iCurrentDiceValue = m_iCurrentDiceValue > 6?6:m_iCurrentDiceValue;
+		
 	}
 
 	public void CheckResult()
 	{
-		CheckPlayerPlayCondition();
+		UpdateBaseOnGameRules();
 	}
 
-	private void CheckPlayerPlayCondition()
+	public void CheckPlayerChangeCondtion()
+	{
+		if(!m_RefCurrentPlayer.m_bPlayAgain)
+		{
+			ChangePlayerTurn();
+		}
+	}
+
+	private void UpdateBaseOnGameRules()
 	{
 		Debug.Log("[GameManager][CheckPlayerPlayCondition]");
+		Debug.Log("[GameManager][CheckPlayerPlayCondition] Total Rolls: " + m_iTotalRolls);
+
 		//Checking how many 6 dice value has been got by player
 		if (m_iCurrentDiceValue == 6)
 		{
+			CurrentPlayer.m_bPlayAgain = true;
+
 			m_iTotalRolls--;
+			Debug.Log("[GameManager][CheckPlayerPlayCondition] Total Rolls Remaining: " + m_iTotalRolls);
 			UpdatePlayerSixPossiblity();
+			CurrentPlayer.m_ePlayerState = ePlayerState.PlayerMoveToken;
+
+		
 			if (m_iTotalRolls <= 0)
-			{
+			{			
 				ChangePlayerTurn();
-			}
+			}		
 			Debug.Log("[GameManager][CheckPlayerPlayCondition] 6 got now");
 		}
 		else 
 		{
-			if (m_RefCurrentPlayer.m_iRollSixIn <= 0)
+			Debug.Log("[GameManager][CheckPlayerPlayCondition] Dice value not : ");
+			CurrentPlayer.m_ePlayerState = ePlayerState.PlayerMoveToken;
+
+			//If the player hasnt got a 6 for a while let the player get 6
+			if (CurrentPlayer.m_iRollSixIn <= 0)
 			{
 				m_iCurrentDiceValue = 6;
+				m_iTotalRolls--;
+				Debug.Log("[GameManager][CheckPlayerPlayCondition] Total Rolls Remaining: " + m_iTotalRolls);
+				UpdatePlayerSixPossiblity();
+				CurrentPlayer.m_bPlayAgain = true;
 			}
+			else
+			{
+				CurrentPlayer.m_bPlayAgain = false;
+			}
+
+			//If SIX has not been got by the player 
+			IncreasePossiblityofGettingSix();
 
 			if (!TokenManager.Instance.CheckValidTokenMovement(m_iCurrentDiceValue))
 			{
 				ChangePlayerTurn();
 			}
-			//If SIX has not been got by the player 
-			IncreasePossiblityofGettingSix();
+
+			
+			
 		}
 	}
 
@@ -175,6 +213,7 @@ public class GameManager : MBSingleton<GameManager>
 			m_iTotalRolls = MAXTRY;
 		}
 
+		CurrentPlayer.m_ePlayerState = ePlayerState.PlayerRollDice;
 		//Get Reference to PlayerData, dont need to loop through players when ever update in data is required
 		CurrentPlayerData();
 		EventManager.Instance.TriggerEvent<EventHighlightCurrentPlayer>(new EventHighlightCurrentPlayer(EnumPlayerToken));
@@ -186,12 +225,12 @@ public class GameManager : MBSingleton<GameManager>
 	private void UpdatePlayerSixPossiblity()
 	{
 		Debug.Log("[GameManager]Updated Possiblity of getting 6");
-		m_RefCurrentPlayer.m_iRollSixIn = Random.Range(3, 10);
+		CurrentPlayer.m_iRollSixIn = Random.Range(3, 10);
 	}
 
 	private void IncreasePossiblityofGettingSix()
 	{
-		m_RefCurrentPlayer.m_iRollSixIn--;
+		CurrentPlayer.m_iRollSixIn--;
 	}
 
 	private void CurrentPlayerData()

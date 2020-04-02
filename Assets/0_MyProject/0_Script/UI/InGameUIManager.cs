@@ -144,11 +144,19 @@ public class InGameUIManager : MonoBehaviour
 		switch (a_strInput)
 		{
 			case "RollDice":
+
+				if (GameManager.Instance.CurrentPlayer.m_ePlayerState != ePlayerState.PlayerRollDice)
+					return;
+
 				Debug.Log("[InGameUIManager] Roll Dice");
 				GameManager.Instance.RollTheDice();
 				StartCoroutine(AnimateDiceRoll());
 				break;
 			case "BackToMenu":
+				if (GameManager.Instance.EnumGameState!= eGameState.InGame)
+						return;
+
+				GameManager.Instance.LoadToGame(0);
 				break;
 		}
 
