@@ -127,7 +127,7 @@ public class PathManager : MonoBehaviour
 					//	pathIndex -= 51;
 					//}
 
-					for (int i = 1; i < a_iDiceValue; i++)
+					for (int i = 1; i <= a_iDiceValue; i++)
 					{
 						int iCurrentTile = a_refTokenData.ICurrentPathIndex;
 						iCurrentTile++;

@@ -234,7 +234,7 @@ public class TokenManager : MonoBehaviour
 			for (int i = 0; i < m_lstTokenMovePoints.Count; i++)
 			{
 				m_bMoveTweenComplete = false;
-				m_TokenToMove.transform.DOMove((Vector2)m_lstTokenMovePoints[i].localPosition, 5, false).SetSpeedBased(true).OnComplete(MoveTweenComplete);
+				m_TokenToMove.transform.DOMove((Vector2)m_lstTokenMovePoints[i].transform.position, 5, false).SetSpeedBased(true).OnComplete(MoveTweenComplete);
 				while (!m_bMoveTweenComplete)
 				{
 					yield return null;
