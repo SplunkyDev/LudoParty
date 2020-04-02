@@ -252,27 +252,47 @@ public class PathManager : MonoBehaviour
 							{
 								case GameUtility.Base.ePathTileType.BlueEnd:
 									if (a_refTokenData.EnumTokenType == GameUtility.Base.eTokenType.Blue)
+									{
 										a_refTokenData.EnumTokenState = refPathTileData.EnumTokenState;
+										//TODO: should enter the stairway to heaven
+									}
 									else
+									{
 										a_refTokenData.EnumTokenState = GameUtility.Base.eTokenState.InRoute;
+									}
 									break;
 								case GameUtility.Base.ePathTileType.YellowEnd:
 									if (a_refTokenData.EnumTokenType == GameUtility.Base.eTokenType.Yellow)
+									{
 										a_refTokenData.EnumTokenState = refPathTileData.EnumTokenState;
+										//TODO: should enter the stairway to heaven
+									}
 									else
+									{
 										a_refTokenData.EnumTokenState = GameUtility.Base.eTokenState.InRoute;
+									}
 									break;
 								case GameUtility.Base.ePathTileType.RedEnd:
 									if (a_refTokenData.EnumTokenType == GameUtility.Base.eTokenType.Red)
+									{
 										a_refTokenData.EnumTokenState = refPathTileData.EnumTokenState;
+										//TODO: should enter the stairway to heaven
+									}
 									else
+									{
 										a_refTokenData.EnumTokenState = GameUtility.Base.eTokenState.InRoute;
+									}
 									break;
 								case GameUtility.Base.ePathTileType.GreenEnd:
 									if (a_refTokenData.EnumTokenType == GameUtility.Base.eTokenType.Green)
+									{
 										a_refTokenData.EnumTokenState = refPathTileData.EnumTokenState;
+										//TODO: should enter the stairway to heaven
+									}
 									else
+									{
 										a_refTokenData.EnumTokenState = GameUtility.Base.eTokenState.InRoute;
+									}
 									break;
 							}
 
