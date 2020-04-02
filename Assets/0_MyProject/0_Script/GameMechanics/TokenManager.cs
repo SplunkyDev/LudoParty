@@ -38,8 +38,10 @@ public class TokenManager : MonoBehaviour
 	private bool m_bMoveTweenComplete = false;
 	private TokenData m_TokenToMove;
 	private Vector2 m_vec2Scalevalue = new Vector2(0.95f, 0.95f);
-	public delegate void m_delResetToken();
+	private TweenParams m_tweenScaleEffect;
 
+
+	public delegate void m_delResetToken();
 	//This event will be called to reset all token BCanBeUsed to false;
 	public m_delResetToken m_OnResetToken;
 
@@ -82,6 +84,7 @@ public class TokenManager : MonoBehaviour
 	void Start()
 	{
 		DOTween.Init(true, false, LogBehaviour.Verbose);
+		m_tweenScaleEffect = new TweenParams().SetLoops(-1).SetEase(Ease.OutCirc).SetId("ScaleEffect");
 	}
 
 	public bool CheckValidTokenMovement(int a_iDiceValue)
@@ -122,6 +125,7 @@ public class TokenManager : MonoBehaviour
 	//This method is used to check which tokens can be moved
 	private bool AnimateValidTokens(List<TokenData> a_lstToken, int a_iDiceValue)
 	{
+		
 		bool bValid = false;
 
 		for (int i = 0; i < a_lstToken.Count; i++)
@@ -132,19 +136,19 @@ public class TokenManager : MonoBehaviour
 					if (a_iDiceValue == 6)
 					{
 						bValid = a_lstToken[i].BCanBeUsed = true;
-						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetLoops(-1).SetEase(Ease.OutCirc);
+						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetAs(m_tweenScaleEffect);
 					}
 					break;
 				case GameUtility.Base.eTokenState.InRoute:
 				case GameUtility.Base.eTokenState.InHideOut:
 					bValid = a_lstToken[i].BCanBeUsed = true;
-					a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetLoops(-1).SetEase(Ease.OutCirc);
+					a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetAs(m_tweenScaleEffect);
 					break;
 				case GameUtility.Base.eTokenState.InStairwayToHeaven:
 					if (PathManager.Instance.ValidateMovement(m_lstBlueToken[i], a_iDiceValue))
 					{
 						bValid = a_lstToken[i].BCanBeUsed = true;
-						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetLoops(-1).SetEase(Ease.OutCirc);
+						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetAs(m_tweenScaleEffect);
 					}
 					break;
 			}
@@ -189,7 +193,7 @@ public class TokenManager : MonoBehaviour
 	}
 
 	//When the dice has been rolled and the token has been selected this will be called
-	public void TokenSelected(TokenData a_refTokenData, int a_iDiceValue)
+	private void TokenSelected(TokenData a_refTokenData, int a_iDiceValue)
 	{
 
 		if(!a_refTokenData.BCanBeUsed)
@@ -203,24 +207,25 @@ public class TokenManager : MonoBehaviour
 			case GameUtility.Base.eTokenType.None:
 				break;
 			case GameUtility.Base.eTokenType.Blue:
-				StopTokenTween(m_lstBlueToken);
+				DOTween.Pause("ScaleEffect");
 				m_TokenToMove = m_lstBlueToken[a_refTokenData.ITokenID];
 				break;
 			case GameUtility.Base.eTokenType.Yellow:
-				StopTokenTween(m_lstYellowToken);
+				DOTween.Pause("ScaleEffect");
 				m_TokenToMove = m_lstYellowToken[a_refTokenData.ITokenID];
 				break;
 			case GameUtility.Base.eTokenType.Red:
-				StopTokenTween(m_lstRedToken);
+				DOTween.Pause("ScaleEffect");
 				m_TokenToMove = m_lstRedToken[a_refTokenData.ITokenID];
 				break;
 			case GameUtility.Base.eTokenType.Green:
-				StopTokenTween(m_lstGreenToken);
+				DOTween.Pause("ScaleEffect");
 				m_TokenToMove = m_lstGreenToken[a_refTokenData.ITokenID];
 				break;
 			default:
 				break;
 		}
+
 
 		//calling the coroutine
 		StartCoroutine(PlayerTurn(0.15f));
@@ -233,7 +238,7 @@ public class TokenManager : MonoBehaviour
 			for (int i = 0; i < m_lstTokenMovePoints.Count; i++)
 			{
 				m_bMoveTweenComplete = false;
-				m_TokenToMove.transform.DOMove(m_lstTokenMovePoints[i].position, 5, false).SetSpeedBased(true).OnComplete(MoveTweenComplete);
+				m_TokenToMove.transform.DOMove((Vector2)m_lstTokenMovePoints[i].localPosition, 5, false).SetSpeedBased(true).OnComplete(MoveTweenComplete);
 				while (!m_bMoveTweenComplete)
 				{
 					yield return null;
@@ -242,23 +247,9 @@ public class TokenManager : MonoBehaviour
 		}
 	}
 
-
-
 	private void MoveTweenComplete()
 	{
 		m_bMoveTweenComplete = true;
 	}
 
-
-	private void StopTokenTween(List<TokenData> a_lstToken)
-	{
-		for (int i = 0; i < a_lstToken.Count; i++)
-		{
-			if (a_lstToken[i].BCanBeUsed)
-			{
-				a_lstToken[i].DOPause();
-			}
-		}
-
-	}
 }

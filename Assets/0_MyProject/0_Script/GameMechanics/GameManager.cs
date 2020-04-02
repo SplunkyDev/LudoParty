@@ -131,6 +131,7 @@ public class GameManager : MBSingleton<GameManager>
 		//Checking how many 6 dice value has been got by player
 		if (m_iCurrentDiceValue == 6)
 		{
+			m_iTotalRolls--;
 			UpdatePlayerSixPossiblity();
 			if (m_iTotalRolls <= 0)
 			{
@@ -183,7 +184,8 @@ public class GameManager : MBSingleton<GameManager>
 	#region Modify_PlayerData
 	private void UpdatePlayerSixPossiblity()
 	{
-		m_RefCurrentPlayer.m_iRollSixIn = Random.Range(5, 10);
+		Debug.Log("[GameManager]Updated Possiblity of getting 6");
+		m_RefCurrentPlayer.m_iRollSixIn = Random.Range(3, 10);
 	}
 
 	private void IncreasePossiblityofGettingSix()

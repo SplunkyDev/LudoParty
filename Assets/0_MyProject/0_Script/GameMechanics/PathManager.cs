@@ -112,14 +112,27 @@ public class PathManager : MonoBehaviour
 			}
 			else
 			{
-				int iCurrentTile = (a_refTokenData.ICurrentPathIndex + 1);
-				for (int i = iCurrentTile; i <= (iCurrentTile + a_iDiceValue); i++)
+				if (a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.InRoute || a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.InHideOut)
 				{
-					PathTileData refPathTileData;
-					m_dicPathTileTypes.TryGetValue(i, out refPathTileData);
-					a_refTokenData.ICurrentPathIndex = refPathTileData.ITileIndex;
-					a_refTokenData.BInSpecial = refPathTileData.EnumPathTileType == GameUtility.Base.ePathTileType.Special ? true : false;
-					m_lstTilePosition.Add(refPathTileData.gameObject.transform);
+					int iCurrentTile = (a_refTokenData.ICurrentPathIndex + 1);
+					for (int i = iCurrentTile; i <= (iCurrentTile + a_iDiceValue); i++)
+					{
+						int pathIndex = iCurrentTile + a_iDiceValue;
+						if (i > pathIndex)
+						{
+							//Path index ends at 51
+							i -= 51;
+						}
+						PathTileData refPathTileData;
+						m_dicPathTileTypes.TryGetValue(i, out refPathTileData);
+						if (refPathTileData == null)
+						{
+							Debug.LogError("[PathManager] PathTileData is null: index: " + i);
+						}
+						a_refTokenData.ICurrentPathIndex = refPathTileData.ITileIndex;
+						a_refTokenData.EnumTokenState = refPathTileData.EnumTokenState;
+						m_lstTilePosition.Add(refPathTileData.gameObject.transform);
+					}
 				}
 			}
 
@@ -129,6 +142,7 @@ public class PathManager : MonoBehaviour
 
 		return m_lstTilePosition;
 	}
+
 
 	//Checking while in stairway the heaven the dice value is valid to move to heaven
 	public bool ValidateMovement(TokenData a_refTokenData, int a_iDiceValue)

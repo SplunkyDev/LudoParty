@@ -14,10 +14,7 @@ public class TokenData : MonoBehaviour
 	private int m_iCurrentPathIndex = -1; //-1 means it is at home
 	public int ICurrentPathIndex { get => m_iCurrentPathIndex; set => m_iCurrentPathIndex = value; }
 
-	private bool m_bInSpecial;
-	public bool BInSpecial { get => m_bInSpecial; set => m_bInSpecial = value; }
-
-	private GameUtility.Base.eTokenState m_enumTokenState = GameUtility.Base.eTokenState.House;
+	[SerializeField]private GameUtility.Base.eTokenState m_enumTokenState = GameUtility.Base.eTokenState.House;
 	public eTokenState EnumTokenState { get => m_enumTokenState; set => m_enumTokenState = value; }
 
 	private bool m_bCanBeUsed = false;
