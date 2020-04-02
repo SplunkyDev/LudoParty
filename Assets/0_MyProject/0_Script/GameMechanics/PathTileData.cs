@@ -13,7 +13,7 @@ public class PathTileData : MonoBehaviour
 
 	private bool m_bTokenPresent = false;
 	public bool BTokenPresent { get => m_bTokenPresent; set => m_bTokenPresent = value; }
-	private int m_iTileIndex = 0;
+	[SerializeField]private int m_iTileIndex = 0;
 	public int ITileIndex { get => m_iTileIndex; set => m_iTileIndex = value; }
 
 	void Start()

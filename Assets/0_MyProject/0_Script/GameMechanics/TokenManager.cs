@@ -91,6 +91,8 @@ public class TokenManager : MonoBehaviour
 
 	public bool CheckValidTokenMovement(int a_iDiceValue)
 	{
+		
+		Debug.Log("[TokenManager][CheckValidTokenMovement]");
 		bool bValid = false;
 		//Resets all the token before checking their movable state, basically checking if the player can move it at their turn after making the roll
 		if (m_OnResetToken != null)
@@ -127,7 +129,7 @@ public class TokenManager : MonoBehaviour
 	//This method is used to check which tokens can be moved
 	private bool AnimateValidTokens(List<TokenData> a_lstToken, int a_iDiceValue)
 	{
-		
+		Debug.Log("[TokenManager][AnimateValidTokens]");
 		bool bValid = false;
 
 		for (int i = 0; i < a_lstToken.Count; i++)
@@ -195,7 +197,7 @@ public class TokenManager : MonoBehaviour
 	//When the dice has been rolled and the token has been selected this will be called
 	private void TokenSelected(TokenData a_refTokenData, int a_iDiceValue)
 	{
-		m_refCurrentToken = a_refTokenData;
+		
 
 		if (!a_refTokenData.BCanBeUsed)
 		{
@@ -230,8 +232,6 @@ public class TokenManager : MonoBehaviour
 			default:
 				break;
 		}
-
-
 		//calling the coroutine
 		StartCoroutine(PlayerTurn(0.15f));
 
@@ -240,6 +240,7 @@ public class TokenManager : MonoBehaviour
 		{
 			yield return new WaitForSeconds(a_fDelay);
 			m_lstTokenMovePoints = PathManager.Instance.TokenStateUpdate(m_TokenToMove, a_iDiceValue);
+			Debug.Log("<color=red>[TokenManager]  m_TokenToMove: " + m_TokenToMove.ICurrentPathIndex+"</color>");
 			for (int i = 0; i < m_lstTokenMovePoints.Count; i++)
 			{
 				m_bMoveTweenComplete = false;
@@ -249,11 +250,17 @@ public class TokenManager : MonoBehaviour
 					yield return null;
 				}
 			}
+
+			GameManager.Instance.CurrentPlayer.m_ePlayerState = ePlayerState.PlayerRollDice;
+			if (m_TokenToMove.EnumTokenState != eTokenState.House)
+			{
+				m_refCurrentToken = m_TokenToMove;
+				Debug.Log("<color=red>[TokenManager] Current Token InRoute,check if other token present in same tile: m_refCurrentToken: " + m_refCurrentToken.ICurrentPathIndex + "</color>");
+				CheckIfTileContainsOtherTokens();
+			}
+			GameManager.Instance.CheckPlayerChangeCondtion();
 		}
 
-		CheckIfTileContainsOtherTokens();
-		GameManager.Instance.CheckPlayerChangeCondtion();
-		
 	}
 
 	private void MoveTweenComplete()
@@ -267,73 +274,122 @@ public class TokenManager : MonoBehaviour
 		
 		if(m_refCurrentToken != null)
 		{
+			Debug.Log("[TokenManager] checking current token tile position with other tokens, send them HOME");
 			switch (m_refCurrentToken.EnumTokenType)
 			{
 				case eTokenType.Blue:
 					for(int i = 0;i< TOKENSPERPLAYER; i++)
 					{
-						if (m_lstRedToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+						if(m_lstRedToken[i].EnumTokenState != eTokenState.InHideOut)
 						{
-							m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							if (m_lstRedToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							}
 						}
-						if (m_lstGreenToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+
+						if (m_lstGreenToken[i].EnumTokenState != eTokenState.InHideOut)
 						{
-							m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							}
 						}
-						if (m_lstYellowToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+
+						if (m_lstYellowToken[i].EnumTokenState != eTokenState.InHideOut)
 						{
-							m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							Debug.Log("[TokenManager] Yellow Token not in hiding, its in danger! Current Token: "+m_refCurrentToken.ICurrentPathIndex+" Checking Token: "+ m_lstYellowToken[i].ICurrentPathIndex);
+							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								Debug.Log("[TokenManager] YELLOW: Gotchya GO HOME!");
+								m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							}
 						}
 					}
 					break;
 				case eTokenType.Yellow:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						if (m_lstRedToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+						if (m_lstRedToken[i].EnumTokenState != eTokenState.InHideOut)
 						{
-							m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							if (m_lstRedToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							}
 						}
-						if (m_lstGreenToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+
+						if (m_lstGreenToken[i].EnumTokenState != eTokenState.InHideOut)
 						{
-							m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							}
 						}
-						if (m_lstBlueToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+
+						if (m_lstBlueToken[i].EnumTokenState != eTokenState.InHideOut)
 						{
-							m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							Debug.Log("[TokenManager] Blue Token not in hiding, its in danger! Current Token: " + m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex + " Checking Token: " + m_lstBlueToken[i].ICurrentPathIndex);
+							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								Debug.Log("[TokenManager] BLUE: Gotchya GO HOME!");
+								m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							}
 						}
 					}
 					break;
 				case eTokenType.Red:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						if (m_lstGreenToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+						if (m_lstYellowToken[i].EnumTokenState != eTokenState.InHideOut)
 						{
-							m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							}
 						}
-						if (m_lstYellowToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+
+						if (m_lstGreenToken[i].EnumTokenState != eTokenState.InHideOut)
 						{
-							m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							}
 						}
-						if (m_lstBlueToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+
+						if (m_lstBlueToken[i].EnumTokenState != eTokenState.InHideOut)
 						{
-							m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							}
 						}
 					}
 					break;
 				case eTokenType.Green:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						if (m_lstRedToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+						if (m_lstYellowToken[i].EnumTokenState != eTokenState.InHideOut)
 						{
-							m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							}
 						}
-						if (m_lstYellowToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+
+						if (m_lstRedToken[i].EnumTokenState != eTokenState.InHideOut)
 						{
-							m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							if (m_lstRedToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							}
 						}
-						if (m_lstBlueToken[i].ICurrentPathIndex == m_refCurrentToken.ICurrentPathIndex)
+
+						if (m_lstBlueToken[i].EnumTokenState != eTokenState.InHideOut)
 						{
-							m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
+							}
 						}
 					}
 					break;

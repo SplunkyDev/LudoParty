@@ -11,7 +11,7 @@ public class GameManager : MBSingleton<GameManager>
 	private int m_iNumberOfPlayers = 1;
 
 	private PlayerData m_RefCurrentPlayer;
-	public PlayerData CurrentPlayer { get => m_RefCurrentPlayer;}
+	public PlayerData CurrentPlayer { get => m_RefCurrentPlayer; set => m_RefCurrentPlayer = value; }
 
 	private int m_iCurrentDiceValue = 0, m_iTotalRolls = MAXTRY;
 	public int ICurrentDiceValue { get => m_iCurrentDiceValue;}
@@ -124,7 +124,8 @@ public class GameManager : MBSingleton<GameManager>
 		//Let's Roll a D20, ;-P
 		m_iCurrentDiceValue = UnityEngine.Random.Range(1, 7);
 		m_iCurrentDiceValue = m_iCurrentDiceValue > 6?6:m_iCurrentDiceValue;
-		
+		CurrentPlayer.m_ePlayerState = ePlayerState.PlayerMoveToken;
+
 	}
 
 	public void CheckResult()
@@ -153,9 +154,9 @@ public class GameManager : MBSingleton<GameManager>
 			m_iTotalRolls--;
 			Debug.Log("[GameManager][CheckPlayerPlayCondition] Total Rolls Remaining: " + m_iTotalRolls);
 			UpdatePlayerSixPossiblity();
-			CurrentPlayer.m_ePlayerState = ePlayerState.PlayerMoveToken;
 
-		
+			TokenManager.Instance.CheckValidTokenMovement(m_iCurrentDiceValue);
+
 			if (m_iTotalRolls <= 0)
 			{			
 				ChangePlayerTurn();
@@ -165,8 +166,8 @@ public class GameManager : MBSingleton<GameManager>
 		else 
 		{
 			Debug.Log("[GameManager][CheckPlayerPlayCondition] Dice value not : ");
-			CurrentPlayer.m_ePlayerState = ePlayerState.PlayerMoveToken;
-
+			//This is used to check whether the palyer get 6 continuously 3 times
+			m_iTotalRolls = MAXTRY;
 			//If the player hasnt got a 6 for a while let the player get 6
 			if (CurrentPlayer.m_iRollSixIn <= 0)
 			{
