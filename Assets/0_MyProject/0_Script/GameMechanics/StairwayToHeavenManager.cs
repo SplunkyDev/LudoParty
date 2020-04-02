@@ -6,7 +6,7 @@ public class StairwayToHeavenManager : MonoBehaviour
 {
 	//This is to set which token this path belongs to, RED, BLUE etc
 	[SerializeField] private GameUtility.Base.eSafePathType m_enumSafePathType = GameUtility.Base.eSafePathType.None;
-	private Dictionary<int, PathTileData> m_dicStairwayToHeaven = new Dictionary<int, PathTileData>();
+	public Dictionary<int, PathTileData> m_dicStairwayToHeaven = new Dictionary<int, PathTileData>();
 
     // Start is called before the first frame update
     void Start()

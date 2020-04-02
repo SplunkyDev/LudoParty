@@ -18,6 +18,8 @@ public class PathManager : MonoBehaviour
 	}
 	//This dictionary contains all the tile data
 	private Dictionary<int,PathTileData> m_dicPathTileTypes = new Dictionary<int, PathTileData>();
+
+	[Header("WayPoints To Heaven (Blue,Yellow,Red,Green)")]
 	//This list contains the reference to the script that holds all the data of the safe bath to finish line
 	[SerializeField] private List<StairwayToHeavenManager> m_lstStairwayToHeaven = new List<StairwayToHeavenManager>();
 	//reference to the start tile for each of the token types
@@ -111,21 +113,118 @@ public class PathManager : MonoBehaviour
 			//NOTE: USE DICE VALUE NOT TILE ID FOR GETTING TILE 
 			if (a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.InStairwayToHeaven)
 			{
-				//TODO: get path to heaven
+				int iCurrentTile = a_refTokenData.ICurrentPathIndex;
+				//Checking while in stairway the heaven the dice value is valid to move to heaven
+				if ((iCurrentTile + a_iDiceValue) >= STEPCOUNT)
+				{
+					Debug.LogError("[PathManager] Cannot enter heaven to wealthy not humble");
+					return null;
+				}
+				#region RetreiveWaypoint
+				PathTileData refPathTileData;
+				for (int i = 1; i < a_iDiceValue; i++)
+				{
+					iCurrentTile++;
 
+					switch (a_refTokenData.EnumTokenType)
+					{
+						case GameUtility.Base.eTokenType.Blue:
+							m_lstStairwayToHeaven[0].m_dicStairwayToHeaven.TryGetValue(iCurrentTile, out refPathTileData);
+							if (refPathTileData == null)
+							{
+								Debug.LogError("[PathManager] PathTileData is null: index: " + iCurrentTile);
+							}
+							a_refTokenData.ICurrentPathIndex = refPathTileData.ITileIndex;
+							m_lstTilePosition.Add(refPathTileData.gameObject.transform);
+							break;
+						case GameUtility.Base.eTokenType.Yellow:
+							m_lstStairwayToHeaven[1].m_dicStairwayToHeaven.TryGetValue(iCurrentTile, out refPathTileData);
+							if (refPathTileData == null)
+							{
+								Debug.LogError("[PathManager] PathTileData is null: index: " + iCurrentTile);
+							}
+							a_refTokenData.ICurrentPathIndex = refPathTileData.ITileIndex;
+							m_lstTilePosition.Add(refPathTileData.gameObject.transform);
+							break;
+						case GameUtility.Base.eTokenType.Red:
+							m_lstStairwayToHeaven[2].m_dicStairwayToHeaven.TryGetValue(iCurrentTile, out refPathTileData);
+							if (refPathTileData == null)
+							{
+								Debug.LogError("[PathManager] PathTileData is null: index: " + iCurrentTile);
+							}
+							a_refTokenData.ICurrentPathIndex = refPathTileData.ITileIndex;
+							m_lstTilePosition.Add(refPathTileData.gameObject.transform);
+							break;
+						case GameUtility.Base.eTokenType.Green:
+							m_lstStairwayToHeaven[3].m_dicStairwayToHeaven.TryGetValue(iCurrentTile, out refPathTileData);
+							if (refPathTileData == null)
+							{
+								Debug.LogError("[PathManager] PathTileData is null: index: " + iCurrentTile);
+							}
+							a_refTokenData.ICurrentPathIndex = refPathTileData.ITileIndex;
+							m_lstTilePosition.Add(refPathTileData.gameObject.transform);
+							break;
+					}
+
+				}
+				#endregion
+			}
+			else if(a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.EntryToStairway)
+			{
+				int iCurrentTile = -1;
+				#region RetreiveWaypoints
+				PathTileData refPathTileData;			
+				for (int i =1;i<a_iDiceValue;i++)
+				{
+					iCurrentTile++;
+
+					switch (a_refTokenData.EnumTokenType)
+					{
+						case GameUtility.Base.eTokenType.Blue:
+							m_lstStairwayToHeaven[0].m_dicStairwayToHeaven.TryGetValue(iCurrentTile, out refPathTileData);
+							if (refPathTileData == null)
+							{
+								Debug.LogError("[PathManager] PathTileData is null: index: " + iCurrentTile);
+							}
+							a_refTokenData.ICurrentPathIndex = refPathTileData.ITileIndex;
+							m_lstTilePosition.Add(refPathTileData.gameObject.transform);
+							break;
+						case GameUtility.Base.eTokenType.Yellow:
+							m_lstStairwayToHeaven[1].m_dicStairwayToHeaven.TryGetValue(iCurrentTile, out refPathTileData);
+							if (refPathTileData == null)
+							{
+								Debug.LogError("[PathManager] PathTileData is null: index: " + iCurrentTile);
+							}
+							a_refTokenData.ICurrentPathIndex = refPathTileData.ITileIndex;
+							m_lstTilePosition.Add(refPathTileData.gameObject.transform);
+							break;
+						case GameUtility.Base.eTokenType.Red:
+							m_lstStairwayToHeaven[2].m_dicStairwayToHeaven.TryGetValue(iCurrentTile, out refPathTileData);
+							if (refPathTileData == null)
+							{
+								Debug.LogError("[PathManager] PathTileData is null: index: " + iCurrentTile);
+							}
+							a_refTokenData.ICurrentPathIndex = refPathTileData.ITileIndex;
+							m_lstTilePosition.Add(refPathTileData.gameObject.transform);
+							break;
+						case GameUtility.Base.eTokenType.Green:
+							m_lstStairwayToHeaven[3].m_dicStairwayToHeaven.TryGetValue(iCurrentTile, out refPathTileData);
+							if (refPathTileData == null)
+							{
+								Debug.LogError("[PathManager] PathTileData is null: index: " + iCurrentTile);
+							}
+							a_refTokenData.ICurrentPathIndex = refPathTileData.ITileIndex;
+							m_lstTilePosition.Add(refPathTileData.gameObject.transform);
+							break;
+					}
+					
+				}
+				#endregion
 			}
 			else
 			{
 				if (a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.InRoute || a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.InHideOut)
 				{
-					//int iCurrentTile = (a_refTokenData.ICurrentPathIndex + 1);
-					//int iCurrentTile = (a_refTokenData.ICurrentPathIndex);
-					//int pathIndex = iCurrentTile + a_iDiceValue;
-					//if (pathIndex > 51)
-					//{
-					//	//Path index ends at 51
-					//	pathIndex -= 51;
-					//}
 
 					for (int i = 1; i <= a_iDiceValue; i++)
 					{
@@ -145,8 +244,8 @@ public class PathManager : MonoBehaviour
 						}
 						a_refTokenData.ICurrentPathIndex = refPathTileData.ITileIndex;
 
-						//Updating token state based on which tile it moves to 
-						#region UpdateTokenState
+						//Updating token state based on which token reaches its entry tile
+						#region UpdateTokenStateWhenReachingEntry
 						if (refPathTileData.EnumTokenState == GameUtility.Base.eTokenState.EntryToStairway)
 						{
 							switch (refPathTileData.EnumPathTileType)
@@ -195,17 +294,23 @@ public class PathManager : MonoBehaviour
 		return m_lstTilePosition;
 	}
 
-
-	//Checking while in stairway the heaven the dice value is valid to move to heaven
 	public bool ValidateMovement(TokenData a_refTokenData, int a_iDiceValue)
 	{
-		bool bValid = false;
-
-		if ((STEPCOUNT - a_refTokenData.ICurrentPathIndex) <= a_iDiceValue)
+		bool bvalid = false;
+		if (a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.InStairwayToHeaven)
 		{
-			bValid = true;
+			if ((a_refTokenData.ICurrentPathIndex + a_iDiceValue) < STEPCOUNT)
+			{
+				Debug.Log("[PathManager] Getting closer to heaven");
+				bvalid = true;
+			}
 		}
-		return bValid;
+
+		return bvalid;
 	}
+
+
+
+
 
 }

@@ -285,6 +285,8 @@ public class TokenManager : MonoBehaviour
 							if (m_lstRedToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
+								m_lstRedToken[i].EnumTokenState = eTokenState.House;
+								m_lstRedToken[i].ICurrentPathIndex = -1;
 							}
 						}
 
@@ -293,6 +295,8 @@ public class TokenManager : MonoBehaviour
 							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
+								m_lstGreenToken[i].EnumTokenState = eTokenState.House;
+								m_lstGreenToken[i].ICurrentPathIndex = -1;
 							}
 						}
 
@@ -303,6 +307,8 @@ public class TokenManager : MonoBehaviour
 							{
 								Debug.Log("[TokenManager] YELLOW: Gotchya GO HOME!");
 								m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
+								m_lstYellowToken[i].EnumTokenState = eTokenState.House;
+								m_lstYellowToken[i].ICurrentPathIndex = -1;
 							}
 						}
 					}
@@ -315,6 +321,8 @@ public class TokenManager : MonoBehaviour
 							if (m_lstRedToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
+								m_lstRedToken[i].EnumTokenState = eTokenState.House;
+								m_lstRedToken[i].ICurrentPathIndex = -1;
 							}
 						}
 
@@ -323,6 +331,8 @@ public class TokenManager : MonoBehaviour
 							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
+								m_lstGreenToken[i].EnumTokenState = eTokenState.House;
+								m_lstGreenToken[i].ICurrentPathIndex = -1;
 							}
 						}
 
@@ -333,6 +343,8 @@ public class TokenManager : MonoBehaviour
 							{
 								Debug.Log("[TokenManager] BLUE: Gotchya GO HOME!");
 								m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
+								m_lstBlueToken[i].EnumTokenState = eTokenState.House;
+								m_lstBlueToken[i].ICurrentPathIndex = -1;
 							}
 						}
 					}
@@ -345,6 +357,8 @@ public class TokenManager : MonoBehaviour
 							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
+								m_lstYellowToken[i].EnumTokenState = eTokenState.House;
+								m_lstYellowToken[i].ICurrentPathIndex = -1;
 							}
 						}
 
@@ -353,6 +367,8 @@ public class TokenManager : MonoBehaviour
 							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
+								m_lstGreenToken[i].EnumTokenState = eTokenState.House;
+								m_lstGreenToken[i].ICurrentPathIndex = -1;
 							}
 						}
 
@@ -361,6 +377,8 @@ public class TokenManager : MonoBehaviour
 							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
+								m_lstBlueToken[i].EnumTokenState = eTokenState.House;
+								m_lstBlueToken[i].ICurrentPathIndex = -1;
 							}
 						}
 					}
@@ -373,6 +391,8 @@ public class TokenManager : MonoBehaviour
 							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
+								m_lstYellowToken[i].EnumTokenState = eTokenState.House;
+								m_lstYellowToken[i].ICurrentPathIndex = -1;
 							}
 						}
 
@@ -381,6 +401,8 @@ public class TokenManager : MonoBehaviour
 							if (m_lstRedToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
+								m_lstRedToken[i].EnumTokenState = eTokenState.House;
+								m_lstRedToken[i].ICurrentPathIndex = -1;
 							}
 						}
 
@@ -389,6 +411,8 @@ public class TokenManager : MonoBehaviour
 							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
+								m_lstBlueToken[i].EnumTokenState = eTokenState.House;
+								m_lstBlueToken[i].ICurrentPathIndex = -1;
 							}
 						}
 					}
