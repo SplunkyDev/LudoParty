@@ -92,6 +92,9 @@ public class GameManager : MBSingleton<GameManager>
 	{
 		yield return new WaitForSeconds(a_fDelay);
 		EventManager.Instance.TriggerEvent<EventHighlightCurrentPlayer>(new EventHighlightCurrentPlayer(EnumPlayerToken));
+
+		//Get Reference to PlayerData, dont need to loop through players when ever update in data is required
+		CurrentPlayerData();
 	}
 
 
@@ -137,11 +140,15 @@ public class GameManager : MBSingleton<GameManager>
 		}
 		else 
 		{
+			if (m_RefCurrentPlayer.m_iRollSixIn <= 0)
+			{
+				m_iCurrentDiceValue = 6;
+			}
+
 			if (!TokenManager.Instance.CheckValidTokenMovement(m_iCurrentDiceValue))
 			{
 				ChangePlayerTurn();
 			}
-
 			//If SIX has not been got by the player 
 			IncreasePossiblityofGettingSix();
 		}

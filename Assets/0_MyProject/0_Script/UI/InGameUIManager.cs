@@ -113,11 +113,15 @@ public class InGameUIManager : MonoBehaviour
 			m_arrAnimController[(int)GameManager.Instance.EnumPlayerToken - 1].enabled = false;
 			yield return new WaitForEndOfFrame();
 
+			GameManager.Instance.CheckResult();
 			Debug.Log("[InGameUIManager] The Dice Roll value: " + GameManager.Instance.ICurrentDiceValue);
+
+			yield return new WaitForEndOfFrame();
+
 			//This will show the current roll sprite on the dice image
 			m_arrDiceImage[(int)GameManager.Instance.EnumPlayerToken - 1].sprite = m_arrDiceSprite[GameManager.Instance.ICurrentDiceValue - 1];
 
-			GameManager.Instance.CheckResult();
+			
 		}
 	}
 

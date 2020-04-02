@@ -33,8 +33,7 @@ public class TokenManager : MonoBehaviour
 	private List<Transform> m_lstTokenMovePoints = new List<Transform>();
 	private bool m_bMoveTweenComplete = false;
 	private TokenData m_TokenToMove;
-	private Vector2 m_vec2Scalevalue = new Vector2(0.65f, 0.65f);
-
+	private Vector2 m_vec2Scalevalue = new Vector2(0.95f, 0.95f);
 	public delegate void m_delResetToken();
 	//This event will be called to reset all token BCanBeUsed to false;
 	public m_delResetToken m_OnResetToken;
@@ -105,19 +104,19 @@ public class TokenManager : MonoBehaviour
 					if (a_iDiceValue == 6)
 					{
 						bValid = a_lstToken[i].BCanBeUsed = true;
-						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(true).SetLoops(3, LoopType.Yoyo);
+						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetLoops(3, LoopType.Yoyo);
 					}
 					break;
 				case GameUtility.Base.eTokenState.InRoute:
 				case GameUtility.Base.eTokenState.InHideOut:
 					bValid = a_lstToken[i].BCanBeUsed = true;
-					a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(true).SetLoops(3, LoopType.Yoyo);
+					a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetLoops(3, LoopType.Yoyo);
 					break;
 				case GameUtility.Base.eTokenState.InStairwayToHeaven:
 					if (PathManager.Instance.ValidateMovement(m_lstBlueToken[i], a_iDiceValue))
 					{
 						bValid = a_lstToken[i].BCanBeUsed = true;
-						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(true).SetLoops(3, LoopType.Yoyo);
+						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetLoops(3, LoopType.Yoyo);
 					}
 					break;
 			}
