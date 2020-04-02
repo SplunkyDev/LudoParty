@@ -251,9 +251,9 @@ public class TokenManager : MonoBehaviour
 			}
 		}
 
-
-		GameManager.Instance.CheckPlayerChangeCondtion();
 		CheckIfTileContainsOtherTokens();
+		GameManager.Instance.CheckPlayerChangeCondtion();
+		
 	}
 
 	private void MoveTweenComplete()
@@ -337,11 +337,6 @@ public class TokenManager : MonoBehaviour
 						}
 					}
 					break;
-			}
-
-			for(int i =0; i< m_lstTokenDataGoHome.Count;i++)
-			{
-				m_lstTokenDataGoHome[i].transform.DOMove((Vector2)m_lstTokenMovePoints[i].transform.position, 5, false).SetSpeedBased(true).OnComplete(MoveTweenComplete);
 			}
 
 		}
