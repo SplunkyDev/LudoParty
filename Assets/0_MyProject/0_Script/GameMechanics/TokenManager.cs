@@ -246,14 +246,17 @@ public class TokenManager : MonoBehaviour
 		{
 			yield return new WaitForSeconds(a_fDelay);
 			m_lstTokenMovePoints = PathManager.Instance.TokenStateUpdate(m_TokenToMove, a_iDiceValue);
-			Debug.Log("<color=red>[TokenManager]  m_TokenToMove: " + m_TokenToMove.ICurrentPathIndex+"</color>");
-			for (int i = 0; i < m_lstTokenMovePoints.Count; i++)
+			if (m_lstTokenMovePoints != null)
 			{
-				m_bMoveTweenComplete = false;
-				m_TokenToMove.transform.DOMove((Vector2)m_lstTokenMovePoints[i].transform.position, 5, false).SetSpeedBased(true).OnComplete(MoveTweenComplete);
-				while (!m_bMoveTweenComplete)
+				Debug.Log("<color=red>[TokenManager]  m_TokenToMove: " + m_TokenToMove.ICurrentPathIndex + "</color>");
+				for (int i = 0; i < m_lstTokenMovePoints.Count; i++)
 				{
-					yield return null;
+					m_bMoveTweenComplete = false;
+					m_TokenToMove.transform.DOMove((Vector2)m_lstTokenMovePoints[i].transform.position, 5, false).SetSpeedBased(true).OnComplete(MoveTweenComplete);
+					while (!m_bMoveTweenComplete)
+					{
+						yield return null;
+					}
 				}
 			}
 
@@ -286,7 +289,7 @@ public class TokenManager : MonoBehaviour
 				case eTokenType.Blue:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						if (m_lstRedToken[i].EnumTokenState != eTokenState.InHideOut || m_lstRedToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstRedToken[i].EnumTokenState != eTokenState.InHeaven)
+						if (m_lstRedToken[i].EnumTokenState == eTokenState.InRoute)
 						{
 							if (m_lstRedToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -296,7 +299,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstGreenToken[i].EnumTokenState != eTokenState.InHideOut || m_lstGreenToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstGreenToken[i].EnumTokenState != eTokenState.InHeaven)
+						if (m_lstGreenToken[i].EnumTokenState == eTokenState.InRoute )
 						{
 							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -306,7 +309,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstYellowToken[i].EnumTokenState != eTokenState.InHideOut || m_lstYellowToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstYellowToken[i].EnumTokenState != eTokenState.InHeaven)
+						if (m_lstYellowToken[i].EnumTokenState == eTokenState.InRoute)
 						{
 							Debug.Log("[TokenManager] Yellow Token not in hiding, its in danger! Current Token: "+m_refCurrentToken.ICurrentPathIndex+" Checking Token: "+ m_lstYellowToken[i].ICurrentPathIndex);
 							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
@@ -322,7 +325,7 @@ public class TokenManager : MonoBehaviour
 				case eTokenType.Yellow:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						if (m_lstRedToken[i].EnumTokenState != eTokenState.InHideOut || m_lstRedToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstRedToken[i].EnumTokenState != eTokenState.InHeaven)
+						if (m_lstRedToken[i].EnumTokenState == eTokenState.InRoute)
 						{
 							if (m_lstRedToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -332,7 +335,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstGreenToken[i].EnumTokenState != eTokenState.InHideOut || m_lstGreenToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstGreenToken[i].EnumTokenState != eTokenState.InHeaven)
+						if (m_lstGreenToken[i].EnumTokenState == eTokenState.InRoute)
 						{
 							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -342,7 +345,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstBlueToken[i].EnumTokenState != eTokenState.InHideOut || m_lstBlueToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstBlueToken[i].EnumTokenState != eTokenState.InHeaven)
+						if (m_lstBlueToken[i].EnumTokenState == eTokenState.InRoute)
 						{
 							Debug.Log("[TokenManager] Blue Token not in hiding, its in danger! Current Token: " + m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex + " Checking Token: " + m_lstBlueToken[i].ICurrentPathIndex);
 							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
@@ -358,7 +361,7 @@ public class TokenManager : MonoBehaviour
 				case eTokenType.Red:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						if (m_lstYellowToken[i].EnumTokenState != eTokenState.InHideOut || m_lstYellowToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstYellowToken[i].EnumTokenState != eTokenState.InHeaven)
+						if (m_lstYellowToken[i].EnumTokenState == eTokenState.InRoute)
 						{
 							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -368,7 +371,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstGreenToken[i].EnumTokenState != eTokenState.InHideOut || m_lstGreenToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstGreenToken[i].EnumTokenState != eTokenState.InHeaven)
+						if (m_lstGreenToken[i].EnumTokenState == eTokenState.InRoute)
 						{
 							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -378,7 +381,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstBlueToken[i].EnumTokenState != eTokenState.InHideOut || m_lstBlueToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstBlueToken[i].EnumTokenState != eTokenState.InHeaven)
+						if (m_lstBlueToken[i].EnumTokenState == eTokenState.InRoute)
 						{
 							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -392,7 +395,7 @@ public class TokenManager : MonoBehaviour
 				case eTokenType.Green:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						if (m_lstYellowToken[i].EnumTokenState != eTokenState.InHideOut || m_lstYellowToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstYellowToken[i].EnumTokenState != eTokenState.InHeaven)
+						if (m_lstYellowToken[i].EnumTokenState == eTokenState.InRoute)
 						{
 							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -402,7 +405,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstRedToken[i].EnumTokenState != eTokenState.InHideOut || m_lstRedToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstRedToken[i].EnumTokenState != eTokenState.InHeaven)
+						if (m_lstRedToken[i].EnumTokenState == eTokenState.InRoute)
 						{
 							if (m_lstRedToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -412,7 +415,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstBlueToken[i].EnumTokenState != eTokenState.InHideOut || m_lstBlueToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstBlueToken[i].EnumTokenState != eTokenState.InHeaven)
+						if (m_lstBlueToken[i].EnumTokenState == eTokenState.InRoute)
 						{
 							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{

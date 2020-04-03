@@ -7843,7 +7843,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_enumPathTileType: 10
-  m_enumTokenState: 1
+  m_enumTokenState: 4
   m_iTileIndex: 0
 --- !u!1 &1261657144
 GameObject:
