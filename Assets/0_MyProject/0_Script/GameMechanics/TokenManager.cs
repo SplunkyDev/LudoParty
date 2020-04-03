@@ -204,13 +204,11 @@ public class TokenManager : MonoBehaviour
 	private void TokenSelected(TokenData a_refTokenData, int a_iDiceValue)
 	{
 		
-
 		if (!a_refTokenData.BCanBeUsed)
 		{
 			Debug.LogError("[TokenManager] This Token cannot be moved");
 			return;
 		}
-
 
 		//Resets all the token after checking their movable state, making sure no user tried to mobe any other token
 		if (m_OnResetToken != null)

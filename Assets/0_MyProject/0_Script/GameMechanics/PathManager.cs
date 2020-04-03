@@ -122,6 +122,8 @@ public class PathManager : MonoBehaviour
 				}
 				for (int i = 1; i <= a_iDiceValue; i++)
 				{
+					iCurrentTile = a_refTokenData.ICurrentPathIndex;
+					Debug.Log("[PathManager][TokenStateUpdate] Current Tile of Token: GameUtility.Base.eTokenState.InStairwayToHeaven:" + iCurrentTile);
 					WaypointToheaven(iCurrentTile);
 				}
 			}
@@ -130,6 +132,12 @@ public class PathManager : MonoBehaviour
 				int iCurrentTile = -1;
 				for (int i = 1; i <= a_iDiceValue; i++)
 				{
+					//The State has been updated to StairwayToHeaven
+					if (a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.InStairwayToHeaven)
+					{					
+						iCurrentTile = a_refTokenData.ICurrentPathIndex;
+						Debug.Log("[PathManager][TokenStateUpdate] Current Tile of Token: GameUtility.Base.eTokenState.EntryToStairway" + iCurrentTile);
+					}
 					WaypointToheaven(iCurrentTile);
 				}
 				
@@ -138,18 +146,23 @@ public class PathManager : MonoBehaviour
 			{
 				if (a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.InRoute || a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.InHideOut)
 				{
-
+					int iCurrentTile = 0;
 					for (int i = 1; i <= a_iDiceValue; i++)
 					{
 
 						if (a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.EntryToStairway)
 						{
-							int iCurrentTile = -1;
+							iCurrentTile = -1;
+							WaypointToheaven(iCurrentTile);
+						}
+						else if(a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.InStairwayToHeaven)
+						{
+							iCurrentTile = a_refTokenData.ICurrentPathIndex;
 							WaypointToheaven(iCurrentTile);
 						}
 						else
 						{
-							int iCurrentTile = a_refTokenData.ICurrentPathIndex;
+							iCurrentTile = a_refTokenData.ICurrentPathIndex;
 							iCurrentTile++;
 							if (iCurrentTile > 51)
 							{
@@ -233,7 +246,7 @@ public class PathManager : MonoBehaviour
 		void WaypointToheaven(int a_iCurrentTile)
 		{
 			PathTileData refPathTileData;
-
+			Debug.Log("[PathManager][WaypointToheaven] Current Tile of Token: " + a_iCurrentTile);
 			a_iCurrentTile++;
 
 			switch (a_refTokenData.EnumTokenType)
@@ -301,6 +314,7 @@ public class PathManager : MonoBehaviour
 		bool bvalid = false;
 		if (a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.InStairwayToHeaven)
 		{
+			Debug.Log("<color=green>[PathManager][ValidateMovement] Getting closer to heaven</color>");
 			if ((a_refTokenData.ICurrentPathIndex + a_iDiceValue) < STEPCOUNT)
 			{
 				Debug.Log("[PathManager] Getting closer to heaven");
@@ -310,11 +324,8 @@ public class PathManager : MonoBehaviour
 		else if (a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.EntryToStairway)
 		{
 			//Zero since its not taken a single step up the stairway to heaven
-			if ((0 + a_iDiceValue) <= STEPCOUNT)
-			{
-				Debug.Log("[PathManager] Getting closer to heaven");
-				bvalid = true;
-			}
+			Debug.Log("<color=green>[PathManager] Getting closer to heaven</color>");
+			bvalid = true;
 		}
 
 		return bvalid;
