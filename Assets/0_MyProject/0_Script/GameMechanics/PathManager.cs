@@ -311,6 +311,7 @@ public class PathManager : MonoBehaviour
 
 	public bool ValidateMovement(TokenData a_refTokenData, int a_iDiceValue)
 	{
+		Debug.Log("<color=red>[PathManager][ValidateMovement] Getting closer to heaven</color>");
 		bool bvalid = false;
 		if (a_refTokenData.EnumTokenState == GameUtility.Base.eTokenState.InStairwayToHeaven)
 		{

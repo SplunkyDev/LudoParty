@@ -100,6 +100,7 @@ public class TokenManager : MonoBehaviour
 			m_OnResetToken.Invoke();
 		}
 
+		Debug.Log("[TokenManager][CheckValidTokenMovement] PlayerToken: "+ GameManager.Instance.EnumPlayerToken.ToString());
 		switch (GameManager.Instance.EnumPlayerToken)
 		{
 			case GameUtility.Base.ePlayerToken.None:
@@ -149,14 +150,15 @@ public class TokenManager : MonoBehaviour
 					a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetAs(m_tweenScaleEffect).SetId("ScaleEffect");
 					break;
 				case GameUtility.Base.eTokenState.InStairwayToHeaven:
-					if (PathManager.Instance.ValidateMovement(m_lstBlueToken[i], a_iDiceValue))
+					if (PathManager.Instance.ValidateMovement(a_lstToken[i], a_iDiceValue))
 					{
 						bValid = a_lstToken[i].BCanBeUsed = true;
 						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetAs(m_tweenScaleEffect).SetId("ScaleEffect");
 					}
 					break;
 				case GameUtility.Base.eTokenState.EntryToStairway:
-					if (PathManager.Instance.ValidateMovement(m_lstBlueToken[i], a_iDiceValue))
+					Debug.Log("<color=red>[TokeManager][AnimateValidTokens] Getting closer to heaven:"+ a_lstToken [i].EnumTokenType+ "</color>");
+					if (PathManager.Instance.ValidateMovement(a_lstToken[i], a_iDiceValue))
 					{
 						bValid = a_lstToken[i].BCanBeUsed = true;
 						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetAs(m_tweenScaleEffect).SetId("ScaleEffect");

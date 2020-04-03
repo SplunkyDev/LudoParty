@@ -110,6 +110,7 @@ namespace GameUtility.Base
 		public ePlayerState m_ePlayerState;
 		public bool m_bPlayAgain;
 		public int m_iRollSixIn;
+		public bool m_gameComplete;
 	}
 
 
