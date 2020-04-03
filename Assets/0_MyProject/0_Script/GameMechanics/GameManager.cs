@@ -8,7 +8,6 @@ public class GameManager : MBSingleton<GameManager>
 {
 
 	private const int MAXTRY = 2;
-	private int m_iNumberOfPlayers = 1;
 
 	private PlayerData m_RefCurrentPlayer;
 	public PlayerData CurrentPlayer { get => m_RefCurrentPlayer; set => m_RefCurrentPlayer = value; }
@@ -25,19 +24,33 @@ public class GameManager : MBSingleton<GameManager>
 	private ePlayerTurn m_enumPlayerTurn = ePlayerTurn.PlayerOne;
 	public ePlayerTurn EnumPlayerTurn { get => m_enumPlayerTurn; }
 
+	//This holds the current player index of the PlayerData List
+	private int m_iCurrentPlayerIndex = 0;
+	private List<PlayerData> m_lstPlayerCompleted = new List<PlayerData>();
+
 	public ePlayerToken EnumPlayerToken
 	{
 		get
 		{
 			for (int i = 0; i < m_lstPlayerData.Count; i++)
 			{
-				if (m_lstPlayerData[i].m_enumPlayerTurn == EnumPlayerTurn)
+				if (m_lstPlayerData[i].m_enumPlayerTurn == m_enumCurrentPlayerTurn)
 				{
 					return m_lstPlayerData[i].m_enumPlayerToken;
 				}				
 			}
 			return ePlayerToken.None;
 		}
+	}
+
+	void RegisterToEVents()
+	{
+		EventManager.Instance.RegisterEvent<EventPlayerFinished>(PlayerFinishedGame);
+	}
+
+	void DeregisterToEvents()
+	{
+		EventManager.Instance.DeRegisterEvent<EventPlayerFinished>(PlayerFinishedGame);
 	}
 
 
@@ -66,6 +79,7 @@ public class GameManager : MBSingleton<GameManager>
 				break;
 		}
 	}
+
 	public void SetPlayerData(PlayerData a_PlayerData)
 	{
 		//Setting the value of how many turns until the player gets a forced six if not got until then
@@ -76,8 +90,6 @@ public class GameManager : MBSingleton<GameManager>
 		Debug.Log("[GameManager] PlayerData PlayerToken: "+a_PlayerData.m_enumPlayerToken);
 		Debug.Log("[GameManager] PlayerData PlayerToken: "+a_PlayerData.m_iRollSixIn);
 		m_lstPlayerData.Add(a_PlayerData);
-
-		m_iNumberOfPlayers = m_lstPlayerData.Count;
 	}
 
 	// Start is called before the first frame update
@@ -92,8 +104,34 @@ public class GameManager : MBSingleton<GameManager>
         
     }
 
+	private void PlayerFinishedGame(IEventBase a_Event)
+	{
+		EventPlayerFinished data = a_Event as EventPlayerFinished;
+		if(data == null)
+		{
+			Debug.LogError("[GamaManager] Event PlayerFinished null");
+			return;
+		}
+
+		for (int i = 0; i < m_lstPlayerData.Count; i++)
+		{
+			if ((int)m_lstPlayerData[i].m_enumPlayerToken == (int)data.RefTokenData.EnumTokenType)
+			{
+				m_lstPlayerData[i].m_gameComplete = true;
+				m_lstPlayerCompleted.Add(m_lstPlayerData[i]);
+			}
+		}
+
+		if((m_lstPlayerData.Count - m_lstPlayerCompleted.Count) == 1)
+		{
+			//TODO: TODO END GAME HERE
+		}
+		
+	}
 	private IEnumerator InitializeGame(float a_fDelay)
 	{
+		m_lstPlayerCompleted.Clear();
+
 		yield return new WaitForSeconds(a_fDelay);
 		EventManager.Instance.TriggerEvent<EventHighlightCurrentPlayer>(new EventHighlightCurrentPlayer(EnumPlayerToken));
 
@@ -135,7 +173,7 @@ public class GameManager : MBSingleton<GameManager>
 
 	public void CheckPlayerChangeCondtion()
 	{
-		if(!m_RefCurrentPlayer.m_bPlayAgain)
+		if(!m_RefCurrentPlayer.m_bPlayAgain || m_RefCurrentPlayer.m_gameComplete)
 		{
 			ChangePlayerTurn();
 		}
@@ -189,34 +227,38 @@ public class GameManager : MBSingleton<GameManager>
 			{
 				ChangePlayerTurn();
 			}
-
-			
 			
 		}
 	}
 
 	private void ChangePlayerTurn()
 	{
-		Debug.Log("[GameManager][ChangePlayerTurn]");
-		if ((int)m_enumCurrentPlayerTurn >= (m_iNumberOfPlayers-1))
+		Debug.Log("[GameManager][ChangePlayerTurn]");	
+		
+		//Check if nect player has finished his game, if so go to next player who has not completed the game
+		do
 		{
-			m_enumPlayerTurn = 0;
+			m_iCurrentPlayerIndex++;
+			if (m_iCurrentPlayerIndex >= m_lstPlayerData.Count)
+			{
+				m_iCurrentPlayerIndex = 0;
+			}
 		}
-		else
-		{
-			m_enumPlayerTurn++;
-		}
+		while (m_lstPlayerData[m_iCurrentPlayerIndex].m_gameComplete);
+		m_enumCurrentPlayerTurn = m_lstPlayerData[m_iCurrentPlayerIndex].m_enumPlayerTurn;
 
-
-		if (m_enumCurrentPlayerTurn != m_enumPlayerTurn)
+		if (m_enumCurrentPlayerTurn != EnumPlayerTurn)
 		{
-			m_enumCurrentPlayerTurn = m_enumPlayerTurn;
+			m_enumPlayerTurn = m_enumCurrentPlayerTurn;
+			//Get Reference to PlayerData, dont need to loop through players when ever update in data is required
+			CurrentPlayerData();
 			m_iTotalRolls = MAXTRY;
 		}
 
 		CurrentPlayer.m_ePlayerState = ePlayerState.PlayerRollDice;
-		//Get Reference to PlayerData, dont need to loop through players when ever update in data is required
-		CurrentPlayerData();
+
+		Debug.Log("[GamaManager] Player Turn Updated: " + EnumPlayerTurn);
+		Debug.Log("[GamaManager] Player Token Updated: " + EnumPlayerToken);
 		EventManager.Instance.TriggerEvent<EventHighlightCurrentPlayer>(new EventHighlightCurrentPlayer(EnumPlayerToken));
 	}
 

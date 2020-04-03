@@ -11,6 +11,18 @@ public class EventPlayerTurnChanged : IEventBase
 {
 	public EventPlayerTurnChanged() { }
 }
+
+public class EventPlayerFinished : IEventBase
+{
+	private TokenData m_refTokenData;
+	public TokenData RefTokenData { get => m_refTokenData;}
+
+	public EventPlayerFinished(TokenData a_refTokenData)
+	{
+		m_refTokenData = a_refTokenData;
+	}
+
+}
 #endregion
 
 #region UI_EVENTS

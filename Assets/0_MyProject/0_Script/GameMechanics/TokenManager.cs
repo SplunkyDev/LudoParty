@@ -261,11 +261,63 @@ public class TokenManager : MonoBehaviour
 			}
 
 			GameManager.Instance.CurrentPlayer.m_ePlayerState = ePlayerState.PlayerRollDice;
-			if (m_TokenToMove.EnumTokenState != eTokenState.House)
+			if (m_TokenToMove.EnumTokenState == eTokenState.InRoute || m_TokenToMove.EnumTokenState == eTokenState.InHideOut)
 			{
 				m_refCurrentToken = m_TokenToMove;
 				Debug.Log("<color=red>[TokenManager] Current Token InRoute,check if other token present in same tile: m_refCurrentToken: " + m_refCurrentToken.ICurrentPathIndex + "</color>");
-				CheckIfTileContainsOtherTokens();
+				CheckIfTileContainsOtherTokens();			
+			}
+
+			//Checks if all Tokens are in heaven and the player has finished his game
+			if (m_refCurrentToken.EnumTokenState == eTokenState.InHeaven)
+			{
+				int iTokensFinished = 0;
+
+				switch (m_refCurrentToken.EnumTokenType)
+				{
+					case eTokenType.Blue:
+						for(int i = 0;i<m_lstBlueToken.Count;i++)
+						{
+							if(m_lstBlueToken[i].EnumTokenState == eTokenState.InHeaven)
+							{
+								iTokensFinished++;
+							}
+						}
+						break;
+					case eTokenType.Yellow:
+						for (int i = 0; i < m_lstBlueToken.Count; i++)
+						{
+							if (m_lstYellowToken[i].EnumTokenState == eTokenState.InHeaven)
+							{
+								iTokensFinished++;
+							}
+						}
+						break;
+					case eTokenType.Red:
+						for (int i = 0; i < m_lstBlueToken.Count; i++)
+						{
+							if (m_lstRedToken[i].EnumTokenState == eTokenState.InHeaven)
+							{
+								iTokensFinished++;
+							}
+						}
+						break;
+					case eTokenType.Green:
+						for (int i = 0; i < m_lstBlueToken.Count; i++)
+						{
+							if (m_lstGreenToken[i].EnumTokenState == eTokenState.InHeaven)
+							{
+								iTokensFinished++;
+							}
+						}
+						break;
+				}
+
+				if(iTokensFinished>=TOKENSPERPLAYER)
+				{
+					EventManager.Instance.TriggerEvent<EventPlayerFinished>(new EventPlayerFinished(m_refCurrentToken));
+				}
+			
 			}
 			GameManager.Instance.CheckPlayerChangeCondtion();
 		}
