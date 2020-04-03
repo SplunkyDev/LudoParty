@@ -38,7 +38,8 @@ public class TokenManager : MonoBehaviour
 	private List<Transform> m_lstTokenMovePoints = new List<Transform>();
 	private bool m_bMoveTweenComplete = false;
 	private TokenData m_TokenToMove;
-	private Vector2 m_vec2Scalevalue = new Vector2(0.45f, 0.45f);
+	private Vector2 m_vec2Scalevalue = new Vector2(0.6f, 0.6f);
+	private Vector2 m_vec2ScaleShared = new Vector2(0.4f, 0.4f);
 	private Vector2 m_Vec3TokenOrginalScale = new Vector2(0.5f, 0.5f);
 	private TweenParams m_tweenScaleEffect;
 	private TokenData m_refCurrentToken;
@@ -49,6 +50,8 @@ public class TokenManager : MonoBehaviour
 	//This event will be called to reset all token BCanBeUsed to false;
 	public m_delResetToken m_OnResetToken;
 
+
+	private Dictionary<int, Transform> m_dicAllTokensInSpecialTile = new Dictionary<int, Transform>();
 
 	private void RegisterToEvents()
 	{
@@ -236,12 +239,16 @@ public class TokenManager : MonoBehaviour
 			case eScaleType.SharedTile:
 				for (int i = 0; i < data.LTokenGameObject.Count; i++)
 				{
+					Debug.Log("<color=green>[TokenManager][TokenScaleFactor] Shared Tile</color>");
 					data.LTokenGameObject[i].transform.localScale = data.Vec2ScaleValue;
+					Vector2 vec2RandomPosition = Random.insideUnitCircle * 0.15f;
+					data.LTokenGameObject[i].transform.position += new Vector3(vec2RandomPosition.x,vec2RandomPosition.y, data.LTokenGameObject[i].transform.position.z);
 				}
 				break;
 		}
 
 
+		//Reseting scale to original size after highlighting them
 		void ScaleTokenType(TokenData a_refTokenData)
 		{
 			switch (a_refTokenData.EnumTokenType)
@@ -348,7 +355,7 @@ public class TokenManager : MonoBehaviour
 			if (m_TokenToMove.EnumTokenState == eTokenState.InRoute || m_TokenToMove.EnumTokenState == eTokenState.InHideOut)
 			{
 				m_refCurrentToken = m_TokenToMove;
-				Debug.Log("<color=red>[TokenManager] Current Token InRoute,check if other token present in same tile: m_refCurrentToken: " + m_refCurrentToken.ICurrentPathIndex + "</color>");
+				Debug.Log("<color=red>[TokenManager] Current Token InRoute,check if other token present in same tile: m_refCurrentToken: " + m_refCurrentToken.ICurrentPathIndex +"TokenState: "+ m_TokenToMove.EnumTokenState + "</color>");
 				CheckIfTileContainsOtherTokens();			
 			}
 
@@ -425,6 +432,15 @@ public class TokenManager : MonoBehaviour
 				case eTokenType.Blue:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
+						if (m_lstBlueToken[i].ITokenID != m_refCurrentToken.ITokenID)
+						{
+							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstTokengameobject.Add(m_lstBlueToken[i].gameObject);
+							}
+						}
+						
+
 						if (m_lstRedToken[i].EnumTokenState == eTokenState.InRoute)
 						{
 							if (m_lstRedToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
@@ -432,6 +448,13 @@ public class TokenManager : MonoBehaviour
 								m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstRedToken[i].EnumTokenState = eTokenState.House;
 								m_lstRedToken[i].ICurrentPathIndex = -1;
+							}
+						}
+						else if (m_lstRedToken[i].EnumTokenState == eTokenState.InHideOut)
+						{
+							if (m_lstRedToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstTokengameobject.Add(m_lstRedToken[i].gameObject);
 							}
 						}
 
@@ -442,6 +465,13 @@ public class TokenManager : MonoBehaviour
 								m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstGreenToken[i].EnumTokenState = eTokenState.House;
 								m_lstGreenToken[i].ICurrentPathIndex = -1;
+							}
+						}
+						else if (m_lstGreenToken[i].EnumTokenState == eTokenState.InHideOut)
+						{
+							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstTokengameobject.Add(m_lstGreenToken[i].gameObject);
 							}
 						}
 
@@ -456,11 +486,28 @@ public class TokenManager : MonoBehaviour
 								m_lstYellowToken[i].ICurrentPathIndex = -1;
 							}
 						}
+						else if (m_lstYellowToken[i].EnumTokenState == eTokenState.InHideOut)
+						{
+							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstTokengameobject.Add(m_lstYellowToken[i].gameObject);
+							}
+						}
 					}
 					break;
 				case eTokenType.Yellow:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
+						//Sharing a tile with same token
+						if (m_lstYellowToken[i].ITokenID != m_refCurrentToken.ITokenID)
+						{
+							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstTokengameobject.Add(m_lstYellowToken[i].gameObject);
+							}
+						}
+						
+
 						if (m_lstRedToken[i].EnumTokenState == eTokenState.InRoute)
 						{
 							if (m_lstRedToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
@@ -468,6 +515,13 @@ public class TokenManager : MonoBehaviour
 								m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstRedToken[i].EnumTokenState = eTokenState.House;
 								m_lstRedToken[i].ICurrentPathIndex = -1;
+							}
+						}
+						else if (m_lstRedToken[i].EnumTokenState == eTokenState.InHideOut)
+						{
+							if (m_lstRedToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstTokengameobject.Add(m_lstRedToken[i].gameObject);
 							}
 						}
 
@@ -478,6 +532,13 @@ public class TokenManager : MonoBehaviour
 								m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstGreenToken[i].EnumTokenState = eTokenState.House;
 								m_lstGreenToken[i].ICurrentPathIndex = -1;
+							}
+						}
+						else if (m_lstGreenToken[i].EnumTokenState == eTokenState.InHideOut)
+						{
+							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstTokengameobject.Add(m_lstGreenToken[i].gameObject);
 							}
 						}
 
@@ -492,11 +553,29 @@ public class TokenManager : MonoBehaviour
 								m_lstBlueToken[i].ICurrentPathIndex = -1;
 							}
 						}
+						else if (m_lstBlueToken[i].EnumTokenState == eTokenState.InHideOut)
+						{
+							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstTokengameobject.Add(m_lstBlueToken[i].gameObject);
+							}
+						}
 					}
 					break;
 				case eTokenType.Red:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
+						//Sharing a tile with same token
+						if (m_lstRedToken[i].ITokenID != m_refCurrentToken.ITokenID)
+						{
+							if (m_lstRedToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstTokengameobject.Add(m_lstRedToken[i].gameObject);
+							}
+						}
+						
+
+
 						if (m_lstYellowToken[i].EnumTokenState == eTokenState.InRoute)
 						{
 							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
@@ -504,6 +583,13 @@ public class TokenManager : MonoBehaviour
 								m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstYellowToken[i].EnumTokenState = eTokenState.House;
 								m_lstYellowToken[i].ICurrentPathIndex = -1;
+							}
+						}
+						else if (m_lstYellowToken[i].EnumTokenState == eTokenState.InHideOut)
+						{
+							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstTokengameobject.Add(m_lstYellowToken[i].gameObject);
 							}
 						}
 
@@ -516,6 +602,13 @@ public class TokenManager : MonoBehaviour
 								m_lstGreenToken[i].ICurrentPathIndex = -1;
 							}
 						}
+						else if (m_lstGreenToken[i].EnumTokenState == eTokenState.InHideOut)
+						{
+							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstTokengameobject.Add(m_lstGreenToken[i].gameObject);
+							}
+						}
 
 						if (m_lstBlueToken[i].EnumTokenState == eTokenState.InRoute)
 						{
@@ -526,11 +619,28 @@ public class TokenManager : MonoBehaviour
 								m_lstBlueToken[i].ICurrentPathIndex = -1;
 							}
 						}
+						else if (m_lstBlueToken[i].EnumTokenState == eTokenState.InHideOut)
+						{
+							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstTokengameobject.Add(m_lstBlueToken[i].gameObject);
+							}
+						}
 					}
 					break;
 				case eTokenType.Green:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
+						//Sharing a tile with same token
+						if (m_lstGreenToken[i].ITokenID != m_refCurrentToken.ITokenID)
+						{
+							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstTokengameobject.Add(m_lstGreenToken[i].gameObject);
+							}
+						}
+						
+
 						if (m_lstYellowToken[i].EnumTokenState == eTokenState.InRoute)
 						{
 							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
@@ -540,7 +650,14 @@ public class TokenManager : MonoBehaviour
 								m_lstYellowToken[i].ICurrentPathIndex = -1;
 							}
 						}
-
+						else if (m_lstYellowToken[i].EnumTokenState == eTokenState.InHideOut)
+						{
+							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstTokengameobject.Add(m_lstYellowToken[i].gameObject);
+							}
+						}
+						
 						if (m_lstRedToken[i].EnumTokenState == eTokenState.InRoute)
 						{
 							if (m_lstRedToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
@@ -548,6 +665,13 @@ public class TokenManager : MonoBehaviour
 								m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstRedToken[i].EnumTokenState = eTokenState.House;
 								m_lstRedToken[i].ICurrentPathIndex = -1;
+							}
+						}
+						else if (m_lstRedToken[i].EnumTokenState == eTokenState.InHideOut)
+						{
+							if (m_lstRedToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstTokengameobject.Add(m_lstRedToken[i].gameObject);
 							}
 						}
 
@@ -560,9 +684,27 @@ public class TokenManager : MonoBehaviour
 								m_lstBlueToken[i].ICurrentPathIndex = -1;
 							}
 						}
+						else if(m_lstBlueToken[i].EnumTokenState == eTokenState.InHideOut)
+						{
+							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							{
+								m_lstTokengameobject.Add(m_lstBlueToken[i].gameObject);
+							}
+						}
 					}
 					break;
 			}
+
+
+			if (m_lstTokengameobject.Count > 0)
+			{
+				Debug.Log("<color=green>[TokenManager][CheckIfTileContainsOtherTokens] More than one token inside same hHdeOut</color>");
+				m_lstTokengameobject.Add(m_refCurrentToken.gameObject);
+				EventManager.Instance.TriggerEvent<EventTokenScaleFactor>(new EventTokenScaleFactor(m_lstTokengameobject, m_vec2ScaleShared, eScaleType.SharedTile));
+				m_lstTokengameobject.Clear();
+			}
+
+			
 
 		}
 	}
