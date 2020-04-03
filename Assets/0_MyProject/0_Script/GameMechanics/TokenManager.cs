@@ -155,6 +155,13 @@ public class TokenManager : MonoBehaviour
 						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetAs(m_tweenScaleEffect).SetId("ScaleEffect");
 					}
 					break;
+				case GameUtility.Base.eTokenState.EntryToStairway:
+					if (PathManager.Instance.ValidateMovement(m_lstBlueToken[i], a_iDiceValue))
+					{
+						bValid = a_lstToken[i].BCanBeUsed = true;
+						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetAs(m_tweenScaleEffect).SetId("ScaleEffect");
+					}
+					break;
 			}
 		}
 
@@ -171,7 +178,6 @@ public class TokenManager : MonoBehaviour
 			return;
 		}
 
-		Debug.Log("[TokenManager] Input detected");
 		if(data.BTouch)
 		{
 			RaycastFromScreen(data.Vec3TouchPosition);
@@ -278,9 +284,9 @@ public class TokenManager : MonoBehaviour
 			switch (m_refCurrentToken.EnumTokenType)
 			{
 				case eTokenType.Blue:
-					for(int i = 0;i< TOKENSPERPLAYER; i++)
+					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						if(m_lstRedToken[i].EnumTokenState != eTokenState.InHideOut)
+						if (m_lstRedToken[i].EnumTokenState != eTokenState.InHideOut || m_lstRedToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstRedToken[i].EnumTokenState != eTokenState.InHeaven)
 						{
 							if (m_lstRedToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -290,7 +296,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstGreenToken[i].EnumTokenState != eTokenState.InHideOut)
+						if (m_lstGreenToken[i].EnumTokenState != eTokenState.InHideOut || m_lstGreenToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstGreenToken[i].EnumTokenState != eTokenState.InHeaven)
 						{
 							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -300,7 +306,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstYellowToken[i].EnumTokenState != eTokenState.InHideOut)
+						if (m_lstYellowToken[i].EnumTokenState != eTokenState.InHideOut || m_lstYellowToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstYellowToken[i].EnumTokenState != eTokenState.InHeaven)
 						{
 							Debug.Log("[TokenManager] Yellow Token not in hiding, its in danger! Current Token: "+m_refCurrentToken.ICurrentPathIndex+" Checking Token: "+ m_lstYellowToken[i].ICurrentPathIndex);
 							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
@@ -316,7 +322,7 @@ public class TokenManager : MonoBehaviour
 				case eTokenType.Yellow:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						if (m_lstRedToken[i].EnumTokenState != eTokenState.InHideOut)
+						if (m_lstRedToken[i].EnumTokenState != eTokenState.InHideOut || m_lstRedToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstRedToken[i].EnumTokenState != eTokenState.InHeaven)
 						{
 							if (m_lstRedToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -326,7 +332,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstGreenToken[i].EnumTokenState != eTokenState.InHideOut)
+						if (m_lstGreenToken[i].EnumTokenState != eTokenState.InHideOut || m_lstGreenToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstGreenToken[i].EnumTokenState != eTokenState.InHeaven)
 						{
 							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -336,7 +342,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstBlueToken[i].EnumTokenState != eTokenState.InHideOut)
+						if (m_lstBlueToken[i].EnumTokenState != eTokenState.InHideOut || m_lstBlueToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstBlueToken[i].EnumTokenState != eTokenState.InHeaven)
 						{
 							Debug.Log("[TokenManager] Blue Token not in hiding, its in danger! Current Token: " + m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex + " Checking Token: " + m_lstBlueToken[i].ICurrentPathIndex);
 							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
@@ -352,7 +358,7 @@ public class TokenManager : MonoBehaviour
 				case eTokenType.Red:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						if (m_lstYellowToken[i].EnumTokenState != eTokenState.InHideOut)
+						if (m_lstYellowToken[i].EnumTokenState != eTokenState.InHideOut || m_lstYellowToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstYellowToken[i].EnumTokenState != eTokenState.InHeaven)
 						{
 							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -362,7 +368,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstGreenToken[i].EnumTokenState != eTokenState.InHideOut)
+						if (m_lstGreenToken[i].EnumTokenState != eTokenState.InHideOut || m_lstGreenToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstGreenToken[i].EnumTokenState != eTokenState.InHeaven)
 						{
 							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -372,7 +378,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstBlueToken[i].EnumTokenState != eTokenState.InHideOut)
+						if (m_lstBlueToken[i].EnumTokenState != eTokenState.InHideOut || m_lstBlueToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstBlueToken[i].EnumTokenState != eTokenState.InHeaven)
 						{
 							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -386,7 +392,7 @@ public class TokenManager : MonoBehaviour
 				case eTokenType.Green:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						if (m_lstYellowToken[i].EnumTokenState != eTokenState.InHideOut)
+						if (m_lstYellowToken[i].EnumTokenState != eTokenState.InHideOut || m_lstYellowToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstYellowToken[i].EnumTokenState != eTokenState.InHeaven)
 						{
 							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -396,7 +402,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstRedToken[i].EnumTokenState != eTokenState.InHideOut)
+						if (m_lstRedToken[i].EnumTokenState != eTokenState.InHideOut || m_lstRedToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstRedToken[i].EnumTokenState != eTokenState.InHeaven)
 						{
 							if (m_lstRedToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -406,7 +412,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstBlueToken[i].EnumTokenState != eTokenState.InHideOut)
+						if (m_lstBlueToken[i].EnumTokenState != eTokenState.InHideOut || m_lstBlueToken[i].EnumTokenState != eTokenState.InStairwayToHeaven || m_lstBlueToken[i].EnumTokenState != eTokenState.InHeaven)
 						{
 							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
 							{

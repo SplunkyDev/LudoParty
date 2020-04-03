@@ -11,7 +11,7 @@ public class StairwayToHeavenManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-		int index = 1;
+		int index = 0;
 		foreach (Transform child in transform)
 		{
 
