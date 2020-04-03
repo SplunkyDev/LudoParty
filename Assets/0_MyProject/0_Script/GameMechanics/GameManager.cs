@@ -230,9 +230,9 @@ public class GameManager : MBSingleton<GameManager>
 			Debug.Log("[GameManager][CheckPlayerPlayCondition] Total Rolls Remaining: " + m_iTotalRolls);
 			UpdatePlayerSixPossiblity();
 
-			TokenManager.Instance.CheckValidTokenMovement(m_iCurrentDiceValue);
-
-			if (m_iTotalRolls <= 0)
+			
+			//If the total changes of getting 6 is over or no taken can be moved
+			if (m_iTotalRolls <= 0 || !TokenManager.Instance.CheckValidTokenMovement(m_iCurrentDiceValue))
 			{			
 				ChangePlayerTurn();
 			}		
