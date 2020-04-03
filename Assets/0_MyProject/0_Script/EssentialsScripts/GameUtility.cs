@@ -103,6 +103,14 @@ namespace GameUtility.Base
 		Green =4
 	}
 
+	public enum eScaleType
+	{
+		None =0,
+		TokenType = 1,
+		SharedTile =2
+	}
+
+
 	public class PlayerData
 	{
 		public ePlayerTurn m_enumPlayerTurn;

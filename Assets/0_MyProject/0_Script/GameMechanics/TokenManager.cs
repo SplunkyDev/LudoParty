@@ -34,10 +34,12 @@ public class TokenManager : MonoBehaviour
 	[Header("Token Layer")]
 	[SerializeField] private LayerMask m_layerMask;
 
+	private List<GameObject> m_lstTokengameobject = new List<GameObject>();
 	private List<Transform> m_lstTokenMovePoints = new List<Transform>();
 	private bool m_bMoveTweenComplete = false;
 	private TokenData m_TokenToMove;
-	private Vector2 m_vec2Scalevalue = new Vector2(0.95f, 0.95f);
+	private Vector2 m_vec2Scalevalue = new Vector2(0.45f, 0.45f);
+	private Vector2 m_Vec3TokenOrginalScale = new Vector2(0.5f, 0.5f);
 	private TweenParams m_tweenScaleEffect;
 	private TokenData m_refCurrentToken;
 
@@ -50,7 +52,13 @@ public class TokenManager : MonoBehaviour
 
 	private void RegisterToEvents()
 	{
+		if (EventManager.Instance == null)
+		{
+			Debug.LogError("[TokenManager] EventManager is null");
+			return;
+		}
 		EventManager.Instance.RegisterEvent<EventTouchActive>(InputReceived);
+		EventManager.Instance.RegisterEvent<EventTokenScaleFactor>(TokenScaleFactor);
 	}
 
 	private void DereegiterToEvents()
@@ -59,6 +67,7 @@ public class TokenManager : MonoBehaviour
 		if (EventManager.Instance == null)
 			return;
 
+		EventManager.Instance.RegisterEvent<EventTokenScaleFactor>(TokenScaleFactor);
 		EventManager.Instance.DeRegisterEvent<EventTouchActive>(InputReceived);
 	}
 
@@ -202,6 +211,72 @@ public class TokenManager : MonoBehaviour
 		}
 	}
 
+	private void TokenScaleFactor(IEventBase a_Event)
+	{
+		EventTokenScaleFactor data = a_Event as EventTokenScaleFactor;
+		if (data == null)
+		{
+			Debug.LogError("[TokenManager] Scale factor Value trigger null");
+			return;
+		}
+
+		switch (data.EScaleType)
+		{
+			case eScaleType.None:
+				break;
+			case eScaleType.TokenType:
+				TokenData refTokenData = data.LTokenGameObject[0].GetComponent<TokenData>();
+				if(refTokenData == null)
+				{
+					Debug.LogError("[TokenManager] TokenData null, cannot set scale value");
+					return;
+				}
+				ScaleTokenType(refTokenData);
+				break;
+			case eScaleType.SharedTile:
+				for (int i = 0; i < data.LTokenGameObject.Count; i++)
+				{
+					data.LTokenGameObject[i].transform.localScale = data.Vec2ScaleValue;
+				}
+				break;
+		}
+
+
+		void ScaleTokenType(TokenData a_refTokenData)
+		{
+			switch (a_refTokenData.EnumTokenType)
+			{
+				case eTokenType.None:
+					break;
+				case eTokenType.Blue:
+					for(int i = 0;i<m_lstBlueToken.Count;i++)
+					{
+						m_lstBlueToken[i].gameObject.transform.localScale = data.Vec2ScaleValue;
+					}
+					break;
+				case eTokenType.Yellow:
+					for (int i = 0; i < m_lstYellowToken.Count; i++)
+					{
+						m_lstYellowToken[i].gameObject.transform.localScale = data.Vec2ScaleValue;
+					}
+					break;
+				case eTokenType.Red:
+					for (int i = 0; i < m_lstRedToken.Count; i++)
+					{
+						m_lstRedToken[i].gameObject.transform.localScale = data.Vec2ScaleValue;
+					}
+					break;
+				case eTokenType.Green:
+					for (int i = 0; i < m_lstGreenToken.Count; i++)
+					{
+						m_lstGreenToken[i].gameObject.transform.localScale = data.Vec2ScaleValue;
+					}
+					break;
+			}
+
+		}
+	}
+
 	//When the dice has been rolled and the token has been selected this will be called
 	private void TokenSelected(TokenData a_refTokenData, int a_iDiceValue)
 	{
@@ -218,6 +293,9 @@ public class TokenManager : MonoBehaviour
 			m_OnResetToken.Invoke();
 		}
 
+
+		
+	
 		Debug.Log("[TokenManager] Scale Effect Tween Paused: " + DOTween.Pause("ScaleEffect"));
 		switch (a_refTokenData.EnumTokenType)
 		{
@@ -225,6 +303,7 @@ public class TokenManager : MonoBehaviour
 				break;
 			case GameUtility.Base.eTokenType.Blue:
 				m_TokenToMove = m_lstBlueToken[a_refTokenData.ITokenID];
+				
 				break;
 			case GameUtility.Base.eTokenType.Yellow:
 				m_TokenToMove = m_lstYellowToken[a_refTokenData.ITokenID];
@@ -238,6 +317,11 @@ public class TokenManager : MonoBehaviour
 			default:
 				break;
 		}
+
+		m_lstTokengameobject.Add(m_TokenToMove.gameObject);
+		EventManager.Instance.TriggerEvent<EventTokenScaleFactor>(new EventTokenScaleFactor(m_lstTokengameobject, m_Vec3TokenOrginalScale, eScaleType.TokenType));
+		m_lstTokengameobject.Clear();
+
 		//calling the coroutine
 		StartCoroutine(PlayerTurn(0.15f));
 

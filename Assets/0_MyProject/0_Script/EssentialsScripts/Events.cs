@@ -1,5 +1,6 @@
 ﻿using GameUtility.Base;
 using UnityEngine;
+using System.Collections.Generic;
 
 #region GameMechanics
 public class EventDiceRollAnimationComplete : IEventBase
@@ -20,6 +21,24 @@ public class EventPlayerFinished : IEventBase
 	public EventPlayerFinished(TokenData a_refTokenData)
 	{
 		m_refTokenData = a_refTokenData;
+	}
+
+}
+
+public class EventTokenScaleFactor : IEventBase
+{
+	private List<GameObject> m_lstTokenGameObject;
+	public List<GameObject> LTokenGameObject { get => m_lstTokenGameObject; }
+	private Vector2 m_vec2ScaleValue;
+	public Vector2 Vec2ScaleValue { get => m_vec2ScaleValue; }
+	private eScaleType m_enumScaleType;
+	public eScaleType EScaleType { get => m_enumScaleType; }
+
+	public EventTokenScaleFactor(List<GameObject> a_lstTokenGameObject, Vector2 a_vec2ScaleValue, eScaleType a_enumScaleType)
+	{
+		m_lstTokenGameObject = a_lstTokenGameObject;
+		m_vec2ScaleValue = a_vec2ScaleValue;
+		m_enumScaleType = a_enumScaleType;
 	}
 
 }

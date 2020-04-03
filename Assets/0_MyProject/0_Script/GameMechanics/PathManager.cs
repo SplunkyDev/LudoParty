@@ -74,6 +74,7 @@ public class PathManager : MonoBehaviour
         
     }
 
+	//All Token updates based on tile data 
 	public List<Transform> TokenStateUpdate(TokenData a_refTokenData, int a_iDiceValue)
 	{
 		m_lstTilePosition.Clear();
