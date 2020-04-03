@@ -542,7 +542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e4a2fa1490924e45ad91817f3047f94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_eUITweenMoveState: 1
+  m_eUITweenMoveState: 4
   m_easeType: 3
   m_bAllowSelfTween: 0
   m_fSelfTweenTime: 0
@@ -850,7 +850,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e4a2fa1490924e45ad91817f3047f94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_eUITweenMoveState: 2
+  m_eUITweenMoveState: 1
   m_easeType: 3
   m_bAllowSelfTween: 0
   m_fSelfTweenTime: 0
@@ -1315,6 +1315,7 @@ MonoBehaviour:
   m_arrChildGameObject:
   - {fileID: 269446831}
   - {fileID: 1726979099}
+  - {fileID: 1266952744}
   - {fileID: 488876016}
   m_fDelay: 0.25
   m_easeType: 0

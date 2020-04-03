@@ -116,6 +116,15 @@ public class TokenManager : MonoBehaviour
 		m_tweenScaleEffect = new TweenParams().SetLoops(-1).SetEase(Ease.OutCirc);
 	}
 
+
+	private void Update()
+	{
+		if (Input.GetKeyUp(KeyCode.Q))
+		{
+			Debug.Log("[TokenManager] BLUE FINISHED");
+			EventManager.Instance.TriggerEvent<EventPlayerFinished>(new EventPlayerFinished(m_lstBlueToken[0]));
+		}
+	}
 	public bool CheckValidTokenMovement(int a_iDiceValue)
 	{
 		
@@ -405,7 +414,7 @@ public class TokenManager : MonoBehaviour
 			//Checks if all Tokens are in heaven and the player has finished his game
 			if (m_refCurrentToken.EnumTokenState == eTokenState.InHeaven)
 			{
-				int iTokensFinished = 0;
+				int iBlueTokensFinished = 0, iYellowTokensFinished = 0, iRedTokensFinished =0, iGreenTokensFinished = 0;
 
 				switch (m_refCurrentToken.EnumTokenType)
 				{
@@ -414,7 +423,11 @@ public class TokenManager : MonoBehaviour
 						{
 							if(m_lstBlueToken[i].EnumTokenState == eTokenState.InHeaven)
 							{
-								iTokensFinished++;
+								iBlueTokensFinished++;
+								if (iBlueTokensFinished >= TOKENSPERPLAYER)
+								{
+									EventManager.Instance.TriggerEvent<EventPlayerFinished>(new EventPlayerFinished(m_refCurrentToken));
+								}
 							}
 						}
 						break;
@@ -423,7 +436,11 @@ public class TokenManager : MonoBehaviour
 						{
 							if (m_lstYellowToken[i].EnumTokenState == eTokenState.InHeaven)
 							{
-								iTokensFinished++;
+								iYellowTokensFinished++;
+								if (iYellowTokensFinished >= TOKENSPERPLAYER)
+								{
+									EventManager.Instance.TriggerEvent<EventPlayerFinished>(new EventPlayerFinished(m_refCurrentToken));
+								}
 							}
 						}
 						break;
@@ -432,7 +449,11 @@ public class TokenManager : MonoBehaviour
 						{
 							if (m_lstRedToken[i].EnumTokenState == eTokenState.InHeaven)
 							{
-								iTokensFinished++;
+								iRedTokensFinished++;
+								if (iRedTokensFinished >= TOKENSPERPLAYER)
+								{
+									EventManager.Instance.TriggerEvent<EventPlayerFinished>(new EventPlayerFinished(m_refCurrentToken));
+								}
 							}
 						}
 						break;
@@ -441,16 +462,17 @@ public class TokenManager : MonoBehaviour
 						{
 							if (m_lstGreenToken[i].EnumTokenState == eTokenState.InHeaven)
 							{
-								iTokensFinished++;
+								iGreenTokensFinished++;
+								if (iGreenTokensFinished >= TOKENSPERPLAYER)
+								{
+									EventManager.Instance.TriggerEvent<EventPlayerFinished>(new EventPlayerFinished(m_refCurrentToken));
+								}
 							}
 						}
 						break;
 				}
 
-				if(iTokensFinished>=TOKENSPERPLAYER)
-				{
-					EventManager.Instance.TriggerEvent<EventPlayerFinished>(new EventPlayerFinished(m_refCurrentToken));
-				}
+				
 			
 			}
 			GameManager.Instance.CheckPlayerChangeCondtion();

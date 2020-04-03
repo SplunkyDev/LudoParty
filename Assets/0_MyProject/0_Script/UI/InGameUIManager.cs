@@ -5,6 +5,7 @@ using GameUtility.Base;
 using UnityEngine.UI;
 using DG.Tweening;
 
+
 public class InGameUIManager : MonoBehaviour
 {
 	private static InGameUIManager m_instance;
@@ -32,7 +33,7 @@ public class InGameUIManager : MonoBehaviour
 
 
 	public GameObject m_gResultPrefab;
-	public GameObject m_gFridResult;
+	public GameObject m_gGridResult;
 
 
 	private void RegisterToEvent()
@@ -99,10 +100,61 @@ public class InGameUIManager : MonoBehaviour
 
 	public void ShowGameResults(List<PlayerData> a_lstPlayerData)
 	{
+		GameObject gResultPanel;
+		Text txtPlayer;
 
+		EventManager.Instance.TriggerEvent<EventShowGameCompleteUI>(new EventShowGameCompleteUI(true, eGameState.GameComplete));
+		for (int i = 0; i < a_lstPlayerData.Count; i++)
+		{
+			gResultPanel = Instantiate(m_gResultPrefab, Vector3.zero, Quaternion.identity, m_gGridResult.transform);
+			gResultPanel.transform.GetChild(0).gameObject.GetComponent<Text>().text = i == 0 ? "1st" : "2nd";
+			switch (a_lstPlayerData[i].m_enumPlayerTurn)
+			{
+				case ePlayerTurn.PlayerOne:
+					txtPlayer = gResultPanel.transform.GetChild(1).gameObject.GetComponent<Text>();
+					txtPlayer.text = "Player One";
+					SetColourToTheName(i);
+					break;
+				case ePlayerTurn.PlayerTwo:
+					txtPlayer = gResultPanel.transform.GetChild(1).gameObject.GetComponent<Text>();
+					txtPlayer.text = "Player Two";
+					SetColourToTheName(i);
+					break;
+				case ePlayerTurn.PlayerThree:
+					txtPlayer = gResultPanel.transform.GetChild(1).gameObject.GetComponent<Text>();
+					txtPlayer.text = "Player Three";
+					SetColourToTheName(i);
+					break;
+				case ePlayerTurn.PlayerFour:
+					txtPlayer = gResultPanel.transform.GetChild(1).gameObject.GetComponent<Text>();
+					txtPlayer.text = "Player Four";
+					SetColourToTheName(i);
+					break;
+			}
+
+		}
+
+		void SetColourToTheName(int a_iIndex)
+		{
+			switch (a_lstPlayerData[a_iIndex].m_enumPlayerToken)
+			{
+				case ePlayerToken.Blue:
+					txtPlayer.color = Color.blue;
+					break;
+				case ePlayerToken.Yellow:
+					txtPlayer.color = Color.yellow;
+					break;
+				case ePlayerToken.red:
+					txtPlayer.color = Color.red;
+					break;
+				case ePlayerToken.Green:
+					txtPlayer.color = Color.green;
+					break;
+			}
+		}
 	}
 
-	private void HighlightCurrentPlayer(IEventBase a_Event)
+		private void HighlightCurrentPlayer(IEventBase a_Event)
 	{
 		Debug.Log("[InGameUIManager] HighlightCurrentPlayer TRIGGERED");
 		EventHighlightCurrentPlayer data = a_Event as EventHighlightCurrentPlayer;
@@ -182,9 +234,23 @@ public class InGameUIManager : MonoBehaviour
 				StartCoroutine(AnimateDiceRoll());
 				break;
 			case "BackToMenu":
-				if (GameManager.Instance.EnumGameState!= eGameState.InGame)
+				if (GameManager.Instance.EnumGameState != eGameState.InGame)
+					return;
+
+				if (GameManager.Instance.BOnlineMultiplayer)
+				{
+					//TODO: Disconnect from server
+				}
+				GameManager.Instance.LoadToGame(0);
+				break;
+			case "BackAfterGC":
+				if (GameManager.Instance.EnumGameState!= eGameState.GameComplete)
 						return;
 
+				if(GameManager.Instance.BOnlineMultiplayer)
+				{
+					//TODO: Disconnect from server
+				}
 				GameManager.Instance.LoadToGame(0);
 				break;
 		}
@@ -198,6 +264,5 @@ public class InGameUIManager : MonoBehaviour
 		yield return new WaitForSeconds(0.25f);
 		m_arrAnimController[(int)GameManager.Instance.EnumPlayerToken -1].SetBool("RollDice",true);
 	}
-
 
 }

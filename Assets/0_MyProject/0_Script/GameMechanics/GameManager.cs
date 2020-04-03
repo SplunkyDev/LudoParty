@@ -53,17 +53,21 @@ public class GameManager : MBSingleton<GameManager>
 
 	void DeregisterToEvents()
 	{
+		if (EventManager.Instance == null) return;
+
 		EventManager.Instance.DeRegisterEvent<EventPlayerFinished>(PlayerFinishedGame);
 	}
 
 
 	private void OnEnable()
 	{
+		RegisterToEVents();
 		SceneManager.sceneLoaded += OnSceneLoaded;
 	}
 
 	private void OnDisable()
 	{
+		DeregisterToEvents();
 		SceneManager.sceneLoaded -= OnSceneLoaded;	
 	}
 
@@ -74,12 +78,13 @@ public class GameManager : MBSingleton<GameManager>
 		{
 			case 0:
 				Debug.Log("[GameManager] Menu Scene Loaded");
+				EventManager.Instance.TriggerEvent<EventShowMenuUI>(new EventShowMenuUI(true, eGameState.Menu));
 				break;
 			case 1:
 				Debug.Log("[GameManager] Game Scene Loaded");
 				EventManager.Instance.TriggerEvent<EventShowInGameUI>(new EventShowInGameUI(true,eGameState.InGame));
 
-				if(BOnlineMultiplayer)
+				if(!BOnlineMultiplayer)
 				{
 					for (int i = 0; i < 2; i++)
 					{
@@ -87,7 +92,7 @@ public class GameManager : MBSingleton<GameManager>
 						playerData.m_enumPlayerTurn = (ePlayerTurn)i;
 						playerData.m_enumPlayerToken = (ePlayerToken)(i + 1);
 
-						GameManager.Instance.SetPlayerData(playerData);
+						SetPlayerData(playerData);
 						playerData = null;
 					}
 
@@ -123,7 +128,7 @@ public class GameManager : MBSingleton<GameManager>
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
 	private void PlayerFinishedGame(IEventBase a_Event)
@@ -135,18 +140,21 @@ public class GameManager : MBSingleton<GameManager>
 			return;
 		}
 
+		Debug.Log("[GameManager] Processing Game Complete");
 		for (int i = 0; i < m_lstPlayerData.Count; i++)
 		{
 			if ((int)m_lstPlayerData[i].m_enumPlayerToken == (int)data.RefTokenData.EnumTokenType)
 			{
 				m_lstPlayerData[i].m_gameComplete = true;
 				m_lstPlayerCompleted.Add(m_lstPlayerData[i]);
+				Debug.Log("[GameManager] Yes, player has completed the game");
 			}
 		}
 
 		if((m_lstPlayerData.Count - m_lstPlayerCompleted.Count) == 1)
 		{
 			//TODO: TODO END GAME HERE
+			Debug.Log("[GameManager] End the game");
 			GameEnded();
 		}
 		
