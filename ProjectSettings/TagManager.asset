@@ -42,3 +42,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: TokenSprite
+    uniqueID: 117508971
+    locked: 0

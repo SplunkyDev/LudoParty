@@ -27,6 +27,8 @@ public class GameManager : MBSingleton<GameManager>
 	//This holds the current player index of the PlayerData List
 	private int m_iCurrentPlayerIndex = 0;
 	private List<PlayerData> m_lstPlayerCompleted = new List<PlayerData>();
+	private bool m_bOnlineMultiplayer;
+	public bool BOnlineMultiplayer { get => m_bOnlineMultiplayer; set => m_bOnlineMultiplayer = value; }
 
 	public ePlayerToken EnumPlayerToken
 	{
@@ -42,6 +44,7 @@ public class GameManager : MBSingleton<GameManager>
 			return ePlayerToken.None;
 		}
 	}
+
 
 	void RegisterToEVents()
 	{
@@ -75,7 +78,26 @@ public class GameManager : MBSingleton<GameManager>
 			case 1:
 				Debug.Log("[GameManager] Game Scene Loaded");
 				EventManager.Instance.TriggerEvent<EventShowInGameUI>(new EventShowInGameUI(true,eGameState.InGame));
-				StartCoroutine(InitializeGame(1f));
+
+				if(BOnlineMultiplayer)
+				{
+					for (int i = 0; i < 2; i++)
+					{
+						PlayerData playerData = new PlayerData();
+						playerData.m_enumPlayerTurn = (ePlayerTurn)i;
+						playerData.m_enumPlayerToken = (ePlayerToken)(i + 1);
+
+						GameManager.Instance.SetPlayerData(playerData);
+						playerData = null;
+					}
+
+					StartCoroutine(InitializeGame(1f));
+				}
+				else
+				{
+					//TODO: Initialize AppWarp
+				}
+				
 				break;
 		}
 	}
@@ -125,9 +147,16 @@ public class GameManager : MBSingleton<GameManager>
 		if((m_lstPlayerData.Count - m_lstPlayerCompleted.Count) == 1)
 		{
 			//TODO: TODO END GAME HERE
+			GameEnded();
 		}
 		
 	}
+
+	private void GameEnded()
+	{
+		InGameUIManager.Instance.ShowGameResults(m_lstPlayerCompleted);
+	}
+
 	private IEnumerator InitializeGame(float a_fDelay)
 	{
 		m_lstPlayerCompleted.Clear();

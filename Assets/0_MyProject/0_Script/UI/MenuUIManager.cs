@@ -24,20 +24,14 @@ public class MenuUIManager : MonoBehaviour
 	{
 		switch (a_strButton)
 		{
-			case "Play":
-				for (int i = 0; i < 2; i++)
-				{
-					PlayerData playerData = new PlayerData();
-					playerData.m_enumPlayerTurn = (ePlayerTurn)i;
-					playerData.m_enumPlayerToken = (ePlayerToken)(i+1);
-
-					GameManager.Instance.SetPlayerData(playerData);
-					playerData = null;
-				}
-
+			case "PlayLocal":
+				GameManager.Instance.BOnlineMultiplayer = false;
 				GameManager.Instance.LoadToGame(1);
 				break;
-
+			case "PlayOnline":
+				GameManager.Instance.BOnlineMultiplayer = true;
+				GameManager.Instance.LoadToGame(1);
+				break;
 			case "Exit":
 				Application.Quit();
 				break;

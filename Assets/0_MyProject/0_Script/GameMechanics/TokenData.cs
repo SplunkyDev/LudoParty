@@ -20,6 +20,10 @@ public class TokenData : MonoBehaviour
 	private bool m_bCanBeUsed = false;
 	public bool BCanBeUsed { get => m_bCanBeUsed; set => m_bCanBeUsed = value; }
 
+	private Vector2 m_vec2PositionOnTile;
+	public Vector2 Vec2PositionOnTile { get => m_vec2PositionOnTile; set => m_vec2PositionOnTile = value; }
+
+	private SpriteRenderer m_spriteRenderer;
 	private void OnEnable()
 	{
 		if(TokenManager.Instance == null)
@@ -28,6 +32,8 @@ public class TokenData : MonoBehaviour
 			return;
 		}
 
+		Vec2PositionOnTile = transform.position;
+		m_spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
 		TokenManager.Instance.m_OnResetToken += ResetTokenUsability;
 	}
 
@@ -42,9 +48,11 @@ public class TokenData : MonoBehaviour
 		TokenManager.Instance.m_OnResetToken -= ResetTokenUsability;
 	}
 
+	
 	private void ResetTokenUsability()
 	{
 		m_bCanBeUsed = false;
+		m_spriteRenderer.sortingOrder = 0;
 	}
 
 	// Start is called before the first frame update

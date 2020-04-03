@@ -7,6 +7,18 @@ using DG.Tweening;
 
 public class InGameUIManager : MonoBehaviour
 {
+	private static InGameUIManager m_instance;
+	public static InGameUIManager Instance
+	{
+		get
+		{
+			if(m_instance == null)
+			{
+				m_instance = FindObjectOfType<InGameUIManager>();
+			}
+			return m_instance;
+		}
+	}
 
 	[Header("Player Avatar (Blue,Yellow,Red,Green)")]
 	[SerializeField] private Image[] m_arrPlayerAvatar;
@@ -17,6 +29,11 @@ public class InGameUIManager : MonoBehaviour
 
 	private Vector2 m_vec2ScaleValue;
 	private Image m_imgPrevAvatar, m_imgCurrentAvatar, m_imgCurrentDiceRoll;
+
+
+	public GameObject m_gResultPrefab;
+	public GameObject m_gFridResult;
+
 
 	private void RegisterToEvent()
 	{
@@ -41,6 +58,14 @@ public class InGameUIManager : MonoBehaviour
 		EventManager.Instance.DeRegisterEvent<EventHighlightCurrentPlayer>(HighlightCurrentPlayer);
 		EventManager.Instance.DeRegisterEvent<EventDiceRollAnimationComplete>(DiceRollAnimationComplete);
 		EventManager.Instance.DeRegisterEvent<EventPlayerTurnChanged>(PlayerTurnChanged);
+	}
+
+	private  void Awake()
+	{
+		if(m_instance == null)
+		{
+			m_instance = this;
+		}
 	}
 
 	private void OnEnable()
@@ -72,6 +97,10 @@ public class InGameUIManager : MonoBehaviour
         
     }
 
+	public void ShowGameResults(List<PlayerData> a_lstPlayerData)
+	{
+
+	}
 
 	private void HighlightCurrentPlayer(IEventBase a_Event)
 	{

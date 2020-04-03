@@ -31,6 +31,12 @@ public class TokenManager : MonoBehaviour
 	[SerializeField] private List<TokenData> m_lstRedToken = new List<TokenData>();
 	[SerializeField] private List<TokenData> m_lstGreenToken = new List<TokenData>();
 
+
+	private List<SpriteRenderer> m_lstBlueTokenSprite = new List<SpriteRenderer>();
+	private List<SpriteRenderer> m_lstYellowTokenSprite = new List<SpriteRenderer>();
+	private List<SpriteRenderer> m_lstRedTokenSprite = new List<SpriteRenderer>();
+	private List<SpriteRenderer> m_lstGreenTokenSprite = new List<SpriteRenderer>();
+
 	[Header("Token Layer")]
 	[SerializeField] private LayerMask m_layerMask;
 
@@ -38,6 +44,7 @@ public class TokenManager : MonoBehaviour
 	private List<Transform> m_lstTokenMovePoints = new List<Transform>();
 	private bool m_bMoveTweenComplete = false;
 	private TokenData m_TokenToMove;
+	private const float FTOKENJUMPVALUE = 0.15f;
 	private Vector2 m_vec2Scalevalue = new Vector2(0.6f, 0.6f);
 	private Vector2 m_vec2ScaleShared = new Vector2(0.4f, 0.4f);
 	private Vector2 m_Vec3TokenOrginalScale = new Vector2(0.5f, 0.5f);
@@ -85,7 +92,15 @@ public class TokenManager : MonoBehaviour
 			m_lstYellowToken[i].transform.position = m_lstStartYellowTokenPosition[i].position;
 			m_lstRedToken[i].transform.position = m_lstStartRedTokenPosition[i].position;
 			m_lstGreenToken[i].transform.position = m_lstStartGreenTokenPosition[i].position;
+
+			m_lstBlueTokenSprite.Add(m_lstBlueToken[i].transform.GetChild(0).GetComponent<SpriteRenderer>());
+			m_lstYellowTokenSprite.Add(m_lstYellowToken[i].transform.GetChild(0).GetComponent<SpriteRenderer>());
+			m_lstRedTokenSprite.Add(m_lstRedToken[i].transform.GetChild(0).GetComponent<SpriteRenderer>());
+			m_lstGreenTokenSprite.Add(m_lstGreenToken[i].transform.GetChild(0).GetComponent<SpriteRenderer>());
+
 		}
+
+		
 	}
 
 
@@ -146,37 +161,64 @@ public class TokenManager : MonoBehaviour
 		bool bValid = false;
 
 		for (int i = 0; i < a_lstToken.Count; i++)
-		{
+		{		
 			switch (a_lstToken[i].EnumTokenState)
 			{
+				
 				case GameUtility.Base.eTokenState.House:
 					if (a_iDiceValue == 6)
 					{
+						UpdateSortOrder(i);
 						bValid = a_lstToken[i].BCanBeUsed = true;
-						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetAs(m_tweenScaleEffect).SetId("ScaleEffect");
+						a_lstToken[i].transform.DOMoveY((a_lstToken[i].transform.position.y+FTOKENJUMPVALUE), 0.5f).From(false).SetAs(m_tweenScaleEffect).SetId("ScaleEffect");
 					}
 					break;
 				case GameUtility.Base.eTokenState.InRoute:
 				case GameUtility.Base.eTokenState.InHideOut:
+					UpdateSortOrder(i);
 					bValid = a_lstToken[i].BCanBeUsed = true;
-					a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetAs(m_tweenScaleEffect).SetId("ScaleEffect");
+					a_lstToken[i].transform.DOMoveY((a_lstToken[i].transform.position.y + FTOKENJUMPVALUE), 0.5f).From(false).SetAs(m_tweenScaleEffect).SetId("ScaleEffect");
 					break;
 				case GameUtility.Base.eTokenState.InStairwayToHeaven:
 					if (PathManager.Instance.ValidateMovement(a_lstToken[i], a_iDiceValue))
 					{
+						UpdateSortOrder(i);
 						bValid = a_lstToken[i].BCanBeUsed = true;
-						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetAs(m_tweenScaleEffect).SetId("ScaleEffect");
+						a_lstToken[i].transform.DOMoveY((a_lstToken[i].transform.position.y + FTOKENJUMPVALUE), 0.5f).From(false).SetAs(m_tweenScaleEffect).SetId("ScaleEffect");
 					}
 					break;
 				case GameUtility.Base.eTokenState.EntryToStairway:
 					Debug.Log("<color=red>[TokeManager][AnimateValidTokens] Getting closer to heaven:"+ a_lstToken [i].EnumTokenType+ "</color>");
 					if (PathManager.Instance.ValidateMovement(a_lstToken[i], a_iDiceValue))
 					{
+						UpdateSortOrder(i);
 						bValid = a_lstToken[i].BCanBeUsed = true;
-						a_lstToken[i].transform.DOScale(m_vec2Scalevalue, 0.5f).From(false).SetAs(m_tweenScaleEffect).SetId("ScaleEffect");
+						a_lstToken[i].transform.DOMoveY((a_lstToken[i].transform.position.y + FTOKENJUMPVALUE), 0.5f).From(false).SetAs(m_tweenScaleEffect).SetId("ScaleEffect");
 					}
 					break;
 			}
+
+		
+		}
+
+		void UpdateSortOrder(int a_index)
+		{
+			switch (a_lstToken[a_index].EnumTokenType)
+			{
+				case eTokenType.Blue:
+					m_lstBlueTokenSprite[a_index].sortingOrder = 1;
+					break;
+				case eTokenType.Yellow:
+					m_lstYellowTokenSprite[a_index].sortingOrder = 1;
+					break;
+				case eTokenType.Red:
+					m_lstRedTokenSprite[a_index].sortingOrder = 1;
+					break;
+				case eTokenType.Green:
+					m_lstGreenTokenSprite[a_index].sortingOrder = 1;
+					break;
+			}
+
 		}
 
 		return bValid;
@@ -325,7 +367,7 @@ public class TokenManager : MonoBehaviour
 				break;
 		}
 
-		m_lstTokengameobject.Add(m_TokenToMove.gameObject);
+		m_lstTokengameobject.Add(a_refTokenData.gameObject);
 		EventManager.Instance.TriggerEvent<EventTokenScaleFactor>(new EventTokenScaleFactor(m_lstTokengameobject, m_Vec3TokenOrginalScale, eScaleType.TokenType));
 		m_lstTokengameobject.Clear();
 
@@ -351,6 +393,7 @@ public class TokenManager : MonoBehaviour
 				}
 			}
 
+			m_TokenToMove.Vec2PositionOnTile = m_TokenToMove.transform.position;
 			GameManager.Instance.CurrentPlayer.m_ePlayerState = ePlayerState.PlayerRollDice;
 			if (m_TokenToMove.EnumTokenState == eTokenState.InRoute || m_TokenToMove.EnumTokenState == eTokenState.InHideOut)
 			{
