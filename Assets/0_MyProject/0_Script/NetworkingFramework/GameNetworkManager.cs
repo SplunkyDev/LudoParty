@@ -31,6 +31,7 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 	{
 
 		EventManager.Instance.RegisterEvent<EventOpponentLeftRoom>(OpponentLeftRoom);
+		EventManager.Instance.RegisterEvent<EventFirstPlayerEntered>(GenerateFirstPlayer);
 	}
 
 	private void DeregisterEvents()
@@ -38,6 +39,7 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 		if (EventManager.Instance == null)
 			return;
 		EventManager.Instance.DeRegisterEvent<EventOpponentLeftRoom>(OpponentLeftRoom);
+		EventManager.Instance.DeRegisterEvent<EventFirstPlayerEntered>(GenerateFirstPlayer);
 
 	}
 
@@ -96,6 +98,35 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 		
 	}
 
+	private void GenerateFirstPlayer(IEventBase a_Event)
+	{
+		EventFirstPlayerEntered data = a_Event as EventFirstPlayerEntered;
+		if (data == null)
+		{
+			Debug.LogError("[GameNetworkManager] EventFirstPlayerEntered Error");
+			return;
+		}
+
+		PlayerData playerData = new PlayerData();
+		playerData.m_enumPlayerTurn = ePlayerTurn.PlayerOne;
+		playerData.m_enumPlayerToken = ePlayerToken.Blue;
+		GameManager.Instance.SetPlayerData(playerData);
+		Debug.Log("[GameNetworkManager] Player One Generated");
+	}
+
+	private void GenerateNextPlayer(IEventBase a_Event)
+	{
+		EventGenerateNextPlayer data = a_Event as EventGenerateNextPlayer;
+		if (data == null)
+		{
+			Debug.LogError("[GameNetworkManager] EventGenerateNextPlayer Error");
+			return;
+		}
+
+		Debug.Log("[GameNetworkManager] Generated Next Player");
+		GameManager.Instance.UpdatePlayersInGame();
+
+	}
 
 	//This event is triggered when an opponent player has left/disconnected from room
 	private void OpponentLeftRoom(IEventBase a_Event)

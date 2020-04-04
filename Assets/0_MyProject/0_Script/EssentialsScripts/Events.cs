@@ -123,6 +123,39 @@ public class EventOpponentLeftRoom : IEventBase
 }
 
 #region AppWarp
+
+public class EventOpponentDiceRoll : IEventBase
+{
+	private int m_iDiceRoll;
+	public int IDiceRoll { get => m_iDiceRoll;}
+
+	public EventOpponentDiceRoll(int a_iDiceRoll)
+	{
+		m_iDiceRoll = a_iDiceRoll;
+	}
+}
+
+public class EventFirstPlayerEntered : IEventBase
+{
+	public EventFirstPlayerEntered() { }
+}
+
+public class EventGenerateNextPlayer : IEventBase
+{
+	public EventGenerateNextPlayer() { }
+}
+
+public class EventOpponentTokenSelected : IEventBase
+{
+	private TokenData m_refTokenSelected;
+	public TokenData TokenSelected { get => m_refTokenSelected; }
+
+	public EventOpponentTokenSelected(TokenData a_refTokenSelected)
+	{
+		m_refTokenSelected = a_refTokenSelected;
+	}
+}
+
 public class EventInitializeNetworkApi : IEventBase
 {
 	public EventInitializeNetworkApi()

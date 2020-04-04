@@ -245,6 +245,14 @@ public class TokenManager : MonoBehaviour
 
 		if(data.BTouch)
 		{
+			if (GameManager.Instance.BOnlineMultiplayer)
+			{
+				//DO not accept input from device if the player turn is not of this device
+				if (GameManager.Instance.EnumPlayerTurn != GameManager.Instance.EnumMyPlayerTurn)
+				{
+					return;
+				}
+			}
 			RaycastFromScreen(data.Vec3TouchPosition);
 		}
 

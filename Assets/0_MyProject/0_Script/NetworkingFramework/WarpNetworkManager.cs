@@ -136,11 +136,19 @@ public class WarpNetworkManager : MBSingleton<WarpNetworkManager>
 
 
 		EventManager.Instance.TriggerEvent<EventConnectToServer>(new EventConnectToServer());
+
+		
 	}
 
 	public void BroadCastMessageInRoom(string a_strMessage)
 	{
 		m_warpClient.SendChat(a_strMessage);
+	}
+
+	public void  GetCUrrentOnlineUser()
+	{
+		Debug.Log("[WarpNetworkManager] Getting online users");
+		m_warpClient.GetOnlineUsers();
 	}
 
 	private void ConnectedToServer(IEventBase a_Event)
@@ -457,9 +465,19 @@ public class WarpListerner : ConnectionRequestListener, LobbyRequestListener, Zo
 		Debug.Log("[WarpNetworkManager] Room ID: "+ eventObj.getData().getId());
 	}
 		
+	//Checking the number of users currently after joining room
 	public void onGetOnlineUsersDone (AllUsersEvent eventObj)
 	{
 		Debug.Log("onGetOnlineUsersDone : " + eventObj.getResult());
+		if(eventObj.getUserNames().Length <= 1)
+		{
+			Debug.Log("[WarpNetworkManager] First player entered");
+			EventManager.Instance.TriggerEvent<EventFirstPlayerEntered>(new EventFirstPlayerEntered());
+		}
+		else
+		{
+			EventManager.Instance.TriggerEvent<EventGenerateNextPlayer>(new EventGenerateNextPlayer());
+		}
 	}
 		
 	public void onGetLiveUserInfoDone (LiveUserInfoEvent eventObj)
@@ -616,7 +634,8 @@ public class WarpListerner : ConnectionRequestListener, LobbyRequestListener, Zo
 				Debug.Log("[WarpNetworkManager] Opponent has joined");				
 			}
 			else 
-			{			
+			{
+				WarpNetworkManager.Instance.GetCUrrentOnlineUser();
 				Debug.Log("[WarpNetworkManager] self has joined");			
 			}
 		}

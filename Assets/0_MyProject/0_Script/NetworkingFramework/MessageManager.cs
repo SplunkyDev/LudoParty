@@ -87,23 +87,58 @@ public class MessageManager : MBSingleton<MessageManager>
 
         for (int i = 0; i < a_arrMessageType.Length; i++)
         {
-            switch (a_arrMessageType[i])
-            {
-                case eMessageType.None:
-                    break;
-                    break;
-                case eMessageType.PlayerTurn:
-                    break;
-                case eMessageType.GameEnded:
-                    break;
-                default:
-                    break;
-            }
+			switch (a_arrMessageType[i])
+			{
+				case eMessageType.None:
+					break;
+				case eMessageType.StartAcknowledgement:
+					//Sends the player turn to opponent
+					if (m_JsonObjectInGame.HasField("StartAcknowledgement"))
+					{
+						m_JsonObjectInGame.SetField("StartAcknowledgement", 1); //(int)EssentialDataManager.Instance.EnumOppoentPlayerTurn
+					}
+					else
+					{
+						m_JsonObjectInGame.AddField("StartAcknowledgement", 1); //(int)EssentialDataManager.Instance.EnumOppoentPlayerTurn
+					}
 
-        }
+					break;
+				case eMessageType.PlayerTurn:
+					break;
+				case eMessageType.GameEnded:
+					break;
+				case eMessageType.PlayerDiceRoll:
+					//Sends the player turn to opponent
+					if (m_JsonObjectInGame.HasField("PlayerDiceRoll"))
+					{
+						m_JsonObjectInGame.SetField("PlayerDiceRoll", GameManager.Instance.ICurrentDiceValue);
+					}
+					else
+					{
+						m_JsonObjectInGame.AddField("PlayerDiceRoll", GameManager.Instance.ICurrentDiceValue);
+					}
+					break;
+				case eMessageType.PlayerTokenSelected:
+					//TODO: Manager reading opponents token 
+					//if (m_JsonObjectInGame.HasField("PlayerDiceRoll"))
+					//{
+					//	m_JsonObjectInGame.SetField("PlayerDiceRoll", TokenManager.Instance.Curre);
+					//}
+					//else
+					//{
+					//	m_JsonObjectInGame.AddField("PlayerDiceRoll", GameManager.Instance.ICurrentDiceValue);
+					//}
+					break;
+				case eMessageType.GameStart:
+					break;
+				default:
+					break;
+			}
 
-        //The State of the message will be checked and that field will be retrieved
-        if (m_JsonObjectInGame.HasField("MessageType"))
+		}
+
+		//The State of the message will be checked and that field will be retrieved
+		if (m_JsonObjectInGame.HasField("MessageType"))
         {
             m_JsonObjectInGame.SetField("MessageType", arr);
         }
@@ -122,9 +157,9 @@ public class MessageManager : MBSingleton<MessageManager>
         //Sending the Json to the room sever
         WarpNetworkManager.Instance.BroadCastMessageInRoom(m_JsonObjectInGame.Print());
 
-    }
+	}
 
-    private void ReadInGameMessage(string a_strMessage)
+	private void ReadInGameMessage(string a_strMessage)
     {
         Debug.Log("[MessageManager] ReadInGameMessage: received: " + a_strMessage);
         m_JsonObjectInGame = null;
@@ -138,24 +173,56 @@ public class MessageManager : MBSingleton<MessageManager>
             arr = m_JsonObjectInGame["MessageType"];
             for (int i = 0; i < arr.Count; i++)
             {
-             
-                switch ((eMessageType)arr[i].n)
-                {
-                    case eMessageType.None:
-                        break;
-                    case eMessageType.StartAcknowledgement:                  
-                        break;
-                    case eMessageType.GameEnded:
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-        else
+
+				switch ((eMessageType)arr[i].n)
+				{
+					case eMessageType.None:
+						break;
+					case eMessageType.StartAcknowledgement:
+						//set dice roll value got from opponent
+						if (m_JsonObjectInGame.HasField("StartAcknowledgement"))
+						{
+							if((int)m_JsonObjectInGame.GetField("StartAcknowledgement").i ==1)
+							{
+
+							}
+							else
+							{
+								Debug.LogError("[MessageManager] StartAcknowledgement FOUND, INVALID DATA");
+							}
+						}
+						else
+						{
+							Debug.LogError("[MessageManager] StartAcknowledgement NOT FOUND");
+						}
+						break;
+					case eMessageType.GameEnded:
+						break;
+					case eMessageType.PlayerTurn:
+						break;
+					case eMessageType.PlayerDiceRoll:
+						//set dice roll value got from opponent
+						if (m_JsonObjectInGame.HasField("PlayerDiceRoll"))
+						{
+							EventManager.Instance.TriggerEvent<EventOpponentDiceRoll>(new EventOpponentDiceRoll((int)m_JsonObjectInGame.GetField("PlayerDiceRoll").i));
+						}
+						else
+						{
+							Debug.LogError("[MessageManager] PlayerDiceRoll NOT FOUND");
+						}
+
+						break;
+					case eMessageType.PlayerTokenSelected:
+						break;
+					default:
+						break;
+				}
+			}
+		}
+		else
         {
             Debug.LogError("[EssentialDataManager] MessageType NOT FOUND");
         }
-    }
+	}
 
 }

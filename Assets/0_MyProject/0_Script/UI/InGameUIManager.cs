@@ -47,6 +47,7 @@ public class InGameUIManager : MonoBehaviour
 		EventManager.Instance.RegisterEvent<EventHighlightCurrentPlayer>(HighlightCurrentPlayer);
 		EventManager.Instance.RegisterEvent<EventDiceRollAnimationComplete>(DiceRollAnimationComplete);
 		EventManager.Instance.RegisterEvent<EventPlayerTurnChanged>(PlayerTurnChanged);
+		EventManager.Instance.RegisterEvent<EventOpponentDiceRoll>(DiceRollAnimation);
 	}
 
 	private void DeregisterToEvent()
@@ -59,6 +60,7 @@ public class InGameUIManager : MonoBehaviour
 		EventManager.Instance.DeRegisterEvent<EventHighlightCurrentPlayer>(HighlightCurrentPlayer);
 		EventManager.Instance.DeRegisterEvent<EventDiceRollAnimationComplete>(DiceRollAnimationComplete);
 		EventManager.Instance.DeRegisterEvent<EventPlayerTurnChanged>(PlayerTurnChanged);
+		EventManager.Instance.DeRegisterEvent<EventOpponentDiceRoll>(DiceRollAnimation);
 	}
 
 	private  void Awake()
@@ -229,6 +231,15 @@ public class InGameUIManager : MonoBehaviour
 				if (GameManager.Instance.CurrentPlayer.m_ePlayerState != ePlayerState.PlayerRollDice)
 					return;
 
+				if (GameManager.Instance.BOnlineMultiplayer)
+				{
+					//DO not accept input from device if the player turn is not of this device
+					if (GameManager.Instance.EnumPlayerTurn != GameManager.Instance.EnumMyPlayerTurn)
+					{
+						return;
+					}
+				}
+
 				Debug.Log("[InGameUIManager] Roll Dice");
 				GameManager.Instance.RollTheDice();
 				StartCoroutine(AnimateDiceRoll());
@@ -256,6 +267,18 @@ public class InGameUIManager : MonoBehaviour
 		}
 
 	}
+
+	private void DiceRollAnimation(IEventBase a_Event)
+	{
+		EventOpponentDiceRoll data = a_Event as EventOpponentDiceRoll;
+		if (data == null)
+		{
+			Debug.LogError("[InGamaUIManager] Event Oppoennt dice roll null");
+			return;
+		}
+		StartCoroutine(AnimateDiceRoll());
+	}
+
 
 	private IEnumerator AnimateDiceRoll()
 	{

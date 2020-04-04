@@ -20,9 +20,12 @@ public class GameManager : MBSingleton<GameManager>
 	private eGameState m_enumGameState;
 	public eGameState EnumGameState { get => m_enumGameState; set => m_enumGameState = value; }
 
+	//This is the Player Turn state for current Device if online mode
 	private ePlayerTurn m_enumMyPlayerTurn = ePlayerTurn.PlayerOne;
+	public ePlayerTurn EnumMyPlayerTurn { get => m_enumMyPlayerTurn;}
 
 	private ePlayerTurn m_enumCurrentPlayerTurn = ePlayerTurn.PlayerOne;
+	//USed to check if the player turn has changed
 	private ePlayerTurn m_enumPlayerTurn = ePlayerTurn.PlayerOne;
 	public ePlayerTurn EnumPlayerTurn { get => m_enumPlayerTurn; }
 
@@ -47,11 +50,13 @@ public class GameManager : MBSingleton<GameManager>
 		}
 	}
 
+	private List<eMessageType> m_lstMessageType = new List<eMessageType>();
 
 	void RegisterToEVents()
 	{
 		EventManager.Instance.RegisterEvent<EventPlayerFinished>(PlayerFinishedGame);
 		EventManager.Instance.RegisterEvent<EventDevicePlayerTurn>(SetDevicePlayerTurn);
+		EventManager.Instance.RegisterEvent<EventOpponentDiceRoll>(DiceRollFromOpponent);
 	}
 
 	void DeregisterToEvents()
@@ -60,6 +65,7 @@ public class GameManager : MBSingleton<GameManager>
 
 		EventManager.Instance.DeRegisterEvent<EventPlayerFinished>(PlayerFinishedGame);
 		EventManager.Instance.DeRegisterEvent<EventDevicePlayerTurn>(SetDevicePlayerTurn);
+		EventManager.Instance.DeRegisterEvent<EventOpponentDiceRoll>(DiceRollFromOpponent);
 	}
 
 
@@ -129,6 +135,7 @@ public class GameManager : MBSingleton<GameManager>
 
 		m_enumMyPlayerTurn = data.EnumPlayerTurn;
 	}
+
 	public void SetPlayerData(PlayerData a_PlayerData)
 	{
 		//Setting the value of how many turns until the player gets a forced six if not got until then
@@ -141,6 +148,45 @@ public class GameManager : MBSingleton<GameManager>
 		m_lstPlayerData.Add(a_PlayerData);
 	}
 
+	//Giving player turn and token base on the order of connecting to game
+	public void UpdatePlayersInGame()
+	{
+		PlayerData playerData = new PlayerData();
+		switch (m_lstPlayerData[(m_lstPlayerData.Count - 1)].m_enumPlayerTurn)
+		{
+			case ePlayerTurn.PlayerOne:
+				break;
+			case ePlayerTurn.PlayerTwo:
+				playerData.m_enumPlayerTurn = ePlayerTurn.PlayerTwo;
+				playerData.m_enumPlayerToken = ePlayerToken.Yellow;
+				SetPlayerData(playerData);
+				break;
+			case ePlayerTurn.PlayerThree:
+				playerData.m_enumPlayerTurn = ePlayerTurn.PlayerThree;
+				playerData.m_enumPlayerToken = ePlayerToken.red;
+				SetPlayerData(playerData);
+				break;
+			case ePlayerTurn.PlayerFour:
+				playerData.m_enumPlayerTurn = ePlayerTurn.PlayerFour;
+				playerData.m_enumPlayerToken = ePlayerToken.Green;
+				SetPlayerData(playerData);
+				break;
+		}
+
+		m_lstMessageType.Clear();
+		m_lstMessageType.Add(eMessageType.PlayerTurn);
+
+		EventManager.Instance.TriggerEvent<EventInsertInGameMessage>(new EventInsertInGameMessage(m_lstMessageType.ToArray()));
+
+		if(m_lstPlayerData.Count >= EssentialDataManager.Instance.MaxPlayers)
+		{
+			m_lstMessageType.Clear();
+			m_lstMessageType.Add(eMessageType.StartAcknowledgement);
+			EventManager.Instance.TriggerEvent<EventInsertInGameMessage>(new EventInsertInGameMessage(m_lstMessageType.ToArray()));
+		}
+	}
+
+		
 	// Start is called before the first frame update
 	void Start()
     {
@@ -215,6 +261,18 @@ public class GameManager : MBSingleton<GameManager>
 		}
 
 		
+	}
+
+	private void DiceRollFromOpponent(IEventBase a_Event)
+	{
+		EventOpponentDiceRoll data = a_Event as EventOpponentDiceRoll;
+		if (data == null)
+		{
+			Debug.LogError("[GamaManager] Event Oppoennt dice roll null");
+			return;
+		}
+
+		m_iCurrentDiceValue = data.IDiceRoll;
 	}
 
 	public void RollTheDice()
@@ -347,4 +405,5 @@ public class GameManager : MBSingleton<GameManager>
 		}
 	}
 	#endregion
+	
 }

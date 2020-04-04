@@ -156,7 +156,10 @@ namespace GameUtility.Base
 		None = 0,
 		PlayerTurn = 1,
 		StartAcknowledgement = 2,
-		GameEnded =3
+		GameEnded =3,
+		PlayerDiceRoll =4,
+		PlayerTokenSelected =5,
+		GameStart =6
 	}
 }
 
