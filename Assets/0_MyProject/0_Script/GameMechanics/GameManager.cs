@@ -175,6 +175,8 @@ public class GameManager : MBSingleton<GameManager>
 		//Get Reference to PlayerData, dont need to loop through players when ever update in data is required
 		CurrentPlayerData();
 		CurrentPlayer.m_ePlayerState = ePlayerState.PlayerRollDice;
+		//This is used to check whether the palyer get 6 continuously 3 times
+		m_iTotalRolls = MAXTRY;
 	}
 
 
