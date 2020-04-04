@@ -95,15 +95,6 @@ public class MessageManager : MBSingleton<MessageManager>
                 case eMessageType.PlayerTurn:
                     break;
                 case eMessageType.GameEnded:
-                    if (m_JsonObjectInGame.HasField("GameEnded"))
-                    {
-                        Debug.Log("Recieved Game Ended");
-                        m_JsonObjectInGame.SetField("GameEnded", true);
-                    }
-                    else
-                    {
-                        m_JsonObjectInGame.AddField("GameEnded", true);
-                    }
                     break;
                 default:
                     break;

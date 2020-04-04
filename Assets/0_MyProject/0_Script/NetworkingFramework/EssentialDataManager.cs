@@ -8,9 +8,9 @@ public class EssentialDataManager : MBSingleton<EssentialDataManager>
 
 	#region Data
 	//App Data
-	private const string m_strAppKey = "3b8eb424ce44e55fc9790c5ef90a388943667831185f9925a78e2f1d2fc9d99e";
+	private const string m_strAppKey = "3947794a91eff135d088c30441ee9f1c995b5f5a32f4843825d0f73c311ea510";
 	public string AppKey { get => m_strAppKey; }
-	private const string m_strSecretKey = "f1965d8e8ab745fe76be22f563445bb96f2914156f45ed8cf1aaf0c2b12b64c4";
+	private const string m_strSecretKey = "38148b9167c527644ba2e59f34cb34bc4ddc0d2273f2578f123502cc67c11276";
 	public string SecretKey { get => m_strSecretKey; }
 	private string m_strMatchId;
 	public string MatchId { get => m_strMatchId; }
@@ -21,10 +21,10 @@ public class EssentialDataManager : MBSingleton<EssentialDataManager>
 
 
 	//Network Data
-	private string m_strRoomName = "";
-	public string RoomName { get => m_strRoomName; set => m_strRoomName = value; }
-	private string m_strRoomNo = "";
-	public string RoomID { get => m_strRoomNo; set => m_strRoomNo = value; }
+	private const string m_strRoomName = "LudoFunTim";
+	public string RoomName { get => m_strRoomName; }
+	private const string m_strRoomNo = "493171307";
+	public string RoomID { get => m_strRoomNo;}
 	private int m_iMaxPlayers = 2;
 	public int MaxPlayers { get => m_iMaxPlayers; }
 
@@ -127,15 +127,6 @@ public class EssentialDataManager : MBSingleton<EssentialDataManager>
 	
 		{
 			Debug.LogError("[EssentialDataManager] DifficultyState NOT found");
-		}
-
-		if (m_jsonObject.HasField("RoomID"))
-		{
-			m_strRoomNo = m_jsonObject.GetField("RoomID").str;
-		}
-		else
-		{
-			Debug.LogError("[EssentialDataManager] RoomID NOT found");
 		}
 
 		

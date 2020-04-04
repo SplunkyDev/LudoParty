@@ -67,6 +67,7 @@ public class WarpNetworkManager : MBSingleton<WarpNetworkManager>
 	{
 		EventManager.Instance.RegisterEvent<EventInitializeNetworkApi>(Init);
 		EventManager.Instance.RegisterEvent<EventConnectToServer>(ConnectedToServer);
+		EventManager.Instance.RegisterEvent<EventDisonnectFromServer>(DisconnectedFromServer);
 		EventManager.Instance.RegisterEvent<EventJoinRoom>(JoinRoom);
 		EventManager.Instance.RegisterEvent<EventReconnectServer>(ReconnectToServer);
 		EventManager.Instance.RegisterEvent<EventSubscribeRoom>(SubscribeRoom);
@@ -79,6 +80,7 @@ public class WarpNetworkManager : MBSingleton<WarpNetworkManager>
 
 		EventManager.Instance.DeRegisterEvent<EventInitializeNetworkApi>(Init);
 		EventManager.Instance.DeRegisterEvent<EventConnectToServer>(ConnectedToServer);
+		EventManager.Instance.DeRegisterEvent<EventDisonnectFromServer>(DisconnectedFromServer);
 		EventManager.Instance.DeRegisterEvent<EventSubscribeRoom>(SubscribeRoom);
 		EventManager.Instance.DeRegisterEvent<EventJoinRoom>(JoinRoom);
 		EventManager.Instance.DeRegisterEvent<EventReconnectServer>(ReconnectToServer);
@@ -131,6 +133,9 @@ public class WarpNetworkManager : MBSingleton<WarpNetworkManager>
 		m_warpClient.AddZoneRequestListener(m_warpListener);
 		//Registering to Turn Based callbacks
 		m_warpClient.AddTurnBasedRoomRequestListener(m_warpListener);
+
+
+		EventManager.Instance.TriggerEvent<EventConnectToServer>(new EventConnectToServer());
 	}
 
 	public void BroadCastMessageInRoom(string a_strMessage)
@@ -163,8 +168,13 @@ public class WarpNetworkManager : MBSingleton<WarpNetworkManager>
 		m_warpClient.Connect(m_strPlayerName);
 	}
 
-	private void DisconnectedFromServer()
+	private void DisconnectedFromServer(IEventBase a_Event)
 	{
+		EventDisonnectFromServer data = a_Event as EventDisonnectFromServer;
+		if(data == null)
+		{
+			Debug.LogError("[WarpNetworkManager] Disconnect From ");
+		}
 		Debug.Log("[WarpNetworkManager] Disconnection from server: PLAYERNAME: " + m_strPlayerName);
 		m_warpClient.Disconnect();
 	}
@@ -277,7 +287,7 @@ public class WarpNetworkManager : MBSingleton<WarpNetworkManager>
 		if (Input.GetKeyUp(KeyCode.Escape))
 		{
 			m_bApplictaionQuit = true;
-			DisconnectedFromServer();			
+			EventManager.Instance.TriggerEvent<EventDisonnectFromServer>(new EventDisonnectFromServer());	
 		}
 	}
 
@@ -285,7 +295,7 @@ public class WarpNetworkManager : MBSingleton<WarpNetworkManager>
 	{
 		if (ConnectionEstablished)
 		{
-			DisconnectedFromServer();
+			EventManager.Instance.TriggerEvent<EventDisonnectFromServer>(new EventDisonnectFromServer());
 		}
 	}
 
@@ -445,13 +455,6 @@ public class WarpListerner : ConnectionRequestListener, LobbyRequestListener, Zo
 
 		Debug.Log("[WarpNetworkManager] Room Name: "+ eventObj.getData().getName());
 		Debug.Log("[WarpNetworkManager] Room ID: "+ eventObj.getData().getId());
-
-		//Setting the RoomName and RoomID
-		EssentialDataManager.Instance.RoomName = eventObj.getData().getName();
-		EssentialDataManager.Instance.RoomID = eventObj.getData().getId();
-
-		//Subscribing to the Room that was created
-		EventManager.Instance.TriggerEvent<EventSubscribeRoom>(new EventSubscribeRoom());
 	}
 		
 	public void onGetOnlineUsersDone (AllUsersEvent eventObj)

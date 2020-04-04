@@ -100,6 +100,19 @@ public class EventReadInGameMessage : IEventBase
 
 }
 
+//Event setting the player turn to this deviice
+public class EventDevicePlayerTurn : IEventBase
+{
+	private ePlayerTurn m_enumPlayerTurn;
+	public ePlayerTurn EnumPlayerTurn { get => m_enumPlayerTurn;  }
+
+	public EventDevicePlayerTurn(ePlayerTurn a_enumPlayerTurn)
+	{
+		m_enumPlayerTurn = a_enumPlayerTurn;
+	}
+
+}
+
 //Event when opponent has left
 public class EventOpponentLeftRoom : IEventBase
 {
@@ -121,6 +134,14 @@ public class EventInitializeNetworkApi : IEventBase
 public class EventConnectToServer : IEventBase
 {
 	public EventConnectToServer()
+	{
+
+	}
+}
+
+public class EventDisonnectFromServer : IEventBase
+{
+	public EventDisonnectFromServer()
 	{
 
 	}

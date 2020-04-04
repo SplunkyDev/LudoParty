@@ -20,6 +20,8 @@ public class GameManager : MBSingleton<GameManager>
 	private eGameState m_enumGameState;
 	public eGameState EnumGameState { get => m_enumGameState; set => m_enumGameState = value; }
 
+	private ePlayerTurn m_enumMyPlayerTurn = ePlayerTurn.PlayerOne;
+
 	private ePlayerTurn m_enumCurrentPlayerTurn = ePlayerTurn.PlayerOne;
 	private ePlayerTurn m_enumPlayerTurn = ePlayerTurn.PlayerOne;
 	public ePlayerTurn EnumPlayerTurn { get => m_enumPlayerTurn; }
@@ -49,6 +51,7 @@ public class GameManager : MBSingleton<GameManager>
 	void RegisterToEVents()
 	{
 		EventManager.Instance.RegisterEvent<EventPlayerFinished>(PlayerFinishedGame);
+		EventManager.Instance.RegisterEvent<EventDevicePlayerTurn>(SetDevicePlayerTurn);
 	}
 
 	void DeregisterToEvents()
@@ -56,6 +59,7 @@ public class GameManager : MBSingleton<GameManager>
 		if (EventManager.Instance == null) return;
 
 		EventManager.Instance.DeRegisterEvent<EventPlayerFinished>(PlayerFinishedGame);
+		EventManager.Instance.DeRegisterEvent<EventDevicePlayerTurn>(SetDevicePlayerTurn);
 	}
 
 
@@ -78,6 +82,12 @@ public class GameManager : MBSingleton<GameManager>
 		{
 			case 0:
 				Debug.Log("[GameManager] Menu Scene Loaded");
+
+				if(BOnlineMultiplayer)
+				{
+					EventManager.Instance.TriggerEvent<EventDisonnectFromServer>(new EventDisonnectFromServer());
+					m_bOnlineMultiplayer = false;
+				}
 				EventManager.Instance.TriggerEvent<EventShowMenuUI>(new EventShowMenuUI(true, eGameState.Menu));
 				break;
 			case 1:
@@ -100,13 +110,25 @@ public class GameManager : MBSingleton<GameManager>
 				}
 				else
 				{
-					//TODO: Initialize AppWarp
+					EventManager.Instance.TriggerEvent<EventInitializeNetworkApi>(new EventInitializeNetworkApi());
 				}
 				
 				break;
 		}
 	}
 
+
+	private void SetDevicePlayerTurn(IEventBase a_Event)
+	{
+		EventDevicePlayerTurn data = a_Event as EventDevicePlayerTurn;
+		if(data == null)
+		{
+			Debug.LogError("[GameManager][SetDevicePlayerTurn] Device Player turn trigger null");
+			return;
+		}
+
+		m_enumMyPlayerTurn = data.EnumPlayerTurn;
+	}
 	public void SetPlayerData(PlayerData a_PlayerData)
 	{
 		//Setting the value of how many turns until the player gets a forced six if not got until then
@@ -171,7 +193,6 @@ public class GameManager : MBSingleton<GameManager>
 
 		yield return new WaitForSeconds(a_fDelay);
 		EventManager.Instance.TriggerEvent<EventHighlightCurrentPlayer>(new EventHighlightCurrentPlayer(EnumPlayerToken));
-
 		//Get Reference to PlayerData, dont need to loop through players when ever update in data is required
 		CurrentPlayerData();
 		CurrentPlayer.m_ePlayerState = ePlayerState.PlayerRollDice;

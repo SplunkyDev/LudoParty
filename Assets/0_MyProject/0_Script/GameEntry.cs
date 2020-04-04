@@ -10,6 +10,14 @@ public class GameEntry : MonoBehaviour
 		EventManager.Instance.Initialize();
 		GameManager.Instance.Initialize();
 		TouchInputManager.Instance.Initialize();
-    }
+
+
+#region Networking
+		EssentialDataManager.Instance.Initialize();
+		WarpNetworkManager.Instance.Initialize();
+		GameNetworkManager.Instance.Initialize();
+		MessageManager.Instance.Initialize();
+#endregion
+	}
 
 }

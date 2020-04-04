@@ -21,75 +21,9 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 		}
 	}
 
-	private int m_iRandomSeed = 0;
-	public int GameRandomSeed
-	{
-		get
-		{
-			return m_iRandomSeed;
-		}
 
-		set
-		{
-			m_iRandomSeed = value;
-		}
-	}
-
-	private float  m_fPlayerScore = 0f, m_fOpponentScore = 0f;
-	public float PlayerScore
-	{
-		get
-		{
-			return m_fPlayerScore;
-		}
-
-        set
-        {
-            m_fPlayerScore = value;
-        }
-	}
-
-	public float OpponentScore
-	{
-		get
-		{
-			return m_fOpponentScore;
-		}
-	}
-
-	public float m_fRematchWaitTime;
-	protected float m_fRemainingRematchTime;
-	public float RemainingRematchSession
-	{
-		get
-		{
-			return m_fRemainingRematchTime;
-		}
-	}
-
-	private bool m_bPlayerWon = false, m_bRematch = false;
-	public bool RematchResponse
-	{
-		get
-		{
-			return m_bRematch;
-		}
-
-		set
-		{
-			m_bRematch = value;
-		}
-	}
-
-	private bool m_bOpponentFinishedGame;
-	public bool BOpponentFinishedGame
-	{
-		get
-		{
-			return m_bOpponentFinishedGame;
-		}
-
-	}
+	private ePlayerTurn m_enumPlayerTurn;
+	public ePlayerTurn EnumPlayerTurn { get => m_enumPlayerTurn;}
 
 	protected List<eMessageType> m_lstMessageType;
 
@@ -129,8 +63,6 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
     {
 		m_lstMessageType = new List<eMessageType>();
 
-		//TODO: This will start the network feature, call by game when needed
-		//InitializeNetworkOrOffline();
 	}
 
 
@@ -156,8 +88,6 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 	private void InitializeGame()
 	{
 		Debug.Log("[GameNetworkManager] InitializeGame");
-		m_fRemainingRematchTime = m_fRematchWaitTime;
-		m_bOpponentFinishedGame = false;
 		EventManager.Instance.TriggerEvent<EventStartGameSession>(new EventStartGameSession());
 	}
 
