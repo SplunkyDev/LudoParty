@@ -32,6 +32,7 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 
 		EventManager.Instance.RegisterEvent<EventOpponentLeftRoom>(OpponentLeftRoom);
 		EventManager.Instance.RegisterEvent<EventFirstPlayerEntered>(GenerateFirstPlayer);
+		EventManager.Instance.RegisterEvent<EventGenerateNextPlayer>(GenerateNextPlayer);
 	}
 
 	private void DeregisterEvents()
@@ -40,6 +41,7 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 			return;
 		EventManager.Instance.DeRegisterEvent<EventOpponentLeftRoom>(OpponentLeftRoom);
 		EventManager.Instance.DeRegisterEvent<EventFirstPlayerEntered>(GenerateFirstPlayer);
+		EventManager.Instance.DeRegisterEvent<EventGenerateNextPlayer>(GenerateNextPlayer);
 
 	}
 
@@ -87,10 +89,13 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 	}
 
 
-	private void InitializeGame()
+	public void InitializeGame()
 	{
 		Debug.Log("[GameNetworkManager] InitializeGame");
-		EventManager.Instance.TriggerEvent<EventStartGameSession>(new EventStartGameSession());
+		if (GameManager.Instance.EnumMyPlayerTurn == ePlayerTurn.PlayerOne)
+		{
+			EventManager.Instance.TriggerEvent<EventStartGameSession>(new EventStartGameSession());
+		}
 	}
 
 	public void PlayerGoalScored()
@@ -110,7 +115,11 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 		PlayerData playerData = new PlayerData();
 		playerData.m_enumPlayerTurn = ePlayerTurn.PlayerOne;
 		playerData.m_enumPlayerToken = ePlayerToken.Blue;
+		playerData.m_strUserName = data.StrUsername;
+
 		GameManager.Instance.SetPlayerData(playerData);
+
+		EventManager.Instance.TriggerEvent<EventDevicePlayerTurn>(new EventDevicePlayerTurn(playerData.m_enumPlayerTurn));
 		Debug.Log("[GameNetworkManager] Player One Generated");
 	}
 
@@ -124,7 +133,7 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 		}
 
 		Debug.Log("[GameNetworkManager] Generated Next Player");
-		GameManager.Instance.UpdatePlayersInGame();
+		GameManager.Instance.UpdatePlayersInGame(data.StrUsername);
 
 	}
 

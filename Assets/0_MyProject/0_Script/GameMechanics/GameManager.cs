@@ -57,6 +57,7 @@ public class GameManager : MBSingleton<GameManager>
 		EventManager.Instance.RegisterEvent<EventPlayerFinished>(PlayerFinishedGame);
 		EventManager.Instance.RegisterEvent<EventDevicePlayerTurn>(SetDevicePlayerTurn);
 		EventManager.Instance.RegisterEvent<EventOpponentDiceRoll>(DiceRollFromOpponent);
+		EventManager.Instance.RegisterEvent<EventStartGameSession>(StartOnlineGame);
 	}
 
 	void DeregisterToEvents()
@@ -66,6 +67,7 @@ public class GameManager : MBSingleton<GameManager>
 		EventManager.Instance.DeRegisterEvent<EventPlayerFinished>(PlayerFinishedGame);
 		EventManager.Instance.DeRegisterEvent<EventDevicePlayerTurn>(SetDevicePlayerTurn);
 		EventManager.Instance.DeRegisterEvent<EventOpponentDiceRoll>(DiceRollFromOpponent);
+		EventManager.Instance.DeRegisterEvent<EventStartGameSession>(StartOnlineGame);
 	}
 
 
@@ -98,7 +100,7 @@ public class GameManager : MBSingleton<GameManager>
 				break;
 			case 1:
 				Debug.Log("[GameManager] Game Scene Loaded");
-				EventManager.Instance.TriggerEvent<EventShowInGameUI>(new EventShowInGameUI(true,eGameState.InGame));
+			
 
 				if(!BOnlineMultiplayer)
 				{
@@ -112,6 +114,7 @@ public class GameManager : MBSingleton<GameManager>
 						playerData = null;
 					}
 
+					EventManager.Instance.TriggerEvent<EventShowInGameUI>(new EventShowInGameUI(true, eGameState.InGame));
 					StartCoroutine(InitializeGame(1f));
 				}
 				else
@@ -123,6 +126,20 @@ public class GameManager : MBSingleton<GameManager>
 		}
 	}
 
+
+	private void StartOnlineGame(IEventBase a_Event)
+	{
+		EventStartGameSession data = a_Event as EventStartGameSession;
+		if(data == null)
+		{
+			Debug.LogError("[GameManager] EventStartGameSession is null");
+			return;
+		}
+
+		EventManager.Instance.TriggerEvent<EventShowInGameUI>(new EventShowInGameUI(true, eGameState.InGame));
+		StartCoroutine(InitializeGame(1f));
+
+	}
 
 	private void SetDevicePlayerTurn(IEventBase a_Event)
 	{
@@ -149,27 +166,36 @@ public class GameManager : MBSingleton<GameManager>
 	}
 
 	//Giving player turn and token base on the order of connecting to game
-	public void UpdatePlayersInGame()
+	public void UpdatePlayersInGame(string a_strUsername)
 	{
+
+		if (m_enumMyPlayerTurn != ePlayerTurn.PlayerOne)
+			return;
+
 		PlayerData playerData = new PlayerData();
+		//Create Next Player
 		switch (m_lstPlayerData[(m_lstPlayerData.Count - 1)].m_enumPlayerTurn)
 		{
 			case ePlayerTurn.PlayerOne:
-				break;
-			case ePlayerTurn.PlayerTwo:
 				playerData.m_enumPlayerTurn = ePlayerTurn.PlayerTwo;
 				playerData.m_enumPlayerToken = ePlayerToken.Yellow;
+				playerData.m_strUserName = a_strUsername;
+				SetPlayerData(playerData);
+				break;
+			case ePlayerTurn.PlayerTwo:
+				playerData.m_enumPlayerTurn = ePlayerTurn.PlayerThree;
+				playerData.m_enumPlayerToken = ePlayerToken.red;
+				playerData.m_strUserName = a_strUsername;
 				SetPlayerData(playerData);
 				break;
 			case ePlayerTurn.PlayerThree:
-				playerData.m_enumPlayerTurn = ePlayerTurn.PlayerThree;
-				playerData.m_enumPlayerToken = ePlayerToken.red;
+				playerData.m_enumPlayerTurn = ePlayerTurn.PlayerFour;
+				playerData.m_enumPlayerToken = ePlayerToken.Green;
+				playerData.m_strUserName = a_strUsername;
 				SetPlayerData(playerData);
 				break;
 			case ePlayerTurn.PlayerFour:
-				playerData.m_enumPlayerTurn = ePlayerTurn.PlayerFour;
-				playerData.m_enumPlayerToken = ePlayerToken.Green;
-				SetPlayerData(playerData);
+			
 				break;
 		}
 
@@ -186,7 +212,50 @@ public class GameManager : MBSingleton<GameManager>
 		}
 	}
 
-		
+	public void DeserializePlayersData(string m_strPlayerData)
+	{
+		PlayerContainer playerContainer = JsonUtility.FromJson<PlayerContainer>(m_strPlayerData);
+		m_lstPlayerData.Clear();
+		m_lstPlayerData = playerContainer.LstPlayerDataContainer;
+
+		for (int i = 0; i < m_lstPlayerData.Count; i++)
+		{
+			if (string.Compare(WarpNetworkManager.Instance.PlayerName, m_lstPlayerData[i].m_strUserName) == 0)
+			{
+				m_enumMyPlayerTurn = m_lstPlayerData[i].m_enumPlayerTurn;
+			}
+		}
+
+		Debug.Log("[GameManager] My Device Player: "+m_enumMyPlayerTurn.ToString());
+	}
+
+	public bool CheckIfAllPlayersHaveBeenAccountedFor()
+	{
+		bool bValid = false;
+		if(m_lstPlayerData.Count == EssentialDataManager.Instance.MaxPlayers)
+		{
+			bValid = true;
+		}
+
+		return bValid;
+	}
+
+	public void SendMessageToStartGame()
+	{
+		m_lstMessageType.Clear();
+		m_lstMessageType.Add(eMessageType.GameStart);
+
+		EventManager.Instance.TriggerEvent<EventInsertInGameMessage>(new EventInsertInGameMessage(m_lstMessageType.ToArray()));
+	}
+
+	public string  GetAllPlayerData()
+	{
+		PlayerContainer playerContainer = new PlayerContainer(m_lstPlayerData);
+		string strJson = JsonUtility.ToJson(playerContainer);
+		Debug.Log("[GameManager] All Player serialized: "+strJson);
+		return strJson;
+	}
+
 	// Start is called before the first frame update
 	void Start()
     {

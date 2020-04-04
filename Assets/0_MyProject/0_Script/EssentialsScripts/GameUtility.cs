@@ -110,7 +110,23 @@ namespace GameUtility.Base
 		SharedTile =2
 	}
 
+	[System.Serializable]
+	public class PlayerContainer
+	{
+		[SerializeField]private List<PlayerData> m_lstPlayerDataContainer = new List<PlayerData>();
+		public List<PlayerData> LstPlayerDataContainer { get => m_lstPlayerDataContainer;}
 
+		public PlayerContainer(List<PlayerData> a_lstPlayerData)
+		{
+			for(int i =0; i<a_lstPlayerData.Count;i++)
+			{
+				m_lstPlayerDataContainer.Add(a_lstPlayerData[i]);
+			}
+		}
+
+	}
+
+	[System.Serializable]
 	public class PlayerData
 	{
 		public ePlayerTurn m_enumPlayerTurn;
@@ -119,6 +135,7 @@ namespace GameUtility.Base
 		public bool m_bPlayAgain;
 		public int m_iRollSixIn;
 		public bool m_gameComplete;
+		public string m_strUserName = string.Empty;
 	}
 
 

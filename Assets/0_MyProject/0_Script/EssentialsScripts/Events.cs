@@ -137,12 +137,22 @@ public class EventOpponentDiceRoll : IEventBase
 
 public class EventFirstPlayerEntered : IEventBase
 {
-	public EventFirstPlayerEntered() { }
+	private string m_strUserName = string.Empty;
+	public string StrUsername { get => m_strUserName; }
+	public EventFirstPlayerEntered(string a_strUsername)
+	{
+		m_strUserName = a_strUsername;
+	}
 }
 
 public class EventGenerateNextPlayer : IEventBase
 {
-	public EventGenerateNextPlayer() { }
+	private string m_strUserName = string.Empty;
+	public string StrUsername { get => m_strUserName; } 
+	public EventGenerateNextPlayer(string a_strUsername)
+	{
+		m_strUserName = a_strUsername;
+	}
 }
 
 public class EventOpponentTokenSelected : IEventBase

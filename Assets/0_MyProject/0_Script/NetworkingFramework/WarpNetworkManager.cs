@@ -33,10 +33,6 @@ public class WarpNetworkManager : MBSingleton<WarpNetworkManager>
 	private string m_strPlayerName;
 	public string PlayerName
 	{
-		set
-		{
-			m_strPlayerName = value;
-		}
 		get
 		{
 			return m_strPlayerName;
@@ -464,19 +460,19 @@ public class WarpListerner : ConnectionRequestListener, LobbyRequestListener, Zo
 		Debug.Log("[WarpNetworkManager] Room Name: "+ eventObj.getData().getName());
 		Debug.Log("[WarpNetworkManager] Room ID: "+ eventObj.getData().getId());
 	}
-		
-	//Checking the number of users currently after joining room
+
+	//Callback Checking the number of users currently after joining room
 	public void onGetOnlineUsersDone (AllUsersEvent eventObj)
 	{
 		Debug.Log("onGetOnlineUsersDone : " + eventObj.getResult());
-		if(eventObj.getUserNames().Length <= 1)
+		if(eventObj.getUserNames().Length == 1)
 		{
-			Debug.Log("[WarpNetworkManager] First player entered");
-			EventManager.Instance.TriggerEvent<EventFirstPlayerEntered>(new EventFirstPlayerEntered());
+			Debug.Log("[WarpNetworkManager] First player entered: "+ eventObj.getUserNames()[0]);
+			EventManager.Instance.TriggerEvent<EventFirstPlayerEntered>(new EventFirstPlayerEntered(eventObj.getUserNames()[0]));
 		}
 		else
 		{
-			EventManager.Instance.TriggerEvent<EventGenerateNextPlayer>(new EventGenerateNextPlayer());
+			Debug.Log("[WarpNetworkManager] NOT THE FIRST PLAYER");
 		}
 	}
 		
@@ -631,7 +627,8 @@ public class WarpListerner : ConnectionRequestListener, LobbyRequestListener, Zo
 			Debug.Log("[WarpNetworkManager] user joined Room successfully: " + username);
 			if (string.Compare(username, WarpNetworkManager.Instance.PlayerName) != 0)
 			{
-				Debug.Log("[WarpNetworkManager] Opponent has joined");				
+				Debug.Log("[WarpNetworkManager] Opponent has joined");
+				EventManager.Instance.TriggerEvent<EventGenerateNextPlayer>(new EventGenerateNextPlayer(username));
 			}
 			else 
 			{

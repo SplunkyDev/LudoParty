@@ -95,15 +95,24 @@ public class MessageManager : MBSingleton<MessageManager>
 					//Sends the player turn to opponent
 					if (m_JsonObjectInGame.HasField("StartAcknowledgement"))
 					{
-						m_JsonObjectInGame.SetField("StartAcknowledgement", 1); //(int)EssentialDataManager.Instance.EnumOppoentPlayerTurn
+						m_JsonObjectInGame.SetField("StartAcknowledgement", 1); 
 					}
 					else
 					{
-						m_JsonObjectInGame.AddField("StartAcknowledgement", 1); //(int)EssentialDataManager.Instance.EnumOppoentPlayerTurn
+						m_JsonObjectInGame.AddField("StartAcknowledgement", 1); 
 					}
 
 					break;
 				case eMessageType.PlayerTurn:
+					if (m_JsonObjectInGame.HasField("PlayerTurn"))
+					{
+						m_JsonObjectInGame.SetField("PlayerTurn", new JSONObject(GameManager.Instance.GetAllPlayerData())); 
+					}
+					else
+					{
+						m_JsonObjectInGame.AddField("PlayerTurn", new JSONObject(GameManager.Instance.GetAllPlayerData())); 
+					}
+
 					break;
 				case eMessageType.GameEnded:
 					break;
@@ -130,6 +139,14 @@ public class MessageManager : MBSingleton<MessageManager>
 					//}
 					break;
 				case eMessageType.GameStart:
+					if (m_JsonObjectInGame.HasField("GameStart"))
+					{
+						m_JsonObjectInGame.SetField("GameStart", 1);
+					}
+					else
+					{
+						m_JsonObjectInGame.AddField("GameStart", 1);
+					}
 					break;
 				default:
 					break;
@@ -182,9 +199,12 @@ public class MessageManager : MBSingleton<MessageManager>
 						//set dice roll value got from opponent
 						if (m_JsonObjectInGame.HasField("StartAcknowledgement"))
 						{
-							if((int)m_JsonObjectInGame.GetField("StartAcknowledgement").i ==1)
+							if ((int)m_JsonObjectInGame.GetField("StartAcknowledgement").i == 1)
 							{
-
+								if (GameManager.Instance.CheckIfAllPlayersHaveBeenAccountedFor())
+								{
+									GameManager.Instance.SendMessageToStartGame();
+								}
 							}
 							else
 							{
@@ -199,6 +219,14 @@ public class MessageManager : MBSingleton<MessageManager>
 					case eMessageType.GameEnded:
 						break;
 					case eMessageType.PlayerTurn:
+						if (m_JsonObjectInGame.HasField("PlayerTurn"))
+						{
+							GameManager.Instance.DeserializePlayersData(m_JsonObjectInGame.GetField("PlayerTurn").Print());
+						}
+						else
+						{
+							Debug.LogError("[MessageManager] PlayerTurn NOT FOUND");
+						}
 						break;
 					case eMessageType.PlayerDiceRoll:
 						//set dice roll value got from opponent
@@ -213,6 +241,16 @@ public class MessageManager : MBSingleton<MessageManager>
 
 						break;
 					case eMessageType.PlayerTokenSelected:
+						break;
+					case eMessageType.GameStart:
+						if (m_JsonObjectInGame.HasField("GameStart"))
+						{
+							GameNetworkManager.Instance.InitializeGame();
+						}
+						else
+						{
+							Debug.LogError("[MessageManager] GameStart NOT FOUND");
+						}
 						break;
 					default:
 						break;
