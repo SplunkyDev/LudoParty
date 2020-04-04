@@ -34,7 +34,7 @@ public class InGameUIManager : MonoBehaviour
 
 	public GameObject m_gResultPrefab;
 	public GameObject m_gGridResult;
-
+	public Text m_textGameInstruction;
 
 	private void RegisterToEvent()
 	{
@@ -205,8 +205,18 @@ public class InGameUIManager : MonoBehaviour
 			//This will show the current roll sprite on the dice image
 			m_imgCurrentDiceRoll.sprite = m_arrDiceSprite[GameManager.Instance.ICurrentDiceValue - 1];
 
-			
+			switch (GameManager.Instance.CurrentPlayer.m_ePlayerState)
+			{
+				case ePlayerState.PlayerRollDice:
+					Instructions("Roll Dice");
+					break;
+				case ePlayerState.PlayerMoveToken:
+					Instructions("Select Token");
+					break;
+			}
 		}
+
+		
 	}
 
 	private void PlayerTurnChanged(IEventBase a_Event)
@@ -288,4 +298,9 @@ public class InGameUIManager : MonoBehaviour
 		m_arrAnimController[(int)GameManager.Instance.EnumPlayerToken -1].SetBool("RollDice",true);
 	}
 
+
+	public void Instructions(string a_strInstructions)
+	{
+		m_textGameInstruction.text = a_strInstructions;
+	}
 }

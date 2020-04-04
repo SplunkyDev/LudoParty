@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GameUtility.Base;
 using UnityEngine;
 
+[System.Serializable]
 public class TokenData : MonoBehaviour
 {
 	//This type is to identify which token it is
@@ -17,13 +18,13 @@ public class TokenData : MonoBehaviour
 	[SerializeField]private GameUtility.Base.eTokenState m_enumTokenState = GameUtility.Base.eTokenState.House;
 	public eTokenState EnumTokenState { get => m_enumTokenState; set => m_enumTokenState = value; }
 
-	private bool m_bCanBeUsed = false;
+	[SerializeField] private bool m_bCanBeUsed = false;
 	public bool BCanBeUsed { get => m_bCanBeUsed; set => m_bCanBeUsed = value; }
 
-	private Vector2 m_vec2PositionOnTile;
+	[SerializeField] private Vector2 m_vec2PositionOnTile;
 	public Vector2 Vec2PositionOnTile { get => m_vec2PositionOnTile; set => m_vec2PositionOnTile = value; }
 
-	private SpriteRenderer m_spriteRenderer;
+	[SerializeField] private SpriteRenderer m_spriteRenderer;
 	private void OnEnable()
 	{
 		if(TokenManager.Instance == null)

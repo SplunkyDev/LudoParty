@@ -10,7 +10,7 @@ public class GameManager : MBSingleton<GameManager>
 	private const int MAXTRY = 3;
 
 	private PlayerData m_RefCurrentPlayer;
-	public PlayerData CurrentPlayer { get => m_RefCurrentPlayer; set => m_RefCurrentPlayer = value; }
+	public PlayerData CurrentPlayer { get => m_RefCurrentPlayer; }
 
 	private int m_iCurrentDiceValue = 0, m_iTotalRolls = MAXTRY;
 	public int ICurrentDiceValue { get => m_iCurrentDiceValue;}
@@ -93,6 +93,7 @@ public class GameManager : MBSingleton<GameManager>
 
 				if(BOnlineMultiplayer)
 				{
+					WarpNetworkManager.Instance.ConnectionEstablished = false;
 					EventManager.Instance.TriggerEvent<EventDisonnectFromServer>(new EventDisonnectFromServer());
 					m_bOnlineMultiplayer = false;
 				}
@@ -234,7 +235,12 @@ public class GameManager : MBSingleton<GameManager>
 		bool bValid = false;
 		if(m_lstPlayerData.Count == EssentialDataManager.Instance.MaxPlayers)
 		{
+			Debug.Log("[GameManager] All Player in Game");
 			bValid = true;
+		}
+		else
+		{
+			Debug.Log("[GameManager] Missing Player in Game");
 		}
 
 		return bValid;
@@ -314,6 +320,7 @@ public class GameManager : MBSingleton<GameManager>
 		CurrentPlayer.m_ePlayerState = ePlayerState.PlayerRollDice;
 		//This is used to check whether the palyer get 6 continuously 3 times
 		m_iTotalRolls = MAXTRY;
+		InGameUIManager.Instance.Instructions("Roll Dice");
 	}
 
 
@@ -350,8 +357,15 @@ public class GameManager : MBSingleton<GameManager>
 		//Let's Roll a D20, ;-P
 		m_iCurrentDiceValue = UnityEngine.Random.Range(1, 7);
 		m_iCurrentDiceValue = m_iCurrentDiceValue > 6?6:m_iCurrentDiceValue;
-		CurrentPlayer.m_ePlayerState = ePlayerState.PlayerMoveToken;
 
+		if (m_bOnlineMultiplayer)
+		{
+			m_lstMessageType.Clear();
+			m_lstMessageType.Add(eMessageType.PlayerDiceRoll);
+			EventManager.Instance.TriggerEvent<EventInsertInGameMessage>(new EventInsertInGameMessage(m_lstMessageType.ToArray()));
+		}
+
+	
 	}
 
 	public void CheckResult()
@@ -365,13 +379,27 @@ public class GameManager : MBSingleton<GameManager>
 		{
 			ChangePlayerTurn();
 		}
+		else
+		{
+			CurrentPlayer.m_ePlayerState = ePlayerState.PlayerRollDice;
+		}
+
+		switch (CurrentPlayer.m_ePlayerState)
+		{
+			case ePlayerState.PlayerRollDice:
+				InGameUIManager.Instance.Instructions("Roll Dice");
+				break;
+			case ePlayerState.PlayerMoveToken:
+				InGameUIManager.Instance.Instructions("Select Token");
+				break;
+		}
 	}
 
 	private void UpdateBaseOnGameRules()
 	{
 		Debug.Log("[GameManager][CheckPlayerPlayCondition]");
 		Debug.Log("[GameManager][CheckPlayerPlayCondition] Total Rolls: " + m_iTotalRolls);
-
+	
 		//Checking how many 6 dice value has been got by player
 		if (m_iCurrentDiceValue == 6)
 		{
@@ -384,9 +412,14 @@ public class GameManager : MBSingleton<GameManager>
 			
 			//If the total changes of getting 6 is over or no taken can be moved
 			if (m_iTotalRolls <= 0 || !TokenManager.Instance.CheckValidTokenMovement(m_iCurrentDiceValue))
-			{			
+			{
+				CurrentPlayer.m_ePlayerState = ePlayerState.PlayerRollDice;				
 				ChangePlayerTurn();
-			}		
+			}	
+			else
+			{
+				CurrentPlayer.m_ePlayerState = ePlayerState.PlayerMoveToken;
+			}
 			Debug.Log("[GameManager][CheckPlayerPlayCondition] 6 got now");
 		}
 		else 
@@ -413,7 +446,12 @@ public class GameManager : MBSingleton<GameManager>
 
 			if (!TokenManager.Instance.CheckValidTokenMovement(m_iCurrentDiceValue))
 			{
+				CurrentPlayer.m_ePlayerState = ePlayerState.PlayerRollDice;
 				ChangePlayerTurn();
+			}
+			else
+			{
+				CurrentPlayer.m_ePlayerState = ePlayerState.PlayerMoveToken;
 			}
 			
 		}

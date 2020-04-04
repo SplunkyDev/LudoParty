@@ -128,15 +128,16 @@ public class MessageManager : MBSingleton<MessageManager>
 					}
 					break;
 				case eMessageType.PlayerTokenSelected:
-					//TODO: Manager reading opponents token 
-					//if (m_JsonObjectInGame.HasField("PlayerDiceRoll"))
-					//{
-					//	m_JsonObjectInGame.SetField("PlayerDiceRoll", TokenManager.Instance.Curre);
-					//}
-					//else
-					//{
-					//	m_JsonObjectInGame.AddField("PlayerDiceRoll", GameManager.Instance.ICurrentDiceValue);
-					//}
+					if (m_JsonObjectInGame.HasField("PlayerTokenSelected"))
+					{
+						Debug.Log("[MessageManager] Sending Token Data to other players");
+						m_JsonObjectInGame.SetField("PlayerTokenSelected", new JSONObject(JsonUtility.ToJson(TokenManager.Instance.StrTokenDataJson)));
+					}
+					else
+					{
+						Debug.Log("[MessageManager] Sending Token Data to other players");
+						m_JsonObjectInGame.AddField("PlayerTokenSelected", new JSONObject(JsonUtility.ToJson(TokenManager.Instance.StrTokenDataJson)));
+					}
 					break;
 				case eMessageType.GameStart:
 					if (m_JsonObjectInGame.HasField("GameStart"))
@@ -241,6 +242,18 @@ public class MessageManager : MBSingleton<MessageManager>
 
 						break;
 					case eMessageType.PlayerTokenSelected:
+						if (m_JsonObjectInGame.HasField("PlayerTokenSelected"))
+						{
+							string strTokenJson = m_JsonObjectInGame.GetField("PlayerTokenSelected").Print();
+							Debug.Log("[MessageManager] Deserializing Token Data: ");
+							TokenData refTokenData = JsonUtility.FromJson<TokenData>(strTokenJson);
+							Debug.Log("[MessageManager]Token Data: TokenID: "+refTokenData.ITokenID+" TokenType: "+refTokenData.EnumTokenType.ToString());
+							EventManager.Instance.TriggerEvent<EventTokenSelectedInMultiplayer>(new EventTokenSelectedInMultiplayer(refTokenData));				
+						}
+						else
+						{
+							Debug.LogError("[MessageManager] PlayerTokenSelected NOT FOUND");
+						}
 						break;
 					case eMessageType.GameStart:
 						if (m_JsonObjectInGame.HasField("GameStart"))

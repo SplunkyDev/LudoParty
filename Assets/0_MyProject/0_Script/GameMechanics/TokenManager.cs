@@ -19,6 +19,7 @@ public class TokenManager : MonoBehaviour
 		}
 	}
 
+
 	[Header("Start Postion Token")]
 	[SerializeField] private List<Transform> m_lstStartBlueTokenPosition = new List<Transform>();
 	[SerializeField] private List<Transform> m_lstStartYellowTokenPosition = new List<Transform>();
@@ -43,15 +44,19 @@ public class TokenManager : MonoBehaviour
 	private List<GameObject> m_lstTokengameobject = new List<GameObject>();
 	private List<Transform> m_lstTokenMovePoints = new List<Transform>();
 	private bool m_bMoveTweenComplete = false;
-	private TokenData m_TokenToMove;
 	private const float FTOKENJUMPVALUE = 0.15f;
 	private Vector2 m_vec2Scalevalue = new Vector2(0.6f, 0.6f);
 	private Vector2 m_vec2ScaleShared = new Vector2(0.4f, 0.4f);
 	private Vector2 m_Vec3TokenOrginalScale = new Vector2(0.5f, 0.5f);
 	private TweenParams m_tweenScaleEffect;
+
 	private TokenData m_refCurrentToken;
+	public TokenData RefCurrentToken { get => m_refCurrentToken;}
+	private string m_strTokenDataJson = string.Empty;
+	public string StrTokenDataJson { get => m_strTokenDataJson; }
 
 	private const int TOKENSPERPLAYER = 4;
+	private List<eMessageType> m_lstMessageType = new List<eMessageType>();
 
 	public delegate void m_delResetToken();
 	//This event will be called to reset all token BCanBeUsed to false;
@@ -69,6 +74,7 @@ public class TokenManager : MonoBehaviour
 		}
 		EventManager.Instance.RegisterEvent<EventTouchActive>(InputReceived);
 		EventManager.Instance.RegisterEvent<EventTokenScaleFactor>(TokenScaleFactor);
+		EventManager.Instance.RegisterEvent<EventTokenSelectedInMultiplayer>(TokenSelectedOverTheNetwork);
 	}
 
 	private void DereegiterToEvents()
@@ -77,8 +83,9 @@ public class TokenManager : MonoBehaviour
 		if (EventManager.Instance == null)
 			return;
 
-		EventManager.Instance.RegisterEvent<EventTokenScaleFactor>(TokenScaleFactor);
+		EventManager.Instance.DeRegisterEvent<EventTokenScaleFactor>(TokenScaleFactor);
 		EventManager.Instance.DeRegisterEvent<EventTouchActive>(InputReceived);
+		EventManager.Instance.DeRegisterEvent<EventTokenSelectedInMultiplayer>(TokenSelectedOverTheNetwork);
 	}
 
 	private void OnEnable()
@@ -343,6 +350,19 @@ public class TokenManager : MonoBehaviour
 		}
 	}
 
+
+	public void TokenSelectedOverTheNetwork(IEventBase a_Event)
+	{
+		EventTokenSelectedInMultiplayer data = a_Event as EventTokenSelectedInMultiplayer;
+		if (data == null)
+		{
+			Debug.LogError("[TokenManager] EventTokenSelectedInMultiplayer null");
+			return;
+		}
+
+		TokenSelected(data.RefTokenData, GameManager.Instance.ICurrentDiceValue);
+	}
+
 	//When the dice has been rolled and the token has been selected this will be called
 	private void TokenSelected(TokenData a_refTokenData, int a_iDiceValue)
 	{
@@ -359,29 +379,37 @@ public class TokenManager : MonoBehaviour
 			m_OnResetToken.Invoke();
 		}
 
-
-		
-	
 		Debug.Log("[TokenManager] Scale Effect Tween Paused: " + DOTween.Pause("ScaleEffect"));
 		switch (a_refTokenData.EnumTokenType)
 		{
 			case GameUtility.Base.eTokenType.None:
 				break;
 			case GameUtility.Base.eTokenType.Blue:
-				m_TokenToMove = m_lstBlueToken[a_refTokenData.ITokenID];
+				m_refCurrentToken = m_lstBlueToken[a_refTokenData.ITokenID];
 				
 				break;
 			case GameUtility.Base.eTokenType.Yellow:
-				m_TokenToMove = m_lstYellowToken[a_refTokenData.ITokenID];
+				m_refCurrentToken = m_lstYellowToken[a_refTokenData.ITokenID];
 				break;
 			case GameUtility.Base.eTokenType.Red:
-				m_TokenToMove = m_lstRedToken[a_refTokenData.ITokenID];
+				m_refCurrentToken = m_lstRedToken[a_refTokenData.ITokenID];
 				break;
 			case GameUtility.Base.eTokenType.Green:
-				m_TokenToMove = m_lstGreenToken[a_refTokenData.ITokenID];
+				m_refCurrentToken = m_lstGreenToken[a_refTokenData.ITokenID];
 				break;
 			default:
 				break;
+		}
+
+		m_strTokenDataJson = JsonUtility.ToJson(m_refCurrentToken);
+		Debug.Log("<color=green>[TokenManager] serializing token data to send  over network: " + m_strTokenDataJson + "</color>");
+
+		//Online call to affect the other device toke also
+		if (GameManager.Instance.BOnlineMultiplayer)
+		{
+			m_lstMessageType.Clear();
+			m_lstMessageType.Add(eMessageType.PlayerTokenSelected);
+			EventManager.Instance.TriggerEvent<EventInsertInGameMessage>(new EventInsertInGameMessage(m_lstMessageType.ToArray()));
 		}
 
 		m_lstTokengameobject.Add(a_refTokenData.gameObject);
@@ -395,14 +423,14 @@ public class TokenManager : MonoBehaviour
 		IEnumerator PlayerTurn(float a_fDelay)
 		{
 			yield return new WaitForSeconds(a_fDelay);
-			m_lstTokenMovePoints = PathManager.Instance.TokenStateUpdate(m_TokenToMove, a_iDiceValue);
+			m_lstTokenMovePoints = PathManager.Instance.TokenStateUpdate(RefCurrentToken, a_iDiceValue);
 			if (m_lstTokenMovePoints != null)
 			{
-				Debug.Log("<color=red>[TokenManager]  m_TokenToMove: " + m_TokenToMove.ICurrentPathIndex + "</color>");
+				Debug.Log("<color=red>[TokenManager]  m_refCurrentToken: " + RefCurrentToken.ICurrentPathIndex + "</color>");
 				for (int i = 0; i < m_lstTokenMovePoints.Count; i++)
 				{
 					m_bMoveTweenComplete = false;
-					m_TokenToMove.transform.DOMove((Vector2)m_lstTokenMovePoints[i].transform.position, 5, false).SetSpeedBased(true).OnComplete(MoveTweenComplete);
+					RefCurrentToken.transform.DOMove((Vector2)m_lstTokenMovePoints[i].transform.position, 5, false).SetSpeedBased(true).OnComplete(MoveTweenComplete);
 					while (!m_bMoveTweenComplete)
 					{
 						yield return null;
@@ -410,21 +438,19 @@ public class TokenManager : MonoBehaviour
 				}
 			}
 
-			m_TokenToMove.Vec2PositionOnTile = m_TokenToMove.transform.position;
-			GameManager.Instance.CurrentPlayer.m_ePlayerState = ePlayerState.PlayerRollDice;
-			if (m_TokenToMove.EnumTokenState == eTokenState.InRoute || m_TokenToMove.EnumTokenState == eTokenState.InHideOut)
+			RefCurrentToken.Vec2PositionOnTile = RefCurrentToken.transform.position;
+			if (RefCurrentToken.EnumTokenState == eTokenState.InRoute || RefCurrentToken.EnumTokenState == eTokenState.InHideOut)
 			{
-				m_refCurrentToken = m_TokenToMove;
-				Debug.Log("<color=red>[TokenManager] Current Token InRoute,check if other token present in same tile: m_refCurrentToken: " + m_refCurrentToken.ICurrentPathIndex +"TokenState: "+ m_TokenToMove.EnumTokenState + "</color>");
+				Debug.Log("<color=red>[TokenManager] Current Token InRoute,check if other token present in same tile: m_refCurrentToken: " + RefCurrentToken.ICurrentPathIndex +"TokenState: "+ RefCurrentToken.EnumTokenState + "</color>");
 				CheckIfTileContainsOtherTokens();			
 			}
 
 			//Checks if all Tokens are in heaven and the player has finished his game
-			if (m_refCurrentToken.EnumTokenState == eTokenState.InHeaven)
+			if (RefCurrentToken.EnumTokenState == eTokenState.InHeaven)
 			{
 				int iBlueTokensFinished = 0, iYellowTokensFinished = 0, iRedTokensFinished =0, iGreenTokensFinished = 0;
 
-				switch (m_refCurrentToken.EnumTokenType)
+				switch (RefCurrentToken.EnumTokenType)
 				{
 					case eTokenType.Blue:
 						for(int i = 0;i<m_lstBlueToken.Count;i++)
@@ -434,7 +460,7 @@ public class TokenManager : MonoBehaviour
 								iBlueTokensFinished++;
 								if (iBlueTokensFinished >= TOKENSPERPLAYER)
 								{
-									EventManager.Instance.TriggerEvent<EventPlayerFinished>(new EventPlayerFinished(m_refCurrentToken));
+									EventManager.Instance.TriggerEvent<EventPlayerFinished>(new EventPlayerFinished(RefCurrentToken));
 								}
 							}
 						}
@@ -447,7 +473,7 @@ public class TokenManager : MonoBehaviour
 								iYellowTokensFinished++;
 								if (iYellowTokensFinished >= TOKENSPERPLAYER)
 								{
-									EventManager.Instance.TriggerEvent<EventPlayerFinished>(new EventPlayerFinished(m_refCurrentToken));
+									EventManager.Instance.TriggerEvent<EventPlayerFinished>(new EventPlayerFinished(RefCurrentToken));
 								}
 							}
 						}
@@ -460,7 +486,7 @@ public class TokenManager : MonoBehaviour
 								iRedTokensFinished++;
 								if (iRedTokensFinished >= TOKENSPERPLAYER)
 								{
-									EventManager.Instance.TriggerEvent<EventPlayerFinished>(new EventPlayerFinished(m_refCurrentToken));
+									EventManager.Instance.TriggerEvent<EventPlayerFinished>(new EventPlayerFinished(RefCurrentToken));
 								}
 							}
 						}
@@ -473,7 +499,7 @@ public class TokenManager : MonoBehaviour
 								iGreenTokensFinished++;
 								if (iGreenTokensFinished >= TOKENSPERPLAYER)
 								{
-									EventManager.Instance.TriggerEvent<EventPlayerFinished>(new EventPlayerFinished(m_refCurrentToken));
+									EventManager.Instance.TriggerEvent<EventPlayerFinished>(new EventPlayerFinished(RefCurrentToken));
 								}
 							}
 						}
@@ -497,17 +523,17 @@ public class TokenManager : MonoBehaviour
 	private void CheckIfTileContainsOtherTokens()
 	{
 		
-		if(m_refCurrentToken != null)
+		if(RefCurrentToken != null)
 		{
 			Debug.Log("[TokenManager] checking current token tile position with other tokens, send them HOME");
-			switch (m_refCurrentToken.EnumTokenType)
+			switch (RefCurrentToken.EnumTokenType)
 			{
 				case eTokenType.Blue:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						if (m_lstBlueToken[i].ITokenID != m_refCurrentToken.ITokenID)
+						if (m_lstBlueToken[i].ITokenID != RefCurrentToken.ITokenID)
 						{
-							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstBlueToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstTokengameobject.Add(m_lstBlueToken[i].gameObject);
 							}
@@ -516,7 +542,7 @@ public class TokenManager : MonoBehaviour
 
 						if (m_lstRedToken[i].EnumTokenState == eTokenState.InRoute)
 						{
-							if (m_lstRedToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstRedToken[i].ICurrentPathIndex == m_lstBlueToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstRedToken[i].EnumTokenState = eTokenState.House;
@@ -525,7 +551,7 @@ public class TokenManager : MonoBehaviour
 						}
 						else if (m_lstRedToken[i].EnumTokenState == eTokenState.InHideOut)
 						{
-							if (m_lstRedToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstRedToken[i].ICurrentPathIndex == m_lstBlueToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstTokengameobject.Add(m_lstRedToken[i].gameObject);
 							}
@@ -533,7 +559,7 @@ public class TokenManager : MonoBehaviour
 
 						if (m_lstGreenToken[i].EnumTokenState == eTokenState.InRoute )
 						{
-							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstBlueToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstGreenToken[i].EnumTokenState = eTokenState.House;
@@ -542,7 +568,7 @@ public class TokenManager : MonoBehaviour
 						}
 						else if (m_lstGreenToken[i].EnumTokenState == eTokenState.InHideOut)
 						{
-							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstBlueToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstTokengameobject.Add(m_lstGreenToken[i].gameObject);
 							}
@@ -550,8 +576,8 @@ public class TokenManager : MonoBehaviour
 
 						if (m_lstYellowToken[i].EnumTokenState == eTokenState.InRoute)
 						{
-							Debug.Log("[TokenManager] Yellow Token not in hiding, its in danger! Current Token: "+m_refCurrentToken.ICurrentPathIndex+" Checking Token: "+ m_lstYellowToken[i].ICurrentPathIndex);
-							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							Debug.Log("[TokenManager] Yellow Token not in hiding, its in danger! Current Token: "+RefCurrentToken.ICurrentPathIndex+" Checking Token: "+ m_lstYellowToken[i].ICurrentPathIndex);
+							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstBlueToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								Debug.Log("[TokenManager] YELLOW: Gotchya GO HOME!");
 								m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
@@ -561,7 +587,7 @@ public class TokenManager : MonoBehaviour
 						}
 						else if (m_lstYellowToken[i].EnumTokenState == eTokenState.InHideOut)
 						{
-							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstBlueToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstBlueToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstTokengameobject.Add(m_lstYellowToken[i].gameObject);
 							}
@@ -572,9 +598,9 @@ public class TokenManager : MonoBehaviour
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
 						//Sharing a tile with same token
-						if (m_lstYellowToken[i].ITokenID != m_refCurrentToken.ITokenID)
+						if (m_lstYellowToken[i].ITokenID != RefCurrentToken.ITokenID)
 						{
-							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstYellowToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstTokengameobject.Add(m_lstYellowToken[i].gameObject);
 							}
@@ -583,7 +609,7 @@ public class TokenManager : MonoBehaviour
 
 						if (m_lstRedToken[i].EnumTokenState == eTokenState.InRoute)
 						{
-							if (m_lstRedToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstRedToken[i].ICurrentPathIndex == m_lstYellowToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstRedToken[i].EnumTokenState = eTokenState.House;
@@ -592,7 +618,7 @@ public class TokenManager : MonoBehaviour
 						}
 						else if (m_lstRedToken[i].EnumTokenState == eTokenState.InHideOut)
 						{
-							if (m_lstRedToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstRedToken[i].ICurrentPathIndex == m_lstYellowToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstTokengameobject.Add(m_lstRedToken[i].gameObject);
 							}
@@ -600,7 +626,7 @@ public class TokenManager : MonoBehaviour
 
 						if (m_lstGreenToken[i].EnumTokenState == eTokenState.InRoute)
 						{
-							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstYellowToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstGreenToken[i].EnumTokenState = eTokenState.House;
@@ -609,7 +635,7 @@ public class TokenManager : MonoBehaviour
 						}
 						else if (m_lstGreenToken[i].EnumTokenState == eTokenState.InHideOut)
 						{
-							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstYellowToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstTokengameobject.Add(m_lstGreenToken[i].gameObject);
 							}
@@ -617,8 +643,8 @@ public class TokenManager : MonoBehaviour
 
 						if (m_lstBlueToken[i].EnumTokenState == eTokenState.InRoute)
 						{
-							Debug.Log("[TokenManager] Blue Token not in hiding, its in danger! Current Token: " + m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex + " Checking Token: " + m_lstBlueToken[i].ICurrentPathIndex);
-							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							Debug.Log("[TokenManager] Blue Token not in hiding, its in danger! Current Token: " + m_lstYellowToken[RefCurrentToken.ITokenID].ICurrentPathIndex + " Checking Token: " + m_lstBlueToken[i].ICurrentPathIndex);
+							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstYellowToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								Debug.Log("[TokenManager] BLUE: Gotchya GO HOME!");
 								m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
@@ -628,7 +654,7 @@ public class TokenManager : MonoBehaviour
 						}
 						else if (m_lstBlueToken[i].EnumTokenState == eTokenState.InHideOut)
 						{
-							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstYellowToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstYellowToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstTokengameobject.Add(m_lstBlueToken[i].gameObject);
 							}
@@ -639,9 +665,9 @@ public class TokenManager : MonoBehaviour
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
 						//Sharing a tile with same token
-						if (m_lstRedToken[i].ITokenID != m_refCurrentToken.ITokenID)
+						if (m_lstRedToken[i].ITokenID != RefCurrentToken.ITokenID)
 						{
-							if (m_lstRedToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstRedToken[i].ICurrentPathIndex == m_lstRedToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstTokengameobject.Add(m_lstRedToken[i].gameObject);
 							}
@@ -651,7 +677,7 @@ public class TokenManager : MonoBehaviour
 
 						if (m_lstYellowToken[i].EnumTokenState == eTokenState.InRoute)
 						{
-							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstRedToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstYellowToken[i].EnumTokenState = eTokenState.House;
@@ -660,7 +686,7 @@ public class TokenManager : MonoBehaviour
 						}
 						else if (m_lstYellowToken[i].EnumTokenState == eTokenState.InHideOut)
 						{
-							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstRedToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstTokengameobject.Add(m_lstYellowToken[i].gameObject);
 							}
@@ -668,7 +694,7 @@ public class TokenManager : MonoBehaviour
 
 						if (m_lstGreenToken[i].EnumTokenState == eTokenState.InRoute)
 						{
-							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstRedToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstGreenToken[i].EnumTokenState = eTokenState.House;
@@ -677,7 +703,7 @@ public class TokenManager : MonoBehaviour
 						}
 						else if (m_lstGreenToken[i].EnumTokenState == eTokenState.InHideOut)
 						{
-							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstRedToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstTokengameobject.Add(m_lstGreenToken[i].gameObject);
 							}
@@ -685,7 +711,7 @@ public class TokenManager : MonoBehaviour
 
 						if (m_lstBlueToken[i].EnumTokenState == eTokenState.InRoute)
 						{
-							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstRedToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstBlueToken[i].EnumTokenState = eTokenState.House;
@@ -694,7 +720,7 @@ public class TokenManager : MonoBehaviour
 						}
 						else if (m_lstBlueToken[i].EnumTokenState == eTokenState.InHideOut)
 						{
-							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstRedToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstRedToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstTokengameobject.Add(m_lstBlueToken[i].gameObject);
 							}
@@ -705,9 +731,9 @@ public class TokenManager : MonoBehaviour
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
 						//Sharing a tile with same token
-						if (m_lstGreenToken[i].ITokenID != m_refCurrentToken.ITokenID)
+						if (m_lstGreenToken[i].ITokenID != RefCurrentToken.ITokenID)
 						{
-							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstGreenToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstTokengameobject.Add(m_lstGreenToken[i].gameObject);
 							}
@@ -716,7 +742,7 @@ public class TokenManager : MonoBehaviour
 
 						if (m_lstYellowToken[i].EnumTokenState == eTokenState.InRoute)
 						{
-							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstGreenToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstYellowToken[i].EnumTokenState = eTokenState.House;
@@ -725,7 +751,7 @@ public class TokenManager : MonoBehaviour
 						}
 						else if (m_lstYellowToken[i].EnumTokenState == eTokenState.InHideOut)
 						{
-							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstGreenToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstTokengameobject.Add(m_lstYellowToken[i].gameObject);
 							}
@@ -733,7 +759,7 @@ public class TokenManager : MonoBehaviour
 						
 						if (m_lstRedToken[i].EnumTokenState == eTokenState.InRoute)
 						{
-							if (m_lstRedToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstRedToken[i].ICurrentPathIndex == m_lstGreenToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstRedToken[i].EnumTokenState = eTokenState.House;
@@ -742,7 +768,7 @@ public class TokenManager : MonoBehaviour
 						}
 						else if (m_lstRedToken[i].EnumTokenState == eTokenState.InHideOut)
 						{
-							if (m_lstRedToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstRedToken[i].ICurrentPathIndex == m_lstGreenToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstTokengameobject.Add(m_lstRedToken[i].gameObject);
 							}
@@ -750,7 +776,7 @@ public class TokenManager : MonoBehaviour
 
 						if (m_lstBlueToken[i].EnumTokenState == eTokenState.InRoute)
 						{
-							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstGreenToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstBlueToken[i].EnumTokenState = eTokenState.House;
@@ -759,7 +785,7 @@ public class TokenManager : MonoBehaviour
 						}
 						else if(m_lstBlueToken[i].EnumTokenState == eTokenState.InHideOut)
 						{
-							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstGreenToken[m_refCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstGreenToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
 								m_lstTokengameobject.Add(m_lstBlueToken[i].gameObject);
 							}
@@ -772,7 +798,7 @@ public class TokenManager : MonoBehaviour
 			if (m_lstTokengameobject.Count > 0)
 			{
 				Debug.Log("<color=green>[TokenManager][CheckIfTileContainsOtherTokens] More than one token inside same hHdeOut</color>");
-				m_lstTokengameobject.Add(m_refCurrentToken.gameObject);
+				m_lstTokengameobject.Add(RefCurrentToken.gameObject);
 				EventManager.Instance.TriggerEvent<EventTokenScaleFactor>(new EventTokenScaleFactor(m_lstTokengameobject, m_vec2ScaleShared, eScaleType.SharedTile));
 				m_lstTokengameobject.Clear();
 			}

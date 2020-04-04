@@ -122,6 +122,18 @@ public class EventOpponentLeftRoom : IEventBase
 	}
 }
 
+public class EventTokenSelectedInMultiplayer : IEventBase
+{
+	private TokenData m_refTokenData;
+	public TokenData RefTokenData { get => m_refTokenData;}
+
+	public EventTokenSelectedInMultiplayer(TokenData a_refTokenData)
+	{
+		m_refTokenData = a_refTokenData;
+	}
+
+}
+
 #region AppWarp
 
 public class EventOpponentDiceRoll : IEventBase

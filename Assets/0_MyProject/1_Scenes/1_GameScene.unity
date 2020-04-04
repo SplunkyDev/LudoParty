@@ -902,6 +902,9 @@ MonoBehaviour:
   m_iTokenID: 2
   m_iCurrentPathIndex: -1
   m_enumTokenState: 0
+  m_bCanBeUsed: 0
+  m_vec2PositionOnTile: {x: 0, y: 0}
+  m_spriteRenderer: {fileID: 0}
 --- !u!1 &177251875
 GameObject:
   m_ObjectHideFlags: 0
@@ -1217,6 +1220,9 @@ MonoBehaviour:
   m_iTokenID: 1
   m_iCurrentPathIndex: -1
   m_enumTokenState: 0
+  m_bCanBeUsed: 0
+  m_vec2PositionOnTile: {x: 0, y: 0}
+  m_spriteRenderer: {fileID: 0}
 --- !u!1 &209994753
 GameObject:
   m_ObjectHideFlags: 0
@@ -3157,6 +3163,9 @@ MonoBehaviour:
   m_iTokenID: 1
   m_iCurrentPathIndex: -1
   m_enumTokenState: 0
+  m_bCanBeUsed: 0
+  m_vec2PositionOnTile: {x: 0, y: 0}
+  m_spriteRenderer: {fileID: 0}
 --- !u!1 &450059259
 GameObject:
   m_ObjectHideFlags: 0
@@ -4561,6 +4570,9 @@ MonoBehaviour:
   m_iTokenID: 3
   m_iCurrentPathIndex: -1
   m_enumTokenState: 0
+  m_bCanBeUsed: 0
+  m_vec2PositionOnTile: {x: 0, y: 0}
+  m_spriteRenderer: {fileID: 0}
 --- !u!1 &659110706
 GameObject:
   m_ObjectHideFlags: 0
@@ -4704,6 +4716,9 @@ MonoBehaviour:
   m_iTokenID: 2
   m_iCurrentPathIndex: -1
   m_enumTokenState: 0
+  m_bCanBeUsed: 0
+  m_vec2PositionOnTile: {x: 0, y: 0}
+  m_spriteRenderer: {fileID: 0}
 --- !u!1 &672977443
 GameObject:
   m_ObjectHideFlags: 0
@@ -7882,6 +7897,9 @@ MonoBehaviour:
   m_iTokenID: 3
   m_iCurrentPathIndex: -1
   m_enumTokenState: 0
+  m_bCanBeUsed: 0
+  m_vec2PositionOnTile: {x: 0, y: 0}
+  m_spriteRenderer: {fileID: 0}
 --- !u!1 &1138750901
 GameObject:
   m_ObjectHideFlags: 0
@@ -8215,6 +8233,9 @@ MonoBehaviour:
   m_iTokenID: 2
   m_iCurrentPathIndex: -1
   m_enumTokenState: 0
+  m_bCanBeUsed: 0
+  m_vec2PositionOnTile: {x: 0, y: 0}
+  m_spriteRenderer: {fileID: 0}
 --- !u!1 &1212816430
 GameObject:
   m_ObjectHideFlags: 0
@@ -9070,6 +9091,9 @@ MonoBehaviour:
   m_iTokenID: 0
   m_iCurrentPathIndex: -1
   m_enumTokenState: 0
+  m_bCanBeUsed: 0
+  m_vec2PositionOnTile: {x: 0, y: 0}
+  m_spriteRenderer: {fileID: 0}
 --- !u!1 &1439420774
 GameObject:
   m_ObjectHideFlags: 0
@@ -10367,6 +10391,9 @@ MonoBehaviour:
   m_iTokenID: 1
   m_iCurrentPathIndex: -1
   m_enumTokenState: 0
+  m_bCanBeUsed: 0
+  m_vec2PositionOnTile: {x: 0, y: 0}
+  m_spriteRenderer: {fileID: 0}
 --- !u!1 &1618699125
 GameObject:
   m_ObjectHideFlags: 0
@@ -10700,6 +10727,9 @@ MonoBehaviour:
   m_iTokenID: 2
   m_iCurrentPathIndex: -1
   m_enumTokenState: 0
+  m_bCanBeUsed: 0
+  m_vec2PositionOnTile: {x: 0, y: 0}
+  m_spriteRenderer: {fileID: 0}
 --- !u!1 &1696627369
 GameObject:
   m_ObjectHideFlags: 0
@@ -11068,6 +11098,7 @@ MonoBehaviour:
   m_gResultPrefab: {fileID: 6844269181148974797, guid: 23abf3736650c1c4c8cafac26245b6fc,
     type: 3}
   m_gGridResult: {fileID: 1778439235}
+  m_textGameInstruction: {fileID: 1881437769}
 --- !u!1 &1740908968
 GameObject:
   m_ObjectHideFlags: 0
@@ -12559,6 +12590,9 @@ MonoBehaviour:
   m_iTokenID: 0
   m_iCurrentPathIndex: -1
   m_enumTokenState: 0
+  m_bCanBeUsed: 0
+  m_vec2PositionOnTile: {x: 0, y: 0}
+  m_spriteRenderer: {fileID: 0}
 --- !u!1 &1931573014
 GameObject:
   m_ObjectHideFlags: 0
@@ -12732,6 +12766,9 @@ MonoBehaviour:
   m_iTokenID: 1
   m_iCurrentPathIndex: -1
   m_enumTokenState: 0
+  m_bCanBeUsed: 0
+  m_vec2PositionOnTile: {x: 0, y: 0}
+  m_spriteRenderer: {fileID: 0}
 --- !u!1 &1960583753
 GameObject:
   m_ObjectHideFlags: 0
@@ -12948,6 +12985,9 @@ MonoBehaviour:
   m_iTokenID: 0
   m_iCurrentPathIndex: -1
   m_enumTokenState: 0
+  m_bCanBeUsed: 0
+  m_vec2PositionOnTile: {x: 0, y: 0}
+  m_spriteRenderer: {fileID: 0}
 --- !u!1 &1987287342
 GameObject:
   m_ObjectHideFlags: 0
@@ -13427,6 +13467,9 @@ MonoBehaviour:
   m_iTokenID: 3
   m_iCurrentPathIndex: -1
   m_enumTokenState: 0
+  m_bCanBeUsed: 0
+  m_vec2PositionOnTile: {x: 0, y: 0}
+  m_spriteRenderer: {fileID: 0}
 --- !u!1 &2074439833
 GameObject:
   m_ObjectHideFlags: 0
@@ -13834,6 +13877,9 @@ MonoBehaviour:
   m_iTokenID: 0
   m_iCurrentPathIndex: -1
   m_enumTokenState: 0
+  m_bCanBeUsed: 0
+  m_vec2PositionOnTile: {x: 0, y: 0}
+  m_spriteRenderer: {fileID: 0}
 --- !u!1 &2132674350
 GameObject:
   m_ObjectHideFlags: 0
@@ -14072,3 +14118,6 @@ MonoBehaviour:
   m_iTokenID: 3
   m_iCurrentPathIndex: -1
   m_enumTokenState: 0
+  m_bCanBeUsed: 0
+  m_vec2PositionOnTile: {x: 0, y: 0}
+  m_spriteRenderer: {fileID: 0}
