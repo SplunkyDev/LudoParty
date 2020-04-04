@@ -246,6 +246,7 @@ public class GameManager : MBSingleton<GameManager>
 		m_lstMessageType.Add(eMessageType.GameStart);
 
 		EventManager.Instance.TriggerEvent<EventInsertInGameMessage>(new EventInsertInGameMessage(m_lstMessageType.ToArray()));
+
 	}
 
 	public string  GetAllPlayerData()

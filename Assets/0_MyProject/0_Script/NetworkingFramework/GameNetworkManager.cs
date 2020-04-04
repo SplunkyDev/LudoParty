@@ -94,8 +94,11 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 		Debug.Log("[GameNetworkManager] InitializeGame");
 		if (GameManager.Instance.EnumMyPlayerTurn == ePlayerTurn.PlayerOne)
 		{
-			EventManager.Instance.TriggerEvent<EventStartGameSession>(new EventStartGameSession());
+			m_lstMessageType.Clear();
+			m_lstMessageType.Add(eMessageType.GameStart);
+			EventManager.Instance.TriggerEvent<EventInsertInGameMessage>(new EventInsertInGameMessage(m_lstMessageType.ToArray()));
 		}
+		EventManager.Instance.TriggerEvent<EventStartGameSession>(new EventStartGameSession());
 	}
 
 	public void PlayerGoalScored()
