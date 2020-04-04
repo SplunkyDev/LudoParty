@@ -3,6 +3,16 @@ using UnityEngine;
 using System.Collections.Generic;
 
 #region GameMechanics
+
+//Event to start a new session as all details have been got
+public class EventStartGameSession : IEventBase
+{
+	public EventStartGameSession()
+	{
+
+	}
+}
+
 public class EventDiceRollAnimationComplete : IEventBase
 {
 	public EventDiceRollAnimationComplete() { }
@@ -42,6 +52,105 @@ public class EventTokenScaleFactor : IEventBase
 	}
 
 }
+#endregion
+
+#region MultiplayerFeatures
+//Event to serialize the data into json
+public class EventSerializeGameEssentialData : IEventBase
+{
+	public EventSerializeGameEssentialData()
+	{
+
+	}
+}
+
+//Event to deserialize the data from json
+public class EventDeserializeGameEssentialData : IEventBase
+{
+	private string m_strJsonData;
+	public string StrJsonData { get => m_strJsonData; }
+	public EventDeserializeGameEssentialData(string a_strJsonData)
+	{
+		m_strJsonData = a_strJsonData;
+	}
+
+}
+
+//Event to insert message to json to send it to room  server
+public class EventInsertInGameMessage : IEventBase
+{
+	private eMessageType[] m_eMessageType;
+	public eMessageType[] EMessageType { get => m_eMessageType; }
+	public EventInsertInGameMessage(eMessageType[] a_eMessageType)
+	{
+		m_eMessageType = a_eMessageType;
+	}
+
+}
+
+//Event to read message from json got from room  server
+public class EventReadInGameMessage : IEventBase
+{
+	private string m_strInGameMessage;
+	public string StrInGameMessage { get => m_strInGameMessage; }
+	public EventReadInGameMessage(string a_strInGameMessage)
+	{
+		m_strInGameMessage = a_strInGameMessage;
+	}
+
+}
+
+//Event when opponent has left
+public class EventOpponentLeftRoom : IEventBase
+{
+	public EventOpponentLeftRoom()
+	{
+
+	}
+}
+
+#region AppWarp
+public class EventInitializeNetworkApi : IEventBase
+{
+	public EventInitializeNetworkApi()
+	{
+
+	}
+}
+
+public class EventConnectToServer : IEventBase
+{
+	public EventConnectToServer()
+	{
+
+	}
+}
+
+
+public class EventSubscribeRoom : IEventBase
+{
+	public EventSubscribeRoom()
+	{
+
+	}
+}
+
+public class EventJoinRoom : IEventBase
+{
+	public EventJoinRoom()
+	{
+
+	}
+}
+
+public class EventReconnectServer : IEventBase
+{
+	public EventReconnectServer()
+	{
+
+	}
+}
+#endregion
 #endregion
 
 #region UI_EVENTS

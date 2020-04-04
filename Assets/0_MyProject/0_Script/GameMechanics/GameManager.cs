@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MBSingleton<GameManager>
 {
 
-	private const int MAXTRY = 2;
+	private const int MAXTRY = 3;
 
 	private PlayerData m_RefCurrentPlayer;
 	public PlayerData CurrentPlayer { get => m_RefCurrentPlayer; set => m_RefCurrentPlayer = value; }

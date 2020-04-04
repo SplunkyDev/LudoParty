@@ -150,5 +150,13 @@ namespace GameUtility.Base
 		Vertical_Up = 3,
 		vertical_Down = 4
 	}
+
+	public enum eMessageType
+	{
+		None = 0,
+		PlayerTurn = 1,
+		StartAcknowledgement = 2,
+		GameEnded =3
+	}
 }
 
