@@ -130,13 +130,16 @@ public class MessageManager : MBSingleton<MessageManager>
 				case eMessageType.PlayerTokenSelected:
 					if (m_JsonObjectInGame.HasField("PlayerTokenSelected"))
 					{
-						Debug.Log("[MessageManager] Sending Token Data to other players");
-						m_JsonObjectInGame.SetField("PlayerTokenSelected", new JSONObject(JsonUtility.ToJson(TokenManager.Instance.StrTokenDataJson)));
+						Debug.Log("[MessageManager] Sending Token Data to other players");					
+						Debug.Log("[TokenManager] Serialized TokenDataContainer: " + TokenManager.Instance.StrTokenDataJson);
+						m_JsonObjectInGame.SetField("PlayerTokenSelected", new JSONObject(TokenManager.Instance.StrTokenDataJson));
 					}
 					else
 					{
 						Debug.Log("[MessageManager] Sending Token Data to other players");
-						m_JsonObjectInGame.AddField("PlayerTokenSelected", new JSONObject(JsonUtility.ToJson(TokenManager.Instance.StrTokenDataJson)));
+						Debug.Log("[TokenManager] Serialized TokenDataContainer: " + TokenManager.Instance.StrTokenDataJson);
+						m_JsonObjectInGame.AddField("PlayerTokenSelected", new JSONObject(TokenManager.Instance.StrTokenDataJson));
+
 					}
 					break;
 				case eMessageType.GameStart:
@@ -244,10 +247,11 @@ public class MessageManager : MBSingleton<MessageManager>
 					case eMessageType.PlayerTokenSelected:
 						if (m_JsonObjectInGame.HasField("PlayerTokenSelected"))
 						{
-							string strTokenJson = m_JsonObjectInGame.GetField("PlayerTokenSelected").Print();
-							Debug.Log("[MessageManager] Deserializing Token Data: ");
-							TokenData refTokenData = JsonUtility.FromJson<TokenData>(strTokenJson);
-							Debug.Log("[MessageManager]Token Data: TokenID: "+refTokenData.ITokenID+" TokenType: "+refTokenData.EnumTokenType.ToString());
+							string strTokenDataContainer = m_JsonObjectInGame.GetField("PlayerTokenSelected").Print();
+							Debug.Log("[MessageManager] Deserializing Token Data Container: "+ strTokenDataContainer);
+							TokenDataContainer refTokenDataContainer = JsonUtility.FromJson<TokenDataContainer>(strTokenDataContainer);
+							Debug.Log("[TokenManager] TokenData Token Type: "+refTokenDataContainer.EnumTokenType+" Token ID"+ refTokenDataContainer.ITokenID);
+							TokenData refTokenData = new TokenData(refTokenDataContainer.EnumTokenType, refTokenDataContainer.ITokenID, refTokenDataContainer.BcanBeUsed);
 							EventManager.Instance.TriggerEvent<EventTokenSelectedInMultiplayer>(new EventTokenSelectedInMultiplayer(refTokenData));				
 						}
 						else

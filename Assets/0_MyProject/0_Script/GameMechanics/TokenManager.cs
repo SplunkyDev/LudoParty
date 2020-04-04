@@ -50,8 +50,8 @@ public class TokenManager : MonoBehaviour
 	private Vector2 m_Vec3TokenOrginalScale = new Vector2(0.5f, 0.5f);
 	private TweenParams m_tweenScaleEffect;
 
-	private TokenData m_refCurrentToken;
-	public TokenData RefCurrentToken { get => m_refCurrentToken;}
+	[SerializeField]private TokenData m_refCurrentToken;
+	public TokenData RefCurrentToken { get => m_refCurrentToken; }
 	private string m_strTokenDataJson = string.Empty;
 	public string StrTokenDataJson { get => m_strTokenDataJson; }
 
@@ -107,7 +107,7 @@ public class TokenManager : MonoBehaviour
 
 		}
 
-		
+
 	}
 
 
@@ -134,7 +134,7 @@ public class TokenManager : MonoBehaviour
 	}
 	public bool CheckValidTokenMovement(int a_iDiceValue)
 	{
-		
+
 		Debug.Log("[TokenManager][CheckValidTokenMovement]");
 		bool bValid = false;
 		//Resets all the token before checking their movable state, basically checking if the player can move it at their turn after making the roll
@@ -143,7 +143,7 @@ public class TokenManager : MonoBehaviour
 			m_OnResetToken.Invoke();
 		}
 
-		Debug.Log("[TokenManager][CheckValidTokenMovement] PlayerToken: "+ GameManager.Instance.EnumPlayerToken.ToString());
+		Debug.Log("[TokenManager][CheckValidTokenMovement] PlayerToken: " + GameManager.Instance.EnumPlayerToken.ToString());
 		switch (GameManager.Instance.EnumPlayerToken)
 		{
 			case GameUtility.Base.ePlayerToken.None:
@@ -177,16 +177,16 @@ public class TokenManager : MonoBehaviour
 		bool bValid = false;
 
 		for (int i = 0; i < a_lstToken.Count; i++)
-		{		
+		{
 			switch (a_lstToken[i].EnumTokenState)
 			{
-				
+
 				case GameUtility.Base.eTokenState.House:
 					if (a_iDiceValue == 6)
 					{
 						UpdateSortOrder(i);
 						bValid = a_lstToken[i].BCanBeUsed = true;
-						a_lstToken[i].transform.DOMoveY((a_lstToken[i].transform.position.y+FTOKENJUMPVALUE), 0.5f).From(false).SetAs(m_tweenScaleEffect).SetId("ScaleEffect");
+						a_lstToken[i].transform.DOMoveY((a_lstToken[i].transform.position.y + FTOKENJUMPVALUE), 0.5f).From(false).SetAs(m_tweenScaleEffect).SetId("ScaleEffect");
 					}
 					break;
 				case GameUtility.Base.eTokenState.InRoute:
@@ -204,7 +204,7 @@ public class TokenManager : MonoBehaviour
 					}
 					break;
 				case GameUtility.Base.eTokenState.EntryToStairway:
-					Debug.Log("<color=red>[TokeManager][AnimateValidTokens] Getting closer to heaven:"+ a_lstToken [i].EnumTokenType+ "</color>");
+					Debug.Log("<color=red>[TokeManager][AnimateValidTokens] Getting closer to heaven:" + a_lstToken[i].EnumTokenType + "</color>");
 					if (PathManager.Instance.ValidateMovement(a_lstToken[i], a_iDiceValue))
 					{
 						UpdateSortOrder(i);
@@ -214,7 +214,7 @@ public class TokenManager : MonoBehaviour
 					break;
 			}
 
-		
+
 		}
 
 		void UpdateSortOrder(int a_index)
@@ -244,13 +244,13 @@ public class TokenManager : MonoBehaviour
 	private void InputReceived(IEventBase a_Event)
 	{
 		EventTouchActive data = a_Event as EventTouchActive;
-		if(data == null)
+		if (data == null)
 		{
 			Debug.LogError("[TokenManager] Touch Active trigger null");
 			return;
 		}
 
-		if(data.BTouch)
+		if (data.BTouch)
 		{
 			if (GameManager.Instance.BOnlineMultiplayer)
 			{
@@ -263,7 +263,7 @@ public class TokenManager : MonoBehaviour
 			RaycastFromScreen(data.Vec3TouchPosition);
 		}
 
-		
+
 	}
 
 	private void RaycastFromScreen(Vector3 a_vec3Position)
@@ -275,7 +275,7 @@ public class TokenManager : MonoBehaviour
 			if (hit.transform.CompareTag("Token"))
 			{
 				Debug.Log("[TokenManger] Token selected");
-				TokenSelected(hit.transform.parent.gameObject.GetComponent<TokenData>(),GameManager.Instance.ICurrentDiceValue);
+				TokenSelected(hit.transform.parent.gameObject.GetComponent<TokenData>(), GameManager.Instance.ICurrentDiceValue);
 			}
 		}
 	}
@@ -295,7 +295,7 @@ public class TokenManager : MonoBehaviour
 				break;
 			case eScaleType.TokenType:
 				TokenData refTokenData = data.LTokenGameObject[0].GetComponent<TokenData>();
-				if(refTokenData == null)
+				if (refTokenData == null)
 				{
 					Debug.LogError("[TokenManager] TokenData null, cannot set scale value");
 					return;
@@ -308,7 +308,7 @@ public class TokenManager : MonoBehaviour
 					Debug.Log("<color=green>[TokenManager][TokenScaleFactor] Shared Tile</color>");
 					data.LTokenGameObject[i].transform.localScale = data.Vec2ScaleValue;
 					Vector2 vec2RandomPosition = Random.insideUnitCircle * 0.15f;
-					data.LTokenGameObject[i].transform.position += new Vector3(vec2RandomPosition.x,vec2RandomPosition.y, data.LTokenGameObject[i].transform.position.z);
+					data.LTokenGameObject[i].transform.position += new Vector3(vec2RandomPosition.x, vec2RandomPosition.y, data.LTokenGameObject[i].transform.position.z);
 				}
 				break;
 		}
@@ -322,7 +322,7 @@ public class TokenManager : MonoBehaviour
 				case eTokenType.None:
 					break;
 				case eTokenType.Blue:
-					for(int i = 0;i<m_lstBlueToken.Count;i++)
+					for (int i = 0; i < m_lstBlueToken.Count; i++)
 					{
 						m_lstBlueToken[i].gameObject.transform.localScale = data.Vec2ScaleValue;
 					}
@@ -351,6 +351,15 @@ public class TokenManager : MonoBehaviour
 	}
 
 
+	//public TokenData DeserializeTokenData(string a_strTokenDataContainer)
+	//{
+	//	//Debug.Log("[TokenManager] Deserializing TokenDataContainer");
+	//	//TokenDataContainer refTokenDataContainer = JsonUtility.FromJson<TokenDataContainer>(a_strTokenDataContainer);
+	//	//Debug.Log("[TokenManager] TokenData Token Type: "+refTokenDataContainer.RefTokenData.EnumTokenType+" Token ID"+refTokenDataContainer.RefTokenData.ITokenID);
+	//	//return refTokenDataContainer.RefTokenData;
+	//	//TokenSelected(refTokenDataContainer.RefTokenData, GameManager.Instance.ICurrentDiceValue);
+	//}
+
 	public void TokenSelectedOverTheNetwork(IEventBase a_Event)
 	{
 		EventTokenSelectedInMultiplayer data = a_Event as EventTokenSelectedInMultiplayer;
@@ -372,6 +381,22 @@ public class TokenManager : MonoBehaviour
 			Debug.LogError("[TokenManager] This Token cannot be moved");
 			return;
 		}
+
+		//Online call to affect the other device toke also
+		if (GameManager.Instance.BOnlineMultiplayer && GameManager.Instance.CurrentPlayer.m_enumPlayerTurn == GameManager.Instance.EnumMyPlayerTurn)
+		{
+			Debug.Log("[TokenManager][TokenSelected] This is local device sending token selected over network");
+
+			TokenDataContainer refTokenDataContainer = new TokenDataContainer(a_refTokenData);
+			m_strTokenDataJson = JsonUtility.ToJson(refTokenDataContainer);
+			Debug.Log("<color=green>[TokenManager] serializing token data to send  over network: " + m_strTokenDataJson + "</color>");
+
+			m_lstMessageType.Clear();
+			m_lstMessageType.Add(eMessageType.PlayerTokenSelected);
+			EventManager.Instance.TriggerEvent<EventInsertInGameMessage>(new EventInsertInGameMessage(m_lstMessageType.ToArray()));
+		}
+
+		
 
 		//Resets all the token after checking their movable state, making sure no user tried to mobe any other token
 		if (m_OnResetToken != null)
@@ -401,18 +426,8 @@ public class TokenManager : MonoBehaviour
 				break;
 		}
 
-		m_strTokenDataJson = JsonUtility.ToJson(m_refCurrentToken);
-		Debug.Log("<color=green>[TokenManager] serializing token data to send  over network: " + m_strTokenDataJson + "</color>");
-
-		//Online call to affect the other device toke also
-		if (GameManager.Instance.BOnlineMultiplayer)
-		{
-			m_lstMessageType.Clear();
-			m_lstMessageType.Add(eMessageType.PlayerTokenSelected);
-			EventManager.Instance.TriggerEvent<EventInsertInGameMessage>(new EventInsertInGameMessage(m_lstMessageType.ToArray()));
-		}
-
-		m_lstTokengameobject.Add(a_refTokenData.gameObject);
+	
+		m_lstTokengameobject.Add(m_refCurrentToken.gameObject);
 		EventManager.Instance.TriggerEvent<EventTokenScaleFactor>(new EventTokenScaleFactor(m_lstTokengameobject, m_Vec3TokenOrginalScale, eScaleType.TokenType));
 		m_lstTokengameobject.Clear();
 

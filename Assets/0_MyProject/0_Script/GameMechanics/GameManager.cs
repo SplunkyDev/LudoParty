@@ -364,8 +364,6 @@ public class GameManager : MBSingleton<GameManager>
 			m_lstMessageType.Add(eMessageType.PlayerDiceRoll);
 			EventManager.Instance.TriggerEvent<EventInsertInGameMessage>(new EventInsertInGameMessage(m_lstMessageType.ToArray()));
 		}
-
-	
 	}
 
 	public void CheckResult()

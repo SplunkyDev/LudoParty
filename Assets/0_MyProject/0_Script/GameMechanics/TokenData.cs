@@ -6,6 +6,14 @@ using UnityEngine;
 [System.Serializable]
 public class TokenData : MonoBehaviour
 {
+
+	public TokenData (eTokenType a_enumTokenType, int a_iTokenID, bool a_bCanBeUsed)
+	{
+		m_enumTokenType = a_enumTokenType;
+		m_iTokenID = a_iTokenID;
+		m_bCanBeUsed = a_bCanBeUsed;
+	}
+
 	//This type is to identify which token it is
 	[SerializeField] private GameUtility.Base.eTokenType m_enumTokenType = GameUtility.Base.eTokenType.None;
 	public eTokenType EnumTokenType { get => m_enumTokenType; }
@@ -25,6 +33,7 @@ public class TokenData : MonoBehaviour
 	public Vector2 Vec2PositionOnTile { get => m_vec2PositionOnTile; set => m_vec2PositionOnTile = value; }
 
 	[SerializeField] private SpriteRenderer m_spriteRenderer;
+
 	private void OnEnable()
 	{
 		if(TokenManager.Instance == null)

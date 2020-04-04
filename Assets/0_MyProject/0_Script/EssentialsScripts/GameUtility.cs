@@ -111,6 +111,24 @@ namespace GameUtility.Base
 	}
 
 	[System.Serializable]
+	public class TokenDataContainer
+	{
+		[SerializeField] private eTokenType m_enumTokenType;
+		public eTokenType EnumTokenType { get => m_enumTokenType; }
+		[SerializeField] private int m_iTokenID;
+		public int ITokenID { get => m_iTokenID; }
+		[SerializeField] private bool m_bCanBeUsed;
+		public bool BcanBeUsed { get => m_bCanBeUsed; }
+
+		public TokenDataContainer(TokenData a_refTokenData)
+		{
+			m_enumTokenType = a_refTokenData.EnumTokenType;
+			m_iTokenID = a_refTokenData.ITokenID;
+			m_bCanBeUsed = a_refTokenData.BCanBeUsed;
+		}
+	}
+
+	[System.Serializable]
 	public class PlayerContainer
 	{
 		[SerializeField]private List<PlayerData> m_lstPlayerDataContainer = new List<PlayerData>();

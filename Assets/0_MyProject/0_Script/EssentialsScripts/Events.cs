@@ -136,6 +136,13 @@ public class EventTokenSelectedInMultiplayer : IEventBase
 
 #region AppWarp
 
+public class EventOpponentDiceRollAnimation : IEventBase
+{
+	public EventOpponentDiceRollAnimation(int a_iDiceRoll)
+	{		
+	}
+}
+
 public class EventOpponentDiceRoll : IEventBase
 {
 	private int m_iDiceRoll;

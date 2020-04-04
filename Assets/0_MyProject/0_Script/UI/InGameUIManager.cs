@@ -199,7 +199,7 @@ public class InGameUIManager : MonoBehaviour
 			m_imgCurrentDiceRoll = m_arrDiceImage[(int)GameManager.Instance.EnumPlayerToken - 1];
 			GameManager.Instance.CheckResult();
 			Debug.Log("[InGameUIManager] The Dice Roll value: " + GameManager.Instance.ICurrentDiceValue);
-
+	
 			yield return new WaitForEndOfFrame();
 
 			//This will show the current roll sprite on the dice image
