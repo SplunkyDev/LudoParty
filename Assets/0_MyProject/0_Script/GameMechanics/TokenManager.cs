@@ -534,11 +534,14 @@ public class TokenManager : MonoBehaviour
 				case eTokenType.Blue:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						if (m_lstBlueToken[i].ITokenID != RefCurrentToken.ITokenID)
+						if (m_lstBlueToken[i].EnumTokenState == eTokenState.InRoute)
 						{
-							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstBlueToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
+							if (m_lstBlueToken[i].ITokenID != RefCurrentToken.ITokenID)
 							{
-								m_lstTokengameobject.Add(m_lstBlueToken[i].gameObject);								
+								if (m_lstBlueToken[i].ICurrentPathIndex == m_lstBlueToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
+								{
+									m_lstTokengameobject.Add(m_lstBlueToken[i].gameObject);
+								}
 							}
 						}
 						
@@ -603,12 +606,15 @@ public class TokenManager : MonoBehaviour
 				case eTokenType.Yellow:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						//Sharing a tile with same token
-						if (m_lstYellowToken[i].ITokenID != RefCurrentToken.ITokenID)
+						if (m_lstYellowToken[i].EnumTokenState == eTokenState.InRoute)
 						{
-							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstYellowToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
+							//Sharing a tile with same token
+							if (m_lstYellowToken[i].ITokenID != RefCurrentToken.ITokenID)
 							{
-								m_lstTokengameobject.Add(m_lstYellowToken[i].gameObject);
+								if (m_lstYellowToken[i].ICurrentPathIndex == m_lstYellowToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
+								{
+									m_lstTokengameobject.Add(m_lstYellowToken[i].gameObject);
+								}
 							}
 						}
 						
@@ -673,12 +679,17 @@ public class TokenManager : MonoBehaviour
 				case eTokenType.Red:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						//Sharing a tile with same token
-						if (m_lstRedToken[i].ITokenID != RefCurrentToken.ITokenID)
+
+
+						if (m_lstRedToken[i].EnumTokenState == eTokenState.InRoute)
 						{
-							if (m_lstRedToken[i].ICurrentPathIndex == m_lstRedToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
+							//Sharing a tile with same token
+							if (m_lstRedToken[i].ITokenID != RefCurrentToken.ITokenID)
 							{
-								m_lstTokengameobject.Add(m_lstRedToken[i].gameObject);
+								if (m_lstRedToken[i].ICurrentPathIndex == m_lstRedToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
+								{
+									m_lstTokengameobject.Add(m_lstRedToken[i].gameObject);
+								}
 							}
 						}
 						
@@ -742,12 +753,15 @@ public class TokenManager : MonoBehaviour
 				case eTokenType.Green:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						//Sharing a tile with same token
-						if (m_lstGreenToken[i].ITokenID != RefCurrentToken.ITokenID)
+						if (m_lstGreenToken[i].EnumTokenState == eTokenState.InRoute)
 						{
-							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstGreenToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
+							//Sharing a tile with same token
+							if (m_lstGreenToken[i].ITokenID != RefCurrentToken.ITokenID)
 							{
-								m_lstTokengameobject.Add(m_lstGreenToken[i].gameObject);
+								if (m_lstGreenToken[i].ICurrentPathIndex == m_lstGreenToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
+								{
+									m_lstTokengameobject.Add(m_lstGreenToken[i].gameObject);
+								}
 							}
 						}
 						
