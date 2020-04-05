@@ -31,6 +31,7 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 	{
 
 		EventManager.Instance.RegisterEvent<EventOpponentLeftRoom>(OpponentLeftRoom);
+		EventManager.Instance.RegisterEvent<EventSelfLeftRoom>(SelfLeftRoom);
 		EventManager.Instance.RegisterEvent<EventFirstPlayerEntered>(GenerateFirstPlayer);
 		EventManager.Instance.RegisterEvent<EventGenerateNextPlayer>(GenerateNextPlayer);
 	}
@@ -40,6 +41,7 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 		if (EventManager.Instance == null)
 			return;
 		EventManager.Instance.DeRegisterEvent<EventOpponentLeftRoom>(OpponentLeftRoom);
+		EventManager.Instance.DeRegisterEvent<EventSelfLeftRoom>(SelfLeftRoom);
 		EventManager.Instance.DeRegisterEvent<EventFirstPlayerEntered>(GenerateFirstPlayer);
 		EventManager.Instance.DeRegisterEvent<EventGenerateNextPlayer>(GenerateNextPlayer);
 
@@ -72,7 +74,6 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 
     private void Update()
     {
-
 	}
 
 
@@ -137,7 +138,7 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 		}
 
 		Debug.Log("[GameNetworkManager] Generated Next Player");
-		GameManager.Instance.UpdatePlayersInGame(data.StrUsername);
+		StartCoroutine(GameManager.Instance.UpdatePlayersInGame(data.StrUsername));
 
 	}
 
@@ -158,6 +159,25 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 		}
 
 	}
+
+	private void SelfLeftRoom(IEventBase a_Event)
+	{
+		EventSelfLeftRoom data = a_Event as EventSelfLeftRoom;
+		if(data == null)
+		{
+			Debug.LogError("[GameNetworkManager] EventOpponentLeftRoom Error");
+			return;
+		}
+
+		if (GameManager.Instance.EnumGameState == eGameState.InGame)
+		{
+			EventManager.Instance.TriggerEvent<EventErrorInConnectionMessage>(new EventErrorInConnectionMessage("Connection  Lost"));
+			EventManager.Instance.TriggerEvent<EventShowConnectionErrorUI>(new EventShowConnectionErrorUI(true, eGameState.ErrorInConnection));
+		}
+
+	}
+
+
 
 
 

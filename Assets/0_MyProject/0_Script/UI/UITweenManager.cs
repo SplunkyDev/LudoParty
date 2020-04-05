@@ -22,7 +22,7 @@ public class UITweenManager : MonoBehaviour
 	private eGameState m_eGameState;
 	public eGameState GameState { get => m_eGameState; }
 
-	public UnityEvent m_unityEvent;
+	public UnityEvent m_unityEventTweenIn, m_unityEventTweenOut;
 
 	void Awake()
 	{
@@ -188,8 +188,6 @@ public class UITweenManager : MonoBehaviour
 			default:
 				break;
 		}
-
-
 	}
 
 	IEnumerator UITweenIn()
@@ -205,6 +203,11 @@ public class UITweenManager : MonoBehaviour
 		if(m_eGameState !=  eGameState.None)
 			GameManager.Instance.EnumGameState = m_eGameState;
 
+		if (m_unityEventTweenIn != null)
+		{
+			m_unityEventTweenIn.Invoke();
+		}
+
 	}
 
 
@@ -219,6 +222,13 @@ public class UITweenManager : MonoBehaviour
 
 		yield return new WaitForSeconds(0.05f);
 		GameManager.Instance.EnumGameState = m_eGameState;
+
+
+		if (m_unityEventTweenOut != null)
+		{
+			m_unityEventTweenOut.Invoke();
+		}
+
 
 	}
 

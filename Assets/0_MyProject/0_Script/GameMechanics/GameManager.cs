@@ -56,7 +56,7 @@ public class GameManager : MBSingleton<GameManager>
 	public int IRandomSeed { get => m_iRandSeed; }
 	private SystemRandom m_gameRandom;
 	private const int IMINVALUE = 3, IMAXVALUE = 10;
-	private Coroutine m_coConnectiontimeout;
+	private Coroutine m_coConnectiontimeout, m_coCheckAllPlayers;
 
 	void RegisterToEVents()
 	{
@@ -132,7 +132,7 @@ public class GameManager : MBSingleton<GameManager>
 					EventManager.Instance.TriggerEvent<EventInitializeNetworkApi>(new EventInitializeNetworkApi());
 					EventManager.Instance.TriggerEvent<EventShowWaitingForPlayersUI>(new EventShowWaitingForPlayersUI(true,eGameState.WaitingForOpponent));
 
-					m_coConnectiontimeout = StartCoroutine(ConnectionTimeout(10));
+					m_coConnectiontimeout = StartCoroutine(ConnectionTimeout(30));
 				}
 				
 				break;
@@ -142,9 +142,23 @@ public class GameManager : MBSingleton<GameManager>
 	private IEnumerator ConnectionTimeout(float a_fDelay)
 	{
 		yield return new WaitForSeconds(a_fDelay);
+
+		//Stopping the time out coroutine if connection has been established
+		if (m_coConnectiontimeout != null)
+		{
+			StopCoroutine(m_coConnectiontimeout);
+			m_coConnectiontimeout = null;
+		}
+
+		if (m_coCheckAllPlayers != null)
+		{
+			StopCoroutine(m_coCheckAllPlayers);
+			m_coCheckAllPlayers = null;
+		}
+
 		EventManager.Instance.TriggerEvent<EventDisonnectFromServer>(new EventDisonnectFromServer());
 		EventManager.Instance.TriggerEvent<EventShowWaitingForPlayersUI>(new EventShowWaitingForPlayersUI(false,eGameState.None));
-		EventManager.Instance.TriggerEvent<EventErrorInConnectionMessage>(new EventErrorInConnectionMessage("Connection Timed Out (15 sec waiting), Please try again."));
+		EventManager.Instance.TriggerEvent<EventErrorInConnectionMessage>(new EventErrorInConnectionMessage("Connection Timed Out (30 sec waiting), Please try again."));
 		EventManager.Instance.TriggerEvent<EventShowConnectionErrorUI>(new EventShowConnectionErrorUI(true,eGameState.ErrorInConnection));
 
 	}
@@ -165,6 +179,11 @@ public class GameManager : MBSingleton<GameManager>
 			m_coConnectiontimeout = null;
 		}
 
+		if (m_coCheckAllPlayers != null)
+		{
+			StopCoroutine(m_coCheckAllPlayers);
+			m_coCheckAllPlayers = null;
+		}
 		EventManager.Instance.TriggerEvent<EventShowWaitingForPlayersUI>(new EventShowWaitingForPlayersUI(false, eGameState.None));
 		EventManager.Instance.TriggerEvent<EventShowInGameUI>(new EventShowInGameUI(true, eGameState.InGame));
 		StartCoroutine(InitializeGame(1f));
@@ -224,12 +243,19 @@ public class GameManager : MBSingleton<GameManager>
 	}
 
 	//Giving player turn and token base on the order of connecting to game
-	public void UpdatePlayersInGame(string a_strUsername)
+	public IEnumerator UpdatePlayersInGame(string a_strUsername)
 	{
-
+		Debug.Log("[GameManager][UpdatePlayersInGame]");
 		if (m_enumMyPlayerTurn != ePlayerTurn.PlayerOne)
-			return;
+			yield  break;
 
+		Debug.Log("[GameManager][UpdatePlayersInGame] Player List BEFORE: " + m_lstPlayerData);
+		while (m_lstPlayerData.Count<=0)
+		{
+			yield return null;
+		}
+
+		Debug.Log("[GameManager][UpdatePlayersInGame] Player List AFTER: "+m_lstPlayerData);
 		PlayerData playerData = new PlayerData();
 		//Create Next Player
 		switch (m_lstPlayerData[(m_lstPlayerData.Count - 1)].m_enumPlayerTurn)
@@ -287,23 +313,29 @@ public class GameManager : MBSingleton<GameManager>
 		Debug.Log("[GameManager] My Device Player: "+m_enumMyPlayerTurn.ToString());
 	}
 
-	public bool CheckIfAllPlayersHaveBeenAccountedFor()
+	
+	public void CheckIfAllPlayersHaveBeenAccountedFor()
 	{
-		bool bValid = false;
-		if(m_lstPlayerData.Count == EssentialDataManager.Instance.MaxPlayers)
+		m_coCheckAllPlayers = StartCoroutine(WaitUntilTimeOut());
+		IEnumerator WaitUntilTimeOut()
 		{
-			Debug.Log("[GameManager] All Player in Game");
-			bValid = true;
-		}
-		else
-		{
-			Debug.Log("[GameManager] Missing Player in Game");
-		}
+			while (m_lstPlayerData.Count != EssentialDataManager.Instance.MaxPlayers)
+			{
+				yield return null;
+			}
+			SendMessageToStartGame();
 
-		return bValid;
+			if(m_coCheckAllPlayers != null)
+			{
+				StopCoroutine(m_coCheckAllPlayers);
+				m_coCheckAllPlayers = null;
+			}
+		}
 	}
 
-	public void SendMessageToStartGame()
+
+
+public void SendMessageToStartGame()
 	{
 		m_lstMessageType.Clear();
 		m_lstMessageType.Add(eMessageType.GameStart);
@@ -329,8 +361,7 @@ public class GameManager : MBSingleton<GameManager>
     // Update is called once per frame
     void Update()
     {
-
-    }
+	}
 
 	private void PlayerFinishedGame(IEventBase a_Event)
 	{

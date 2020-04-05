@@ -223,15 +223,19 @@ public class WarpNetworkManager : MBSingleton<WarpNetworkManager>
 			Debug.LogError("[WarpNetworkManager] not initialized, its NULL [ReconnectToServer]");
 			return;
 		}
-		if (m_iSessionID == 0)
-		{
-			Debug.Log("[WarpNetworkManager] no session ID [ReconnectToServer]");
-			m_warpClient.RecoverConnection();
-		}
-		else
-		{
-			m_warpClient.RecoverConnectionWithSessioId(m_iSessionID,PlayerName);
-		}
+
+		//Unable to recover connection, need to look into it, removing feature now. Force disconnect
+		EventManager.Instance.TriggerEvent<EventDisonnectFromServer>(new EventDisonnectFromServer());
+		
+		//if (m_iSessionID == 0)
+		//{
+		//	Debug.Log("[WarpNetworkManager] no session ID [ReconnectToServer]");
+		//	m_warpClient.RecoverConnection();
+		//}
+		//else
+		//{
+		//	m_warpClient.RecoverConnectionWithSessioId(m_iSessionID,PlayerName);
+		//}
 	}
 
 	private void PlayerLeftRoom(string a_strUsername)
@@ -288,11 +292,7 @@ public class WarpNetworkManager : MBSingleton<WarpNetworkManager>
 		if(m_warpClient != null)
 			m_warpClient.Update();
 
-		if (Input.GetKeyUp(KeyCode.Escape))
-		{
-			m_bApplictaionQuit = true;
-			EventManager.Instance.TriggerEvent<EventDisonnectFromServer>(new EventDisonnectFromServer());	
-		}
+
 	}
 
 	private void OnApplicationQuit()
@@ -466,13 +466,17 @@ public class WarpListerner : ConnectionRequestListener, LobbyRequestListener, Zo
 	//Callback Checking the number of users currently after joining room
 	public void onGetOnlineUsersDone (AllUsersEvent eventObj)
 	{
-		Debug.Log("onGetOnlineUsersDone : " + eventObj.getResult());
-		if(eventObj.getUserNames().Length == 1)
+		for (int i = 0; i < eventObj.getUserNames().Length; i++)
+		{
+			Debug.Log("onGetOnlineUsersDone : " + eventObj.getUserNames()[i]);
+		}
+
+		if(string.Compare(eventObj.getUserNames()[0], WarpNetworkManager.Instance.PlayerName ) == 0)
 		{
 			Debug.Log("[WarpNetworkManager] First player entered: "+ eventObj.getUserNames()[0]);
 			EventManager.Instance.TriggerEvent<EventFirstPlayerEntered>(new EventFirstPlayerEntered(eventObj.getUserNames()[0]));
 		}
-		else if(eventObj.getUserNames().Length == 2)
+		else 
 		{
 			Debug.Log("[WarpNetworkManager] NOT THE FIRST PLAYER");
 		}
@@ -617,6 +621,10 @@ public class WarpListerner : ConnectionRequestListener, LobbyRequestListener, Zo
 		if (string.Compare(username,WarpNetworkManager.Instance.PlayerName) != 0)
 		{
 			EventManager.Instance.TriggerEvent<EventOpponentLeftRoom>(new EventOpponentLeftRoom());
+		}
+		else
+		{
+			EventManager.Instance.TriggerEvent < EventSelfLeftRoom>(new EventSelfLeftRoom());
 		}
 	}
 

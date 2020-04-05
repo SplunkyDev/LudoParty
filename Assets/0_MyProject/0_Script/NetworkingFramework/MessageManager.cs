@@ -204,15 +204,7 @@ public class MessageManager : MBSingleton<MessageManager>
 						if (m_JsonObjectInGame.HasField("StartAcknowledgement"))
 						{
 							EventManager.Instance.TriggerEvent<EventSetRandomSeedGotFromNetwork>(new EventSetRandomSeedGotFromNetwork((int)m_JsonObjectInGame.GetField("StartAcknowledgement").i));
-							if (GameManager.Instance.CheckIfAllPlayersHaveBeenAccountedFor())
-							{
-								GameManager.Instance.SendMessageToStartGame();
-							}
-							else
-							{
-								Debug.LogError("[MessageManager] All  players not found");
-							}
-
+							GameManager.Instance.CheckIfAllPlayersHaveBeenAccountedFor();
 						}
 						else
 						{

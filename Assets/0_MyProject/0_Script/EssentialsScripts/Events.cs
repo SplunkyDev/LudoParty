@@ -122,6 +122,16 @@ public class EventOpponentLeftRoom : IEventBase
 	}
 }
 
+//Event when self left
+public class EventSelfLeftRoom : IEventBase
+{
+	public EventSelfLeftRoom()
+	{
+
+	}
+}
+
+
 public class EventTokenSelectedInMultiplayer : IEventBase
 {
 	private TokenData m_refTokenData;

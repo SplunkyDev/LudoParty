@@ -126,12 +126,8 @@ public class TokenManager : MonoBehaviour
 
 	private void Update()
 	{
-		if (Input.GetKeyUp(KeyCode.Q))
-		{
-			Debug.Log("[TokenManager] BLUE FINISHED");
-			EventManager.Instance.TriggerEvent<EventPlayerFinished>(new EventPlayerFinished(m_lstBlueToken[0]));
-		}
 	}
+
 	public bool CheckValidTokenMovement(int a_iDiceValue)
 	{
 
