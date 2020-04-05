@@ -546,6 +546,12 @@ public class WarpListerner : ConnectionRequestListener, LobbyRequestListener, Zo
 			Debug.Log("[WarpListener] Joining Room successful");
 		}
 		Debug.Log("onJoinRoomDone : " + eventObj.getResult());	
+		if(eventObj.getResult() == 4)
+		{
+			EventManager.Instance.TriggerEvent<EventShowWaitingForPlayersUI>(new EventShowWaitingForPlayersUI(false,eGameState.None));
+			EventManager.Instance.TriggerEvent<EventErrorInConnectionMessage>(new EventErrorInConnectionMessage("Cannot join room. Room is at FULL capacity"));
+			EventManager.Instance.TriggerEvent<EventShowConnectionErrorUI>(new EventShowConnectionErrorUI(true,eGameState.ErrorInConnection));
+		}
 	}
 		
 	public void onLockPropertiesDone(byte result)
