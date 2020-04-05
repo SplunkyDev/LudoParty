@@ -13,6 +13,19 @@ public class EventStartGameSession : IEventBase
 	}
 }
 
+//Event to start a new session as all details have been got
+public class EventLetCurrentPlayerPlayAgain : IEventBase
+{
+	private bool m_bPlayAgain;
+	public bool BplayAgain { get => m_bPlayAgain; }
+
+	public EventLetCurrentPlayerPlayAgain(bool a_bPlayAgain)
+	{
+		m_bPlayAgain = a_bPlayAgain;
+	}
+
+}
+
 public class EventDiceRollAnimationComplete : IEventBase
 {
 	public EventDiceRollAnimationComplete() { }

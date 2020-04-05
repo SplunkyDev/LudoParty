@@ -66,6 +66,7 @@ public class GameManager : MBSingleton<GameManager>
 		EventManager.Instance.RegisterEvent<EventStartGameSession>(StartOnlineGame);
 		EventManager.Instance.RegisterEvent<EventFirstPlayerEntered>(GenerateRandomSeed);
 		EventManager.Instance.RegisterEvent<EventSetRandomSeedGotFromNetwork>(SetRandomSeedGotFromNetwork);
+		EventManager.Instance.RegisterEvent<EventLetCurrentPlayerPlayAgain>(LetTheCurrentPlayerPlayAgain);
 	}
 
 	void DeregisterToEvents()
@@ -78,6 +79,7 @@ public class GameManager : MBSingleton<GameManager>
 		EventManager.Instance.DeRegisterEvent<EventStartGameSession>(StartOnlineGame);
 		EventManager.Instance.DeRegisterEvent<EventFirstPlayerEntered>(GenerateRandomSeed);
 		EventManager.Instance.DeRegisterEvent<EventSetRandomSeedGotFromNetwork>(SetRandomSeedGotFromNetwork);
+		EventManager.Instance.DeRegisterEvent<EventLetCurrentPlayerPlayAgain>(LetTheCurrentPlayerPlayAgain);
 	}
 
 
@@ -229,6 +231,20 @@ public class GameManager : MBSingleton<GameManager>
 		m_iRandSeed = data.IRandomSeed;
 		m_gameRandom = new SystemRandom(m_iRandSeed);
 		Debug.Log("Random Seed set from network: " + m_iRandSeed);
+	}
+
+
+	private void LetTheCurrentPlayerPlayAgain(IEventBase a_Event)
+	{
+		EventLetCurrentPlayerPlayAgain data = a_Event as EventLetCurrentPlayerPlayAgain;
+		if (data == null)
+		{
+			Debug.LogError("[GameManager] EventLetCurrentPlayerPlayAgain null");
+			return;
+		}
+
+		Debug.Log("This player can play again");
+		m_RefCurrentPlayer.m_bPlayAgain = data.BplayAgain;
 	}
 
 	public void SetPlayerData(PlayerData a_PlayerData)

@@ -450,6 +450,7 @@ public class TokenManager : MonoBehaviour
 			//Checks if all Tokens are in heaven and the player has finished his game
 			if (RefCurrentToken.EnumTokenState == eTokenState.InHeaven)
 			{
+				EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 				int iBlueTokensFinished = 0, iYellowTokensFinished = 0, iRedTokensFinished =0, iGreenTokensFinished = 0;
 
 				switch (RefCurrentToken.EnumTokenType)
@@ -537,7 +538,7 @@ public class TokenManager : MonoBehaviour
 						{
 							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstBlueToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
-								m_lstTokengameobject.Add(m_lstBlueToken[i].gameObject);
+								m_lstTokengameobject.Add(m_lstBlueToken[i].gameObject);								
 							}
 						}
 						
@@ -549,6 +550,7 @@ public class TokenManager : MonoBehaviour
 								m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstRedToken[i].EnumTokenState = eTokenState.House;
 								m_lstRedToken[i].ICurrentPathIndex = -1;
+								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
 						else if (m_lstRedToken[i].EnumTokenState == eTokenState.InHideOut)
@@ -566,6 +568,7 @@ public class TokenManager : MonoBehaviour
 								m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstGreenToken[i].EnumTokenState = eTokenState.House;
 								m_lstGreenToken[i].ICurrentPathIndex = -1;
+								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
 						else if (m_lstGreenToken[i].EnumTokenState == eTokenState.InHideOut)
@@ -585,6 +588,7 @@ public class TokenManager : MonoBehaviour
 								m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstYellowToken[i].EnumTokenState = eTokenState.House;
 								m_lstYellowToken[i].ICurrentPathIndex = -1;
+								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
 						else if (m_lstYellowToken[i].EnumTokenState == eTokenState.InHideOut)
@@ -616,6 +620,7 @@ public class TokenManager : MonoBehaviour
 								m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstRedToken[i].EnumTokenState = eTokenState.House;
 								m_lstRedToken[i].ICurrentPathIndex = -1;
+								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
 						else if (m_lstRedToken[i].EnumTokenState == eTokenState.InHideOut)
@@ -633,6 +638,7 @@ public class TokenManager : MonoBehaviour
 								m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstGreenToken[i].EnumTokenState = eTokenState.House;
 								m_lstGreenToken[i].ICurrentPathIndex = -1;
+								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
 						else if (m_lstGreenToken[i].EnumTokenState == eTokenState.InHideOut)
@@ -652,6 +658,7 @@ public class TokenManager : MonoBehaviour
 								m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstBlueToken[i].EnumTokenState = eTokenState.House;
 								m_lstBlueToken[i].ICurrentPathIndex = -1;
+								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
 						else if (m_lstBlueToken[i].EnumTokenState == eTokenState.InHideOut)
@@ -684,6 +691,7 @@ public class TokenManager : MonoBehaviour
 								m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstYellowToken[i].EnumTokenState = eTokenState.House;
 								m_lstYellowToken[i].ICurrentPathIndex = -1;
+								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
 						else if (m_lstYellowToken[i].EnumTokenState == eTokenState.InHideOut)
@@ -701,6 +709,7 @@ public class TokenManager : MonoBehaviour
 								m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstGreenToken[i].EnumTokenState = eTokenState.House;
 								m_lstGreenToken[i].ICurrentPathIndex = -1;
+								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
 						else if (m_lstGreenToken[i].EnumTokenState == eTokenState.InHideOut)
@@ -718,6 +727,7 @@ public class TokenManager : MonoBehaviour
 								m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstBlueToken[i].EnumTokenState = eTokenState.House;
 								m_lstBlueToken[i].ICurrentPathIndex = -1;
+								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
 						else if (m_lstBlueToken[i].EnumTokenState == eTokenState.InHideOut)
@@ -749,6 +759,7 @@ public class TokenManager : MonoBehaviour
 								m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstYellowToken[i].EnumTokenState = eTokenState.House;
 								m_lstYellowToken[i].ICurrentPathIndex = -1;
+								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
 						else if (m_lstYellowToken[i].EnumTokenState == eTokenState.InHideOut)
@@ -766,6 +777,7 @@ public class TokenManager : MonoBehaviour
 								m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstRedToken[i].EnumTokenState = eTokenState.House;
 								m_lstRedToken[i].ICurrentPathIndex = -1;
+								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
 						else if (m_lstRedToken[i].EnumTokenState == eTokenState.InHideOut)
@@ -783,6 +795,7 @@ public class TokenManager : MonoBehaviour
 								m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstBlueToken[i].EnumTokenState = eTokenState.House;
 								m_lstBlueToken[i].ICurrentPathIndex = -1;
+								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
 						else if(m_lstBlueToken[i].EnumTokenState == eTokenState.InHideOut)
