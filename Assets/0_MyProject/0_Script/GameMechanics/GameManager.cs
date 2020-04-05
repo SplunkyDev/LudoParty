@@ -186,6 +186,7 @@ public class GameManager : MBSingleton<GameManager>
 			StopCoroutine(m_coCheckAllPlayers);
 			m_coCheckAllPlayers = null;
 		}
+		InGameUIManager.Instance.DisplayDevicePlayer();
 		EventManager.Instance.TriggerEvent<EventShowWaitingForPlayersUI>(new EventShowWaitingForPlayersUI(false, eGameState.None));
 		EventManager.Instance.TriggerEvent<EventShowInGameUI>(new EventShowInGameUI(true, eGameState.InGame));
 		StartCoroutine(InitializeGame(1f));

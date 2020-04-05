@@ -34,7 +34,7 @@ public class InGameUIManager : MonoBehaviour
 
 	public GameObject m_gResultPrefab;
 	public GameObject m_gGridResult;
-	public Text m_textGameInstruction, m_textConnectionError;
+	public Text m_textGameInstruction, m_textConnectionError, m_textBluePlayer, m_textYelloPlayer, m_textRedPlayer, m_textGreenPlayer;
 
 	private void RegisterToEvent()
 	{
@@ -101,6 +101,25 @@ public class InGameUIManager : MonoBehaviour
     {
         
     }
+
+	public void DisplayDevicePlayer()
+	{
+		switch (GameManager.Instance.EnumMyPlayerTurn)
+		{
+			case ePlayerTurn.PlayerOne:
+				m_textBluePlayer.text = "Me";
+				break;
+			case ePlayerTurn.PlayerTwo:
+				m_textYelloPlayer.text = "Me";
+				break;
+			case ePlayerTurn.PlayerThree:
+				m_textRedPlayer.text = "Me";
+				break;
+			case ePlayerTurn.PlayerFour:
+				m_textGreenPlayer.text = "Me";
+				break;
+		}
+	}
 
 	public void ShowGameResults(List<PlayerData> a_lstPlayerData)
 	{
