@@ -103,8 +103,11 @@ public class GameManager : MBSingleton<GameManager>
 			case 0:
 				Debug.Log("[GameManager] Menu Scene Loaded");
 
-				if(BOnlineMultiplayer)
-				{
+				m_lstPlayerData.Clear();
+				m_enumMyPlayerTurn = ePlayerTurn.PlayerOne;
+
+				if (BOnlineMultiplayer)
+				{				
 					WarpNetworkManager.Instance.ConnectionEstablished = false;					
 					m_bOnlineMultiplayer = false;
 				}
