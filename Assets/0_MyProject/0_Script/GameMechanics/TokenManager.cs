@@ -351,15 +351,6 @@ public class TokenManager : MonoBehaviour
 	}
 
 
-	//public TokenData DeserializeTokenData(string a_strTokenDataContainer)
-	//{
-	//	//Debug.Log("[TokenManager] Deserializing TokenDataContainer");
-	//	//TokenDataContainer refTokenDataContainer = JsonUtility.FromJson<TokenDataContainer>(a_strTokenDataContainer);
-	//	//Debug.Log("[TokenManager] TokenData Token Type: "+refTokenDataContainer.RefTokenData.EnumTokenType+" Token ID"+refTokenDataContainer.RefTokenData.ITokenID);
-	//	//return refTokenDataContainer.RefTokenData;
-	//	//TokenSelected(refTokenDataContainer.RefTokenData, GameManager.Instance.ICurrentDiceValue);
-	//}
-
 	public void TokenSelectedOverTheNetwork(IEventBase a_Event)
 	{
 		EventTokenSelectedInMultiplayer data = a_Event as EventTokenSelectedInMultiplayer;

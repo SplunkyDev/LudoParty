@@ -11737,7 +11737,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.7169812, g: 0.057493784, b: 0.057493784, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -12206,7 +12206,7 @@ MonoBehaviour:
     type: 3}
   m_gGridResult: {fileID: 1778439235}
   m_textGameInstruction: {fileID: 1881437769}
-  m_textConnectionErros: {fileID: 1652259877}
+  m_textConnectionError: {fileID: 1652259877}
 --- !u!1 &1740908968
 GameObject:
   m_ObjectHideFlags: 0

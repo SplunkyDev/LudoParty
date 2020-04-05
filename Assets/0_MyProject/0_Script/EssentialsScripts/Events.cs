@@ -245,12 +245,12 @@ public class EventReconnectServer : IEventBase
 	}
 }
 
-public class EventErrorInConnection : IEventBase
+public class EventErrorInConnectionMessage : IEventBase
 {
 	private string m_strErrorMessage = string.Empty;
 	public string StrErrorMessage { get => m_strErrorMessage; }
 
-	public EventErrorInConnection(string a_strErrorMessage)
+	public EventErrorInConnectionMessage(string a_strErrorMessage)
 	{
 		m_strErrorMessage = a_strErrorMessage;
 	}

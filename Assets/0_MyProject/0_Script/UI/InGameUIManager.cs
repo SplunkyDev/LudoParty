@@ -34,7 +34,7 @@ public class InGameUIManager : MonoBehaviour
 
 	public GameObject m_gResultPrefab;
 	public GameObject m_gGridResult;
-	public Text m_textGameInstruction, m_textConnectionErros;
+	public Text m_textGameInstruction, m_textConnectionError;
 
 	private void RegisterToEvent()
 	{
@@ -48,6 +48,7 @@ public class InGameUIManager : MonoBehaviour
 		EventManager.Instance.RegisterEvent<EventDiceRollAnimationComplete>(DiceRollAnimationComplete);
 		EventManager.Instance.RegisterEvent<EventPlayerTurnChanged>(PlayerTurnChanged);
 		EventManager.Instance.RegisterEvent<EventOpponentDiceRoll>(DiceRollAnimation);
+		EventManager.Instance.RegisterEvent<EventErrorInConnectionMessage>(ErrorInConnectionMessage);
 	}
 
 	private void DeregisterToEvent()
@@ -61,6 +62,7 @@ public class InGameUIManager : MonoBehaviour
 		EventManager.Instance.DeRegisterEvent<EventDiceRollAnimationComplete>(DiceRollAnimationComplete);
 		EventManager.Instance.DeRegisterEvent<EventPlayerTurnChanged>(PlayerTurnChanged);
 		EventManager.Instance.DeRegisterEvent<EventOpponentDiceRoll>(DiceRollAnimation);
+		EventManager.Instance.DeRegisterEvent<EventErrorInConnectionMessage>(ErrorInConnectionMessage);
 	}
 
 	private  void Awake()
@@ -230,6 +232,18 @@ public class InGameUIManager : MonoBehaviour
 		}
 
 		EventManager.Instance.TriggerEvent<EventHighlightCurrentPlayer>(new EventHighlightCurrentPlayer(GameManager.Instance.EnumPlayerToken));
+	}
+
+	private void ErrorInConnectionMessage(IEventBase a_Event)
+	{
+		EventErrorInConnectionMessage data = a_Event as EventErrorInConnectionMessage;
+		if (data == null)
+		{
+			Debug.LogError("[InGameUIManager] EventErrorInConnectionMessage is null");
+			return;
+		}
+
+		m_textConnectionError.text = data.StrErrorMessage;
 	}
 
 	public void InputButton(string a_strInput)

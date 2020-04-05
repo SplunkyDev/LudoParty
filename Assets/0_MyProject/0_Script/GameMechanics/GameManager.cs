@@ -56,6 +56,7 @@ public class GameManager : MBSingleton<GameManager>
 	public int IRandomSeed { get => m_iRandSeed; }
 	private SystemRandom m_gameRandom;
 	private const int IMINVALUE = 3, IMAXVALUE = 10;
+	private Coroutine m_coConnectiontimeout;
 
 	void RegisterToEVents()
 	{
@@ -129,12 +130,24 @@ public class GameManager : MBSingleton<GameManager>
 				else
 				{
 					EventManager.Instance.TriggerEvent<EventInitializeNetworkApi>(new EventInitializeNetworkApi());
+					EventManager.Instance.TriggerEvent<EventShowWaitingForPlayersUI>(new EventShowWaitingForPlayersUI(true,eGameState.WaitingForOpponent));
+
+					m_coConnectiontimeout = StartCoroutine(ConnectionTimeout(10));
 				}
 				
 				break;
 		}
 	}
 
+	private IEnumerator ConnectionTimeout(float a_fDelay)
+	{
+		yield return new WaitForSeconds(a_fDelay);
+		EventManager.Instance.TriggerEvent<EventDisonnectFromServer>(new EventDisonnectFromServer());
+		EventManager.Instance.TriggerEvent<EventShowWaitingForPlayersUI>(new EventShowWaitingForPlayersUI(false,eGameState.None));
+		EventManager.Instance.TriggerEvent<EventErrorInConnectionMessage>(new EventErrorInConnectionMessage("Connection Timed Out (15 sec waiting), Please try again."));
+		EventManager.Instance.TriggerEvent<EventShowConnectionErrorUI>(new EventShowConnectionErrorUI(true,eGameState.ErrorInConnection));
+
+	}
 
 	private void StartOnlineGame(IEventBase a_Event)
 	{
@@ -145,6 +158,14 @@ public class GameManager : MBSingleton<GameManager>
 			return;
 		}
 
+		//Stopping the time out coroutine if connection has been established
+		if(m_coConnectiontimeout != null)
+		{
+			StopCoroutine(m_coConnectiontimeout);
+			m_coConnectiontimeout = null;
+		}
+
+		EventManager.Instance.TriggerEvent<EventShowWaitingForPlayersUI>(new EventShowWaitingForPlayersUI(false, eGameState.None));
 		EventManager.Instance.TriggerEvent<EventShowInGameUI>(new EventShowInGameUI(true, eGameState.InGame));
 		StartCoroutine(InitializeGame(1f));
 
@@ -194,7 +215,6 @@ public class GameManager : MBSingleton<GameManager>
 	public void SetPlayerData(PlayerData a_PlayerData)
 	{
 		//Setting the value of how many turns until the player gets a forced six if not got until then
-		//a_PlayerData.m_iRollSixIn = Random.Range(5, 10);
 		a_PlayerData.m_iRollSixIn = Random.Range(3, 10); ;
 
 		Debug.Log("[GameManager] PlayerData PlayerTurn: "+a_PlayerData.m_enumPlayerTurn);

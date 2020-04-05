@@ -151,7 +151,11 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 			return;
 		}
 
-		//TODO: HANDLE OPPONENT LEFT
+		if (GameManager.Instance.EnumGameState == eGameState.InGame)
+		{
+			EventManager.Instance.TriggerEvent<EventErrorInConnectionMessage>(new EventErrorInConnectionMessage("Opponent has Left, Game Stopped"));
+			EventManager.Instance.TriggerEvent<EventShowConnectionErrorUI>(new EventShowConnectionErrorUI(true, eGameState.ErrorInConnection));
+		}
 
 	}
 

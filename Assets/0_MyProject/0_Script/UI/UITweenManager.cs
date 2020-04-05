@@ -202,13 +202,9 @@ public class UITweenManager : MonoBehaviour
 
 		//yield return new WaitForSeconds(1);
 		Debug.Log("[UITweenManager] TweenIn Change GameState: " + m_eGameState);
-		GameManager.Instance.EnumGameState = m_eGameState;
+		if(m_eGameState !=  eGameState.None)
+			GameManager.Instance.EnumGameState = m_eGameState;
 
-		//yield return new WaitForSeconds(1);
-		//if (GameNetworkManager.Instance.GameState == eGameState.GameComplete)
-		//{
-		//	EventManager.Instance.TriggerEvent<EventCreateGameSessionSummary>(new EventCreateGameSessionSummary());
-		//}
 	}
 
 

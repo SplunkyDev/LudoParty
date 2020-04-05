@@ -344,6 +344,8 @@ public class WarpListerner : ConnectionRequestListener, LobbyRequestListener, Zo
 				break;
 			case WarpResponseResultCode.CONNECTION_ERR:
 				Debug.Log("[WarpNetworkManager] connection error [Non-Recoverable]: " + eventObj.getResult().ToString());
+				EventManager.Instance.TriggerEvent<EventErrorInConnectionMessage>(new EventErrorInConnectionMessage("Connection Error"));
+				EventManager.Instance.TriggerEvent<EventShowConnectionErrorUI>(new EventShowConnectionErrorUI(true,eGameState.ErrorInConnection));
 				break;
 			case WarpResponseResultCode.CONNECTION_ERROR_RECOVERABLE:
 				Debug.Log("[WarpNetworkManager] connection error [Recoverable]: " + eventObj.getResult().ToString());
