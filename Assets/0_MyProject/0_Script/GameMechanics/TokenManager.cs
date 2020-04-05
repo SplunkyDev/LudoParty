@@ -432,6 +432,10 @@ public class TokenManager : MonoBehaviour
 				for (int i = 0; i < m_lstTokenMovePoints.Count; i++)
 				{
 					m_bMoveTweenComplete = false;
+					if(AudioManager.Instance)
+					{
+						AudioManager.Instance.PlaySound("TokenHop");
+					}
 					RefCurrentToken.transform.DOMove((Vector2)m_lstTokenMovePoints[i].transform.position, 5, false).SetSpeedBased(true).OnComplete(MoveTweenComplete);
 					while (!m_bMoveTweenComplete)
 					{
@@ -553,6 +557,10 @@ public class TokenManager : MonoBehaviour
 								m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstRedToken[i].EnumTokenState = eTokenState.House;
 								m_lstRedToken[i].ICurrentPathIndex = -1;
+								if (AudioManager.Instance)
+								{
+									AudioManager.Instance.PlaySound("GoHomeToken");
+								}
 								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
@@ -571,6 +579,10 @@ public class TokenManager : MonoBehaviour
 								m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstGreenToken[i].EnumTokenState = eTokenState.House;
 								m_lstGreenToken[i].ICurrentPathIndex = -1;
+								if (AudioManager.Instance)
+								{
+									AudioManager.Instance.PlaySound("GoHomeToken");
+								}
 								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
@@ -591,6 +603,10 @@ public class TokenManager : MonoBehaviour
 								m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstYellowToken[i].EnumTokenState = eTokenState.House;
 								m_lstYellowToken[i].ICurrentPathIndex = -1;
+								if (AudioManager.Instance)
+								{
+									AudioManager.Instance.PlaySound("GoHomeToken");
+								}
 								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
@@ -626,6 +642,10 @@ public class TokenManager : MonoBehaviour
 								m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstRedToken[i].EnumTokenState = eTokenState.House;
 								m_lstRedToken[i].ICurrentPathIndex = -1;
+								if (AudioManager.Instance)
+								{
+									AudioManager.Instance.PlaySound("GoHomeToken");
+								}
 								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
@@ -644,6 +664,10 @@ public class TokenManager : MonoBehaviour
 								m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstGreenToken[i].EnumTokenState = eTokenState.House;
 								m_lstGreenToken[i].ICurrentPathIndex = -1;
+								if (AudioManager.Instance)
+								{
+									AudioManager.Instance.PlaySound("GoHomeToken");
+								}
 								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
@@ -664,6 +688,10 @@ public class TokenManager : MonoBehaviour
 								m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstBlueToken[i].EnumTokenState = eTokenState.House;
 								m_lstBlueToken[i].ICurrentPathIndex = -1;
+								if (AudioManager.Instance)
+								{
+									AudioManager.Instance.PlaySound("GoHomeToken");
+								}
 								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
@@ -702,6 +730,10 @@ public class TokenManager : MonoBehaviour
 								m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstYellowToken[i].EnumTokenState = eTokenState.House;
 								m_lstYellowToken[i].ICurrentPathIndex = -1;
+								if (AudioManager.Instance)
+								{
+									AudioManager.Instance.PlaySound("GoHomeToken");
+								}
 								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
@@ -720,6 +752,10 @@ public class TokenManager : MonoBehaviour
 								m_lstGreenToken[i].transform.DOMove((Vector2)m_lstStartGreenTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstGreenToken[i].EnumTokenState = eTokenState.House;
 								m_lstGreenToken[i].ICurrentPathIndex = -1;
+								if (AudioManager.Instance)
+								{
+									AudioManager.Instance.PlaySound("GoHomeToken");
+								}
 								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
@@ -738,6 +774,10 @@ public class TokenManager : MonoBehaviour
 								m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstBlueToken[i].EnumTokenState = eTokenState.House;
 								m_lstBlueToken[i].ICurrentPathIndex = -1;
+								if (AudioManager.Instance)
+								{
+									AudioManager.Instance.PlaySound("GoHomeToken");
+								}
 								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
@@ -773,6 +813,10 @@ public class TokenManager : MonoBehaviour
 								m_lstYellowToken[i].transform.DOMove((Vector2)m_lstStartYellowTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstYellowToken[i].EnumTokenState = eTokenState.House;
 								m_lstYellowToken[i].ICurrentPathIndex = -1;
+								if (AudioManager.Instance)
+								{
+									AudioManager.Instance.PlaySound("GoHomeToken");
+								}
 								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
@@ -791,6 +835,10 @@ public class TokenManager : MonoBehaviour
 								m_lstRedToken[i].transform.DOMove((Vector2)m_lstStartRedTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstRedToken[i].EnumTokenState = eTokenState.House;
 								m_lstRedToken[i].ICurrentPathIndex = -1;
+								if (AudioManager.Instance)
+								{
+									AudioManager.Instance.PlaySound("GoHomeToken");
+								}
 								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}
@@ -809,6 +857,10 @@ public class TokenManager : MonoBehaviour
 								m_lstBlueToken[i].transform.DOMove((Vector2)m_lstStartBlueTokenPosition[i].position, 5, false).SetSpeedBased(true);
 								m_lstBlueToken[i].EnumTokenState = eTokenState.House;
 								m_lstBlueToken[i].ICurrentPathIndex = -1;
+								if (AudioManager.Instance)
+								{
+									AudioManager.Instance.PlaySound("GoHomeToken");
+								}
 								EventManager.Instance.TriggerEvent<EventLetCurrentPlayerPlayAgain>(new EventLetCurrentPlayerPlayAgain(true));
 							}
 						}

@@ -25,6 +25,10 @@ public class TapUIEffect : MonoBehaviour, IPointerClickHandler,IPointerUpHandler
 	public void OnPointerUp(PointerEventData eventData)
 	{
 		m_rectTransform.DOScale(Vector3.one, 0.25f).From(m_vec3ScaleValue).SetEase(m_EaseEffect);
+		if(AudioManager.Instance)
+		{
+			AudioManager.Instance.PlaySound("Button");
+		}
 	}
 
 

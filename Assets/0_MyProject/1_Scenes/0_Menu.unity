@@ -946,6 +946,75 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1589537037
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1589537039}
+  - component: {fileID: 1589537038}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1589537038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1589537037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e9720d96b76a4443ab8c1aa56e7548f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Sounds:
+  - name: TokenHop
+    clip: {fileID: 8300000, guid: dd33cfb4748054b4a98e4281b01c35ee, type: 3}
+    volume: 0.35
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: GoHomeToken
+    clip: {fileID: 8300000, guid: 8a112a13878530549bddbb9c3cc37553, type: 3}
+    volume: 0.35
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: Button
+    clip: {fileID: 8300000, guid: ed08b13403761bf43998287cba2638f8, type: 3}
+    volume: 0.35
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  m_gamebackgroundSound:
+    name: GameBG
+    clip: {fileID: 8300000, guid: 92d5d87ee26e0ca4396a2befe9f8da13, type: 3}
+    volume: 0.15
+    pitch: 1
+    source: {fileID: 0}
+    loop: 1
+--- !u!4 &1589537039
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1589537037}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1589661403
 GameObject:
   m_ObjectHideFlags: 0
@@ -1320,3 +1389,9 @@ MonoBehaviour:
   m_fDelay: 0.25
   m_easeType: 0
   m_eGameUIState: 2
+  m_unityEventTweenIn:
+    m_PersistentCalls:
+      m_Calls: []
+  m_unityEventTweenOut:
+    m_PersistentCalls:
+      m_Calls: []
