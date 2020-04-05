@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using GameUtility.Base;
+using UnityEngine.Events;
 
 public class UITweenManager : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class UITweenManager : MonoBehaviour
 	private eGameState m_eGameState;
 	public eGameState GameState { get => m_eGameState; }
 
+	public UnityEvent m_unityEvent;
+
 	void Awake()
 	{
 		DOTween.Init(true, true, LogBehaviour.Verbose);
@@ -35,7 +38,7 @@ public class UITweenManager : MonoBehaviour
 		switch (m_eGameUIState)
 		{
 			case eGameUIState.None:
-				Debug.LogWarning("[UITweenManager] No UI State set: "+gameObject.name);
+				Debug.LogWarning("[UITweenManager] No UI State set: " + gameObject.name);
 				break;
 			case eGameUIState.MenuUI:
 				EventManager.Instance.RegisterEvent<EventShowMenuUI>(AnimateUI);
@@ -45,6 +48,14 @@ public class UITweenManager : MonoBehaviour
 				break;
 			case eGameUIState.GameComplete:
 				EventManager.Instance.RegisterEvent<EventShowGameCompleteUI>(AnimateUI);
+				break;
+			case eGameUIState.InitializeUI:
+				break;
+			case eGameUIState.ErrorInConnection:
+				EventManager.Instance.RegisterEvent<EventShowConnectionErrorUI>(AnimateUI);
+				break;
+			case eGameUIState.WaitingForPlayers:
+				EventManager.Instance.RegisterEvent<EventShowWaitingForPlayersUI>(AnimateUI);
 				break;
 			default:
 				break;
@@ -65,11 +76,19 @@ public class UITweenManager : MonoBehaviour
 			case eGameUIState.InGameUI:
 				EventManager.Instance.DeRegisterEvent<EventShowInGameUI>(AnimateUI);
 				break;
-            case eGameUIState.MenuUI:
-                EventManager.Instance.DeRegisterEvent<EventShowMenuUI>(AnimateUI);
-                break;
-            case eGameUIState.GameComplete:
+			case eGameUIState.MenuUI:
+				EventManager.Instance.DeRegisterEvent<EventShowMenuUI>(AnimateUI);
+				break;
+			case eGameUIState.GameComplete:
 				EventManager.Instance.DeRegisterEvent<EventShowGameCompleteUI>(AnimateUI);
+				break;
+			case eGameUIState.InitializeUI:
+				break;
+			case eGameUIState.ErrorInConnection:
+				EventManager.Instance.DeRegisterEvent<EventShowConnectionErrorUI>(AnimateUI);
+				break;
+			case eGameUIState.WaitingForPlayers:
+				EventManager.Instance.DeRegisterEvent<EventShowWaitingForPlayersUI>(AnimateUI);
 				break;
 			default:
 				break;
@@ -115,7 +134,7 @@ public class UITweenManager : MonoBehaviour
 						StartCoroutine(UITweenOut());
 					}
 				}
-					break;
+				break;
 			case eGameUIState.GameComplete:
 				EventShowGameCompleteUI d2;
 				d2 = a_Event as EventShowGameCompleteUI;
@@ -132,11 +151,45 @@ public class UITweenManager : MonoBehaviour
 					}
 				}
 				break;
+			case eGameUIState.InitializeUI:
+				break;
+			case eGameUIState.ErrorInConnection:
+				EventShowConnectionErrorUI d3;
+				d3 = a_Event as EventShowConnectionErrorUI;
+				if (d3 != null)
+				{
+					m_eGameState = d3.EGameState;
+					if (d3.BShowUI)
+					{
+						StartCoroutine(UITweenIn());
+					}
+					else
+					{
+						StartCoroutine(UITweenOut());
+					}
+				}
+				break;
+			case eGameUIState.WaitingForPlayers:
+				EventShowWaitingForPlayersUI d4;
+				d4 = a_Event as EventShowWaitingForPlayersUI;
+				if (d4 != null)
+				{
+					m_eGameState = d4.EGameState;
+					if (d4.BShowUI)
+					{
+						StartCoroutine(UITweenIn());
+					}
+					else
+					{
+						StartCoroutine(UITweenOut());
+					}
+				}
+				break;
 			default:
 				break;
 		}
 
-		
+
 	}
 
 	IEnumerator UITweenIn()

@@ -165,7 +165,8 @@ namespace GameUtility.Base
 		InGame = 3,
 		GameComplete = 4,
 		Menu = 6,
-		WaitingForOpponent = 7
+		WaitingForOpponent = 7,
+		ErrorInConnection =8
 	}
 
 	public enum eGameUIState
@@ -175,6 +176,9 @@ namespace GameUtility.Base
 		MenuUI = 2,
 		InGameUI = 3,
 		GameComplete = 4,
+		ErrorInConnection =5,
+		WaitingForPlayers =6
+
 	}
 
 	public enum eUITweenMoveState

@@ -102,8 +102,7 @@ public class GameManager : MBSingleton<GameManager>
 
 				if(BOnlineMultiplayer)
 				{
-					WarpNetworkManager.Instance.ConnectionEstablished = false;
-					EventManager.Instance.TriggerEvent<EventDisonnectFromServer>(new EventDisonnectFromServer());
+					WarpNetworkManager.Instance.ConnectionEstablished = false;					
 					m_bOnlineMultiplayer = false;
 				}
 				EventManager.Instance.TriggerEvent<EventShowMenuUI>(new EventShowMenuUI(true, eGameState.Menu));

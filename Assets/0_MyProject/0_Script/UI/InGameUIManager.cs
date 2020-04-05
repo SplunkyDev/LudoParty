@@ -34,7 +34,7 @@ public class InGameUIManager : MonoBehaviour
 
 	public GameObject m_gResultPrefab;
 	public GameObject m_gGridResult;
-	public Text m_textGameInstruction;
+	public Text m_textGameInstruction, m_textConnectionErros;
 
 	private void RegisterToEvent()
 	{
@@ -260,7 +260,7 @@ public class InGameUIManager : MonoBehaviour
 
 				if (GameManager.Instance.BOnlineMultiplayer)
 				{
-					//TODO: Disconnect from server
+					EventManager.Instance.TriggerEvent<EventDisonnectFromServer>(new EventDisonnectFromServer());
 				}
 				GameManager.Instance.LoadToGame(0);
 				break;
@@ -270,7 +270,15 @@ public class InGameUIManager : MonoBehaviour
 
 				if(GameManager.Instance.BOnlineMultiplayer)
 				{
-					//TODO: Disconnect from server
+					EventManager.Instance.TriggerEvent<EventDisonnectFromServer>(new EventDisonnectFromServer());
+				}
+				GameManager.Instance.LoadToGame(0);
+				break;
+			case "BackAfterFailure":
+			
+				if (GameManager.Instance.BOnlineMultiplayer)
+				{
+					EventManager.Instance.TriggerEvent<EventDisonnectFromServer>(new EventDisonnectFromServer());
 				}
 				GameManager.Instance.LoadToGame(0);
 				break;

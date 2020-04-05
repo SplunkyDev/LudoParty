@@ -244,6 +244,18 @@ public class EventReconnectServer : IEventBase
 
 	}
 }
+
+public class EventErrorInConnection : IEventBase
+{
+	private string m_strErrorMessage = string.Empty;
+	public string StrErrorMessage { get => m_strErrorMessage; }
+
+	public EventErrorInConnection(string a_strErrorMessage)
+	{
+		m_strErrorMessage = a_strErrorMessage;
+	}
+}
+
 #endregion
 #endregion
 
@@ -304,6 +316,34 @@ public class EventHighlightCurrentPlayer : IEventBase
 	public EventHighlightCurrentPlayer(ePlayerToken a_enumPlayerToken)
 	{
 		m_enumPlayerToken = a_enumPlayerToken;
+	}
+}
+
+public class EventShowWaitingForPlayersUI : IEventBase
+{
+	private bool m_bShowUI = false;
+	public bool BShowUI { get => m_bShowUI; }
+	private eGameState m_eGameState;
+	public eGameState EGameState { get => m_eGameState; }
+
+	public EventShowWaitingForPlayersUI(bool a_bShowUI, eGameState a_eGameState)
+	{
+		m_bShowUI = a_bShowUI;
+		m_eGameState = a_eGameState;
+	}
+}
+
+public class EventShowConnectionErrorUI : IEventBase
+{
+	private bool m_bShowUI = false;
+	public bool BShowUI { get => m_bShowUI; }
+	private eGameState m_eGameState;
+	public eGameState EGameState { get => m_eGameState; }
+
+	public EventShowConnectionErrorUI(bool a_bShowUI, eGameState a_eGameState)
+	{
+		m_bShowUI = a_bShowUI;
+		m_eGameState = a_eGameState;
 	}
 }
 
