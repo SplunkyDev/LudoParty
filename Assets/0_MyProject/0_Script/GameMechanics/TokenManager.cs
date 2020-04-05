@@ -534,7 +534,7 @@ public class TokenManager : MonoBehaviour
 				case eTokenType.Blue:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						if (m_lstBlueToken[i].EnumTokenState == eTokenState.InRoute)
+						if (m_lstBlueToken[i].EnumTokenState == RefCurrentToken.EnumTokenState)
 						{
 							if (m_lstBlueToken[i].ITokenID != RefCurrentToken.ITokenID)
 							{
@@ -606,7 +606,7 @@ public class TokenManager : MonoBehaviour
 				case eTokenType.Yellow:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						if (m_lstYellowToken[i].EnumTokenState == eTokenState.InRoute)
+						if (m_lstYellowToken[i].EnumTokenState == RefCurrentToken.EnumTokenState)
 						{
 							//Sharing a tile with same token
 							if (m_lstYellowToken[i].ITokenID != RefCurrentToken.ITokenID)
@@ -681,7 +681,7 @@ public class TokenManager : MonoBehaviour
 					{
 
 
-						if (m_lstRedToken[i].EnumTokenState == eTokenState.InRoute)
+						if (m_lstRedToken[i].EnumTokenState == RefCurrentToken.EnumTokenState)
 						{
 							//Sharing a tile with same token
 							if (m_lstRedToken[i].ITokenID != RefCurrentToken.ITokenID)
@@ -753,7 +753,7 @@ public class TokenManager : MonoBehaviour
 				case eTokenType.Green:
 					for (int i = 0; i < TOKENSPERPLAYER; i++)
 					{
-						if (m_lstGreenToken[i].EnumTokenState == eTokenState.InRoute)
+						if (m_lstGreenToken[i].EnumTokenState == RefCurrentToken.EnumTokenState)
 						{
 							//Sharing a tile with same token
 							if (m_lstGreenToken[i].ITokenID != RefCurrentToken.ITokenID)
