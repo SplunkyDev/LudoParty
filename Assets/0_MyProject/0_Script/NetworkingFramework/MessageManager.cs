@@ -95,11 +95,11 @@ public class MessageManager : MBSingleton<MessageManager>
 					//Sends the player turn to opponent
 					if (m_JsonObjectInGame.HasField("StartAcknowledgement"))
 					{
-						m_JsonObjectInGame.SetField("StartAcknowledgement", 1); 
+						m_JsonObjectInGame.SetField("StartAcknowledgement", GameManager.Instance.IRandomSeed); 
 					}
 					else
 					{
-						m_JsonObjectInGame.AddField("StartAcknowledgement", 1); 
+						m_JsonObjectInGame.AddField("StartAcknowledgement", GameManager.Instance.IRandomSeed); 
 					}
 
 					break;
@@ -203,17 +203,16 @@ public class MessageManager : MBSingleton<MessageManager>
 						//set dice roll value got from opponent
 						if (m_JsonObjectInGame.HasField("StartAcknowledgement"))
 						{
-							if ((int)m_JsonObjectInGame.GetField("StartAcknowledgement").i == 1)
+							EventManager.Instance.TriggerEvent<EventSetRandomSeedGotFromNetwork>(new EventSetRandomSeedGotFromNetwork((int)m_JsonObjectInGame.GetField("StartAcknowledgement").i));
+							if (GameManager.Instance.CheckIfAllPlayersHaveBeenAccountedFor())
 							{
-								if (GameManager.Instance.CheckIfAllPlayersHaveBeenAccountedFor())
-								{
-									GameManager.Instance.SendMessageToStartGame();
-								}
+								GameManager.Instance.SendMessageToStartGame();
 							}
 							else
 							{
-								Debug.LogError("[MessageManager] StartAcknowledgement FOUND, INVALID DATA");
+								Debug.LogError("[MessageManager] All  players not found");
 							}
+
 						}
 						else
 						{

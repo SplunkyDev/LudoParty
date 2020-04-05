@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GameUtility.Base;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using SystemRandom = System.Random;
 
 public class GameManager : MBSingleton<GameManager>
 {
@@ -51,6 +52,10 @@ public class GameManager : MBSingleton<GameManager>
 	}
 
 	private List<eMessageType> m_lstMessageType = new List<eMessageType>();
+	private int m_iRandSeed;
+	public int IRandomSeed { get => m_iRandSeed; }
+	private SystemRandom m_gameRandom;
+	private const int IMINVALUE = 3, IMAXVALUE = 10;
 
 	void RegisterToEVents()
 	{
@@ -58,6 +63,8 @@ public class GameManager : MBSingleton<GameManager>
 		EventManager.Instance.RegisterEvent<EventDevicePlayerTurn>(SetDevicePlayerTurn);
 		EventManager.Instance.RegisterEvent<EventOpponentDiceRoll>(DiceRollFromOpponent);
 		EventManager.Instance.RegisterEvent<EventStartGameSession>(StartOnlineGame);
+		EventManager.Instance.RegisterEvent<EventFirstPlayerEntered>(GenerateRandomSeed);
+		EventManager.Instance.RegisterEvent<EventSetRandomSeedGotFromNetwork>(SetRandomSeedGotFromNetwork);
 	}
 
 	void DeregisterToEvents()
@@ -68,6 +75,8 @@ public class GameManager : MBSingleton<GameManager>
 		EventManager.Instance.DeRegisterEvent<EventDevicePlayerTurn>(SetDevicePlayerTurn);
 		EventManager.Instance.DeRegisterEvent<EventOpponentDiceRoll>(DiceRollFromOpponent);
 		EventManager.Instance.DeRegisterEvent<EventStartGameSession>(StartOnlineGame);
+		EventManager.Instance.DeRegisterEvent<EventFirstPlayerEntered>(GenerateRandomSeed);
+		EventManager.Instance.DeRegisterEvent<EventSetRandomSeedGotFromNetwork>(SetRandomSeedGotFromNetwork);
 	}
 
 
@@ -152,6 +161,35 @@ public class GameManager : MBSingleton<GameManager>
 		}
 
 		m_enumMyPlayerTurn = data.EnumPlayerTurn;
+	}
+
+	private void GenerateRandomSeed(IEventBase a_Event)
+	{
+		EventFirstPlayerEntered data = a_Event as EventFirstPlayerEntered;
+		if (data == null)
+		{
+			Debug.LogError("[GameManager] EventFirstPlayerEntered null");
+			return;
+		}
+
+		m_iRandSeed = Random.Range(6, 18);
+		m_gameRandom = new SystemRandom(m_iRandSeed);
+		Debug.Log("Random Seed: " + m_iRandSeed);
+		
+	}
+
+	private void SetRandomSeedGotFromNetwork(IEventBase a_Event)
+	{
+		EventSetRandomSeedGotFromNetwork data = a_Event as EventSetRandomSeedGotFromNetwork;
+		if (data == null)
+		{
+			Debug.LogError("[GameManager] EventSetRandomSeedGotFromNetwork null");
+			return;
+		}
+
+		m_iRandSeed = data.IRandomSeed;
+		m_gameRandom = new SystemRandom(m_iRandSeed);
+		Debug.Log("Random Seed set from network: " + m_iRandSeed);
 	}
 
 	public void SetPlayerData(PlayerData a_PlayerData)
@@ -492,7 +530,19 @@ public class GameManager : MBSingleton<GameManager>
 	private void UpdatePlayerSixPossiblity()
 	{
 		Debug.Log("[GameManager]Updated Possiblity of getting 6");
-		CurrentPlayer.m_iRollSixIn = Random.Range(3, 10);
+
+		if(BOnlineMultiplayer)
+		{			
+			CurrentPlayer.m_iRollSixIn = m_gameRandom.Next(IMINVALUE, IMAXVALUE);
+			Debug.Log("[GameManager]Updated Possiblity of getting 6 using random seed: "+ CurrentPlayer.m_iRollSixIn);
+
+		}
+		else
+		{
+			CurrentPlayer.m_iRollSixIn = Random.Range(IMINVALUE, IMAXVALUE);
+			Debug.Log("[GameManager]Updated Possiblity of getting 6 locally: " + CurrentPlayer.m_iRollSixIn);
+		}
+		
 	}
 
 	private void IncreasePossiblityofGettingSix()

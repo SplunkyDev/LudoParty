@@ -154,6 +154,17 @@ public class EventOpponentDiceRoll : IEventBase
 	}
 }
 
+public class EventSetRandomSeedGotFromNetwork : IEventBase
+{
+	private int m_iRandomSeed;
+	public int IRandomSeed { get => m_iRandomSeed; }
+	
+	public EventSetRandomSeedGotFromNetwork(int a_iRandomSeed)
+	{
+		m_iRandomSeed = a_iRandomSeed;
+	}
+
+}
 public class EventFirstPlayerEntered : IEventBase
 {
 	private string m_strUserName = string.Empty;

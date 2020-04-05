@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GameUtility.Base;
 
+
 public class GameNetworkManager : MBSingleton<GameNetworkManager>
 {
 	protected GameNetworkManager() { }
@@ -24,7 +25,6 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 
 	private ePlayerTurn m_enumPlayerTurn;
 	public ePlayerTurn EnumPlayerTurn { get => m_enumPlayerTurn;}
-
 	protected List<eMessageType> m_lstMessageType;
 
 	private void RegisterEvents()
@@ -115,6 +115,7 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 			return;
 		}
 
+	
 		PlayerData playerData = new PlayerData();
 		playerData.m_enumPlayerTurn = ePlayerTurn.PlayerOne;
 		playerData.m_enumPlayerToken = ePlayerToken.Blue;

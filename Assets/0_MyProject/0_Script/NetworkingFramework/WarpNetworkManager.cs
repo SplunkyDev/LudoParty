@@ -470,7 +470,7 @@ public class WarpListerner : ConnectionRequestListener, LobbyRequestListener, Zo
 			Debug.Log("[WarpNetworkManager] First player entered: "+ eventObj.getUserNames()[0]);
 			EventManager.Instance.TriggerEvent<EventFirstPlayerEntered>(new EventFirstPlayerEntered(eventObj.getUserNames()[0]));
 		}
-		else
+		else if(eventObj.getUserNames().Length == 2)
 		{
 			Debug.Log("[WarpNetworkManager] NOT THE FIRST PLAYER");
 		}
