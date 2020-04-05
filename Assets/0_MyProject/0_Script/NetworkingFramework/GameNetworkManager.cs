@@ -92,7 +92,8 @@ public class GameNetworkManager : MBSingleton<GameNetworkManager>
 
 	public void InitializeGame()
 	{
-		Debug.Log("[GameNetworkManager] InitializeGame");
+		Debug.Log("[GameNetworkManager] InitializeGame: This Is: "+ GameManager.Instance.EnumMyPlayerTurn.ToString());
+
 		if (GameManager.Instance.EnumMyPlayerTurn == ePlayerTurn.PlayerOne)
 		{
 			m_lstMessageType.Clear();

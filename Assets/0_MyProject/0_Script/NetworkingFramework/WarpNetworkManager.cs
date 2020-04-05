@@ -226,7 +226,8 @@ public class WarpNetworkManager : MBSingleton<WarpNetworkManager>
 
 		//Unable to recover connection, need to look into it, removing feature now. Force disconnect
 		EventManager.Instance.TriggerEvent<EventDisonnectFromServer>(new EventDisonnectFromServer());
-		
+		EventManager.Instance.TriggerEvent<EventSelfLeftRoom>(new EventSelfLeftRoom());
+
 		//if (m_iSessionID == 0)
 		//{
 		//	Debug.Log("[WarpNetworkManager] no session ID [ReconnectToServer]");
@@ -299,7 +300,8 @@ public class WarpNetworkManager : MBSingleton<WarpNetworkManager>
 	{
 		if (ConnectionEstablished)
 		{
-			EventManager.Instance.TriggerEvent<EventDisonnectFromServer>(new EventDisonnectFromServer());
+			if(EventManager.Instance != null)
+				EventManager.Instance.TriggerEvent<EventDisonnectFromServer>(new EventDisonnectFromServer());
 		}
 	}
 
@@ -471,15 +473,27 @@ public class WarpListerner : ConnectionRequestListener, LobbyRequestListener, Zo
 			Debug.Log("onGetOnlineUsersDone : " + eventObj.getUserNames()[i]);
 		}
 
-		if(string.Compare(eventObj.getUserNames()[0], WarpNetworkManager.Instance.PlayerName ) == 0)
+
+		if(GameManager.Instance.EnumMyPlayerTurn == ePlayerTurn.PlayerOne)
 		{
-			Debug.Log("[WarpNetworkManager] First player entered: "+ eventObj.getUserNames()[0]);
+			Debug.Log("[WarpNetworkManager] First player entered: " + eventObj.getUserNames()[0]);
 			EventManager.Instance.TriggerEvent<EventFirstPlayerEntered>(new EventFirstPlayerEntered(eventObj.getUserNames()[0]));
 		}
-		else 
+		else
 		{
 			Debug.Log("[WarpNetworkManager] NOT THE FIRST PLAYER");
 		}
+
+		//The first index is always the local device, Not sur how to get the 1st user yet.
+		//if(string.Compare(eventObj.getUserNames()[0], WarpNetworkManager.Instance.PlayerName ) == 0)
+		//{
+		//	Debug.Log("[WarpNetworkManager] First player entered: "+ eventObj.getUserNames()[0]);
+		//	EventManager.Instance.TriggerEvent<EventFirstPlayerEntered>(new EventFirstPlayerEntered(eventObj.getUserNames()[0]));
+		//}
+		//else 
+		//{
+		//	Debug.Log("[WarpNetworkManager] NOT THE FIRST PLAYER");
+		//}
 	}
 		
 	public void onGetLiveUserInfoDone (LiveUserInfoEvent eventObj)
@@ -621,10 +635,6 @@ public class WarpListerner : ConnectionRequestListener, LobbyRequestListener, Zo
 		if (string.Compare(username,WarpNetworkManager.Instance.PlayerName) != 0)
 		{
 			EventManager.Instance.TriggerEvent<EventOpponentLeftRoom>(new EventOpponentLeftRoom());
-		}
-		else
-		{
-			EventManager.Instance.TriggerEvent < EventSelfLeftRoom>(new EventSelfLeftRoom());
 		}
 	}
 
