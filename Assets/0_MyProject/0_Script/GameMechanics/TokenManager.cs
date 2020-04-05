@@ -550,7 +550,7 @@ public class TokenManager : MonoBehaviour
 						}
 						
 
-						if (m_lstRedToken[i].EnumTokenState == eTokenState.InRoute)
+						if (m_lstRedToken[i].EnumTokenState == eTokenState.InRoute || m_lstRedToken[i].EnumTokenState == eTokenState.EntryToStairway)
 						{
 							if (m_lstRedToken[i].ICurrentPathIndex == m_lstBlueToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -572,7 +572,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstGreenToken[i].EnumTokenState == eTokenState.InRoute )
+						if (m_lstGreenToken[i].EnumTokenState == eTokenState.InRoute || m_lstGreenToken[i].EnumTokenState == eTokenState.EntryToStairway)
 						{
 							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstBlueToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -594,7 +594,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstYellowToken[i].EnumTokenState == eTokenState.InRoute)
+						if (m_lstYellowToken[i].EnumTokenState == eTokenState.InRoute || m_lstYellowToken[i].EnumTokenState == eTokenState.EntryToStairway)
 						{
 							Debug.Log("[TokenManager] Yellow Token not in hiding, its in danger! Current Token: "+RefCurrentToken.ICurrentPathIndex+" Checking Token: "+ m_lstYellowToken[i].ICurrentPathIndex);
 							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstBlueToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
@@ -635,7 +635,7 @@ public class TokenManager : MonoBehaviour
 						}
 						
 
-						if (m_lstRedToken[i].EnumTokenState == eTokenState.InRoute)
+						if (m_lstRedToken[i].EnumTokenState == eTokenState.InRoute || m_lstRedToken[i].EnumTokenState == eTokenState.EntryToStairway)
 						{
 							if (m_lstRedToken[i].ICurrentPathIndex == m_lstYellowToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -657,7 +657,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstGreenToken[i].EnumTokenState == eTokenState.InRoute)
+						if (m_lstGreenToken[i].EnumTokenState == eTokenState.InRoute || m_lstGreenToken[i].EnumTokenState == eTokenState.EntryToStairway)
 						{
 							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstYellowToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -679,7 +679,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstBlueToken[i].EnumTokenState == eTokenState.InRoute)
+						if (m_lstBlueToken[i].EnumTokenState == eTokenState.InRoute || m_lstBlueToken[i].EnumTokenState == eTokenState.EntryToStairway)
 						{
 							Debug.Log("[TokenManager] Blue Token not in hiding, its in danger! Current Token: " + m_lstYellowToken[RefCurrentToken.ITokenID].ICurrentPathIndex + " Checking Token: " + m_lstBlueToken[i].ICurrentPathIndex);
 							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstYellowToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
@@ -723,7 +723,7 @@ public class TokenManager : MonoBehaviour
 						
 
 
-						if (m_lstYellowToken[i].EnumTokenState == eTokenState.InRoute)
+						if (m_lstYellowToken[i].EnumTokenState == eTokenState.InRoute || m_lstYellowToken[i].EnumTokenState == eTokenState.EntryToStairway)
 						{
 							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstRedToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -745,7 +745,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstGreenToken[i].EnumTokenState == eTokenState.InRoute)
+						if (m_lstGreenToken[i].EnumTokenState == eTokenState.InRoute || m_lstGreenToken[i].EnumTokenState == eTokenState.EntryToStairway)
 						{
 							if (m_lstGreenToken[i].ICurrentPathIndex == m_lstRedToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -767,7 +767,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstBlueToken[i].EnumTokenState == eTokenState.InRoute)
+						if (m_lstBlueToken[i].EnumTokenState == eTokenState.InRoute || m_lstBlueToken[i].EnumTokenState == eTokenState.EntryToStairway)
 						{
 							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstRedToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -806,7 +806,7 @@ public class TokenManager : MonoBehaviour
 						}
 						
 
-						if (m_lstYellowToken[i].EnumTokenState == eTokenState.InRoute)
+						if (m_lstYellowToken[i].EnumTokenState == eTokenState.InRoute || m_lstYellowToken[i].EnumTokenState == eTokenState.EntryToStairway)
 						{
 							if (m_lstYellowToken[i].ICurrentPathIndex == m_lstGreenToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -828,7 +828,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 						
-						if (m_lstRedToken[i].EnumTokenState == eTokenState.InRoute)
+						if (m_lstRedToken[i].EnumTokenState == eTokenState.InRoute || m_lstRedToken[i].EnumTokenState == eTokenState.EntryToStairway)
 						{
 							if (m_lstRedToken[i].ICurrentPathIndex == m_lstGreenToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
@@ -850,7 +850,7 @@ public class TokenManager : MonoBehaviour
 							}
 						}
 
-						if (m_lstBlueToken[i].EnumTokenState == eTokenState.InRoute)
+						if (m_lstBlueToken[i].EnumTokenState == eTokenState.InRoute || m_lstBlueToken[i].EnumTokenState == eTokenState.EntryToStairway)
 						{
 							if (m_lstBlueToken[i].ICurrentPathIndex == m_lstGreenToken[RefCurrentToken.ITokenID].ICurrentPathIndex)
 							{
